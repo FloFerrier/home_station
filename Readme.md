@@ -9,7 +9,7 @@ Download Renode and install it.
 ## Build project
 ### Build and flash embedded firmware (cross-compilation)
 ```bash
-$ cmake -B build/<Debug or Release> -GNinja -DCMAKE_BUILD_TYPE=<Debug or Release> -DSELECTED_BOARD=stm32f446retx
+$ cmake -B build/<Debug or Release> -GNinja -DCMAKE_BUILD_TYPE=<Debug or Release>
 $ cmake --build build/<Debug or Release> # Build sources
 $ cmake --build build/<Debug or Release> --target flash # Flash the firmware
 $ cmake --build build/<Debug or Release> --target clean # Clean the build
