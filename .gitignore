@@ -1,0 +1,17 @@
+# Generated file
+bin
+build
+
+# IDE file
+.cproject
+.project
+
+# lib specific folder
+lib/hal/cmsis/Device
+lib/hal/stm32
+lib/rtos/freertos_kernel
+
+# Python folders
+test/end-to-end/virtualenv
+test/end-to-end/__pycache__
+test/end-to-end/.pytest_cache

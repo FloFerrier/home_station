@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        /*{
+            "type": "cppdbg",
+            "request": "attach",
+            "name": "Start gdb server with openocd",
+            "program": "openocd -f config/openocd.cfg -c \"setup stm32f4x\" -c \"program_debug\""
+        },
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "Start debug session",
+            "preLaunchTask": "Configure Workspace",
+            "program": "gdb-multiarch bin/stm32f446retx_Debug.elf"
+        },*/
+        {
+			"name": "Launch Debug on target",
+			"type": "cppdbg",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": "${workspaceRoot}/bin/stm32f446retx_Debug.elf",
+			"MIMode": "gdb",
+			"miDebuggerPath": "gdb-multiarch",
+			"miDebuggerServerAddress": "localhost:3333",
+            "setupCommands": [
+                {
+                    "text": "set remotetimeout 2"
+                }
+            ],
+			"useExtendedRemote": true,
+			/*"postRemoteConnectCommands": [
+				{"text": "monitor reset 1"},
+				{"text": "load"}
+			]*/
+		}
+    ]
+}

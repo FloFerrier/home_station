@@ -1,0 +1,3 @@
+set(SPECIFIC_BOARD_HAL STM32F103xE)
+set(LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-board/stm32f1/stm32f103c8t6/stm32f103c8t6.ld)
+set(STARTUP_FILE startup_stm32f103xb.s)
