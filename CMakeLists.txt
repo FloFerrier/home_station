@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(STM32_Framework ASM C)
+project(weather_sensors ASM C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL Release)
 	include(cmake/stm32-board.cmake)

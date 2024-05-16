@@ -1,7 +1,7 @@
 # Filename: nucleo-f446re.resc
 
 $CONFIG_FILE?=@config/nucleo-f446re.repl
-$FIRMWARE_FILE?=@bin/stm32f446retx_Debug.elf
+$FIRMWARE_FILE?=@build/Debug/src/weather_sensors.elf
 
 emulation CreateUartPtyTerminal "console" "/tmp/console"
 

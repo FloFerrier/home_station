@@ -9,14 +9,14 @@ Download Renode and install it.
 ## Build project
 ### Build and flash embedded firmware (cross-compilation)
 ```bash
-$ cmake -B build/<Debug or Release> -GNinja -DCMAKE_BUILD_TYPE=<Debug or Release>
+$ cmake -B build/<Debug or Release> -DCMAKE_BUILD_TYPE=<Debug or Release>
 $ cmake --build build/<Debug or Release> # Build sources
 $ cmake --build build/<Debug or Release> --target flash # Flash the firmware
 $ cmake --build build/<Debug or Release> --target clean # Clean the build
 ```
 ### Build tests (native compilation)
 ```bash
-$ cmake -B build/Test -GNinja -DCMAKE_BUILD_TYPE=Test
+$ cmake -B build/Test -DCMAKE_BUILD_TYPE=Test
 $ cmake --build build/Test
 $ ctest -V --test-dir build/Test # Run all tests with verbose output
 $ cmake --build build/Test --target coverage # Generate code coverage report
@@ -28,7 +28,7 @@ $ openocd -f config/openocd.cfg -c "setup stm32f4x" -c "program_debug"
 ```
 Use gdb to debug your program :
 ```bash
-$ gdb-multiarch --tui bin/<firmware_name>.elf
+$ gdb-multiarch --tui build/Debug/src/weather_sensors.elf
 (gdb) target extended-remote localhost:3333
 (gdb) load
 (gdb) monitor reset halt
@@ -49,7 +49,7 @@ $ renode config/nucleo-f446re.resc
 ```
 Or with gdb :
 ```bash
-$ gdb-multiarch --tui bin/<firmware_name>.elf
+$ gdb-multiarch --tui build/Debug/src/weather_sensors.elf
 (gdb) target extended-remote localhost:3333
 (gdb) monitor start # With renode only
 (gdb) monitor halt # With renode only
