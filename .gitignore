@@ -9,6 +9,7 @@ build
 lib/hal/cmsis/Device
 lib/hal/stm32
 lib/rtos/freertos_kernel
+lib/driver/bme68x/src
 
 # Python folders
 test/end-to-end/virtualenv
