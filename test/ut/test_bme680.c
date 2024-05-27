@@ -19,7 +19,7 @@ static void mock_assert_call_bme68x_i2c_read(uint8_t reg_addr_expt, uint8_t *reg
     assert_non_null(reg_data_mock);
     will_return(bme68x_i2c_read, reg_data_mock);
     (void)intf_ptr;
-    (void)rslt;
+    will_return(bme68x_i2c_read, rslt);
 }
 static int8_t bme68x_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr) {
     function_called();
@@ -28,7 +28,7 @@ static int8_t bme68x_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len,
     uint8_t *reg_data_mock = mock_ptr_type(uint8_t *);
     memcpy(reg_data, reg_data_mock, len);
     (void)intf_ptr;
-    return BME68X_OK;
+    return mock();
 }
 
 static void mock_assert_call_bme68x_i2c_write(uint8_t reg_addr_expt, const uint8_t *reg_data_expt, uint32_t len_expt, void *intf_ptr, int8_t rslt) {
@@ -38,7 +38,7 @@ static void mock_assert_call_bme68x_i2c_write(uint8_t reg_addr_expt, const uint8
     assert_non_null(reg_data_expt);
     expect_memory(bme68x_i2c_write, reg_data, reg_data_expt, 1);
     (void)intf_ptr;
-    (void)rslt;
+    will_return(bme68x_i2c_write, rslt);
 }
 static int8_t bme68x_i2c_write(uint8_t reg_addr, const uint8_t *reg_data, uint32_t len, void *intf_ptr) {
     function_called();
@@ -46,7 +46,7 @@ static int8_t bme68x_i2c_write(uint8_t reg_addr, const uint8_t *reg_data, uint32
     check_expected(len);
     check_expected(reg_data);
     (void)intf_ptr;
-    return BME68X_OK;
+    return mock();
 }
 
 static void mock_assert_call_bme68x_delay_us(uint32_t period_expt, void *intf_ptr){
