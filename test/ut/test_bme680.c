@@ -60,7 +60,7 @@ static void bme68x_delay_us(uint32_t period, void *intf_ptr) {
     (void)intf_ptr;
 }
 
-static void test_bme680_init_success(void **state) {
+static void test_bme680_device_is_plugged(void **state) {
     (void)state;
 
     struct bme68x_dev sensor = {
@@ -91,7 +91,7 @@ static void test_bme680_init_success(void **state) {
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_bme680_init_success),
+        cmocka_unit_test(test_bme680_device_is_plugged),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
