@@ -36,7 +36,7 @@ static void mock_assert_call_bme68x_i2c_write(uint8_t reg_addr_expt, const uint8
     expect_value(bme68x_i2c_write, reg_addr, reg_addr_expt);
     expect_value(bme68x_i2c_write, len, len_expt);
     assert_non_null(reg_data_expt);
-    expect_memory(bme68x_i2c_write, reg_data, reg_data_expt, 1);
+    expect_memory(bme68x_i2c_write, reg_data, reg_data_expt, len_expt);
     (void)intf_ptr;
     will_return(bme68x_i2c_write, rslt);
 }
