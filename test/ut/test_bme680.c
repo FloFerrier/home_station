@@ -11,6 +11,18 @@
 #include <bme68x.h>
 
 static uint8_t dev_addr = BME68X_I2C_ADDR_LOW;
+static uint8_t calib_data_1[BME68X_LEN_COEFF1] = {
+    0x2f, 0x66, 0x3, 0x10, 0x90, 0x91, 0x91, 0xd6,
+    0x58, 0x0, 0x93, 0x18, 0xa, 0x0, 0x32, 0x1e,
+    0x0, 0x0, 0x95, 0xf1, 0x88, 0xf7, 0x1e,
+};
+static uint8_t calib_data_2[BME68X_LEN_COEFF2] = {
+    0x3f, 0x95, 0x2e, 0x0, 0x2d, 0x14, 0x78, 0x9c,
+    0x44, 0x66, 0x0, 0xdc, 0xec, 0x12,
+};
+static uint8_t calib_data_3[BME68X_LEN_COEFF3] = {
+    0x0//0x33, 0xaa, 0x16, 0xc9, 0xf3,
+};
 
 static void mock_assert_call_bme68x_i2c_read(uint8_t reg_addr_expt, uint8_t *reg_data_mock, uint32_t len_expt, void *intf_ptr, int8_t rslt) {
     expect_function_call(bme68x_i2c_read);
@@ -69,11 +81,8 @@ static void test_bme680_device_is_plugged_and_found(void **state) {
     uint8_t chip_id[] = {BME68X_CHIP_ID};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CHIP_ID, chip_id, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_VARIANT_ID, chip_id, 1, NULL, BME68X_OK);
-    uint8_t calib_data_1[BME68X_LEN_COEFF1] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF1, calib_data_1, BME68X_LEN_COEFF1, NULL, BME68X_OK);
-    uint8_t calib_data_2[BME68X_LEN_COEFF2] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF2, calib_data_2, BME68X_LEN_COEFF2, NULL, BME68X_OK);
-    uint8_t calib_data_3[BME68X_LEN_COEFF3] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF3, calib_data_3, BME68X_LEN_COEFF3, NULL, BME68X_OK);
     struct bme68x_dev sensor = {
         .intf = BME68X_I2C_INTF,
@@ -139,11 +148,8 @@ static void test_bme680_device_is_configured(void **state) {
     uint8_t chip_id[] = {BME68X_CHIP_ID};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CHIP_ID, chip_id, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_VARIANT_ID, chip_id, 1, NULL, BME68X_OK);
-    uint8_t calib_data_1[BME68X_LEN_COEFF1] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF1, calib_data_1, BME68X_LEN_COEFF1, NULL, BME68X_OK);
-    uint8_t calib_data_2[BME68X_LEN_COEFF2] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF2, calib_data_2, BME68X_LEN_COEFF2, NULL, BME68X_OK);
-    uint8_t calib_data_3[BME68X_LEN_COEFF3] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF3, calib_data_3, BME68X_LEN_COEFF3, NULL, BME68X_OK);
     struct bme68x_dev sensor = {
         .intf = BME68X_I2C_INTF,
@@ -171,7 +177,7 @@ static void test_bme680_device_is_configured(void **state) {
     rslt = bme68x_set_conf(&conf, &sensor);
     uint8_t ctrl_meas_1[] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_1, 1, NULL, BME68X_OK);
-    uint8_t res_heat0[] = {0xc7};
+    uint8_t res_heat0[] = {0xba};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
     uint8_t gas_wait0[] = {0x59};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
@@ -209,7 +215,7 @@ static void test_bme680_device_is_operated(void **state) {
     assert_int_equal(rslt, BME68X_OK);
 }
 
-/*static void test_bme680_device_is_self_tested(void **state) {
+static void test_bme680_device_is_self_tested(void **state) {
     (void)state;
 
     uint8_t soft_reset_cmd[] = {BME68X_SOFT_RESET_CMD};
@@ -218,16 +224,13 @@ static void test_bme680_device_is_operated(void **state) {
     uint8_t chip_id[] = {BME68X_CHIP_ID};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CHIP_ID, chip_id, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_VARIANT_ID, chip_id, 1, NULL, BME68X_OK);
-    uint8_t calib_data_1[BME68X_LEN_COEFF1] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF1, calib_data_1, BME68X_LEN_COEFF1, NULL, BME68X_OK);
-    uint8_t calib_data_2[BME68X_LEN_COEFF2] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF2, calib_data_2, BME68X_LEN_COEFF2, NULL, BME68X_OK);
-    uint8_t calib_data_3[BME68X_LEN_COEFF3] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF3, calib_data_3, BME68X_LEN_COEFF3, NULL, BME68X_OK);
 
     uint8_t ctrl_meas_1[] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_1, 1, NULL, BME68X_OK);
-    uint8_t res_heat0[] = {0xda};
+    uint8_t res_heat0[] = {0xcc};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
     uint8_t gas_wait0[] = {0xbe};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
@@ -248,12 +251,14 @@ static void test_bme680_device_is_operated(void **state) {
     uint8_t ctrl_meas_5[] = {0x1};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_5, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR1_DELAY, NULL);
-    uint8_t field0[BME68X_LEN_FIELD] = {0x80, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x0, 0x0, 0x0, 0x0, 0x30, 0x30, 0x30, 0x30};
+    uint8_t field0[BME68X_LEN_FIELD] = {0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x30, 0x0, 0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0, BME68X_LEN_FIELD, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
     uint8_t idac_heat0[] = {0xaa}; // random number
     mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #1 */
     uint8_t ctrl_meas_6[] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_6, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
@@ -270,7 +275,6 @@ static void test_bme680_device_is_operated(void **state) {
     uint8_t ctrl_meas_9[] = {0x0};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
-
     uint8_t ctrl_meas_10[] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
     uint8_t config_1[BME68X_LEN_CONFIG] = {0x0};
@@ -282,11 +286,130 @@ static void test_bme680_device_is_operated(void **state) {
     uint8_t ctrl_meas_12[] = {0x1};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
-    uint8_t field0_1[BME68X_LEN_FIELD] = {0x80, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x0, 0x0, 0x0, 0x0, 0x30, 0x30, 0x30, 0x30};
+    uint8_t field0_1[BME68X_LEN_FIELD] = {0x80, 0x0, 0x5a, 0x0, 0x0, 0x7a, 0x0, 0x0, 0x51, 0x00, 0x0, 0x0, 0x0, 0x0, 0xf0, 0x0, 0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_1, BME68X_LEN_FIELD, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #2 */
+    uint8_t ctrl_meas_13[] = {0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_13, 1, NULL, BME68X_OK);
+    uint8_t res_heat0_1[] = {0x84};
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_0, ctrl_gas_2, 2, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_0, ctrl_gas_3, 3, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_7, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_8, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_1, config_1, BME68X_LEN_CONFIG, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_1, data_1, 9, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_11, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_1, BME68X_LEN_FIELD, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #3 */
+    uint8_t ctrl_meas_14[] = {0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_14, 1, NULL, BME68X_OK);
+    uint8_t res_heat0_2[] = {0xcc};
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0_2, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_0, ctrl_gas_2, 2, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_0, ctrl_gas_3, 3, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_7, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_8, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_1, config_1, BME68X_LEN_CONFIG, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_1, data_1, 9, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_11, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
+    uint8_t field0_3[BME68X_LEN_FIELD] = {0x80, 0x0, 0x5a, 0x0, 0x0, 0x7a, 0x0, 0x0, 0x51, 0x00, 0x0, 0x0, 0x0, 0xff, 0x3f, 0x0, 0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_3, BME68X_LEN_FIELD, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #4 */
+    uint8_t ctrl_meas_15[] = {0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_15, 1, NULL, BME68X_OK);
+    uint8_t res_heat0_3[] = {0x84};
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0_3, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_0, ctrl_gas_2, 2, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_0, ctrl_gas_3, 3, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_7, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_8, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_1, config_1, BME68X_LEN_CONFIG, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_1, data_1, 9, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_11, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
+    uint8_t field0_4[BME68X_LEN_FIELD] = {0x80, 0x0, 0x5a, 0x0, 0x0, 0x7a, 0x0, 0x0, 0x51, 0x00, 0x0, 0x0, 0x0, 0xaa, 0x3f, 0x0, 0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_4, BME68X_LEN_FIELD, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #5 */
+    uint8_t ctrl_meas_16[] = {0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_16, 1, NULL, BME68X_OK);
+    uint8_t res_heat0_4[] = {0xcc};
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0_4, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_0, ctrl_gas_2, 2, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_0, ctrl_gas_3, 3, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_7, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_8, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_1, config_1, BME68X_LEN_CONFIG, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_1, data_1, 9, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_11, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
+    uint8_t field0_5[BME68X_LEN_FIELD] = {0x80, 0x0, 0x5a, 0x0, 0x0, 0x7a, 0x0, 0x0, 0x51, 0x00, 0x0, 0x0, 0x0, 0x11, 0x3f, 0x0, 0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_5, BME68X_LEN_FIELD, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
+    /* #6 */
+    uint8_t ctrl_meas_17[] = {0x0};
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_17, 1, NULL, BME68X_OK);
+    uint8_t res_heat0_5[] = {0x84};
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat0_5, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait0_1, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_0, ctrl_gas_2, 2, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_0, ctrl_gas_3, 3, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_7, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_8, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_9, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_PERIOD_RESET, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_10, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_GAS_1, config_1, BME68X_LEN_CONFIG, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_GAS_1, data_1, 9, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_11, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_write(BME68X_REG_CTRL_MEAS, ctrl_meas_12, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_delay_us(BME68X_HEATR_DUR2_DELAY, NULL);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_FIELD0, field0_1, BME68X_LEN_FIELD, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_RES_HEAT0, res_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_IDAC_HEAT0, idac_heat0, 1, NULL, BME68X_OK);
+    mock_assert_call_bme68x_i2c_read(BME68X_REG_GAS_WAIT0, gas_wait0, 1, NULL, BME68X_OK);
+
     struct bme68x_dev sensor = {
         .intf = BME68X_I2C_INTF,
         .intf_ptr = &dev_addr,
@@ -298,7 +421,7 @@ static void test_bme680_device_is_operated(void **state) {
     int8_t rslt = bme68x_selftest_check(&sensor);
 
     assert_int_equal(rslt, BME68X_OK);
-}*/
+}
 
 static void test_bme680_device_is_not_self_tested(void **state) {
     (void)state;
@@ -309,15 +432,12 @@ static void test_bme680_device_is_not_self_tested(void **state) {
     uint8_t chip_id[] = {BME68X_CHIP_ID};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CHIP_ID, chip_id, 1, NULL, BME68X_OK);
     mock_assert_call_bme68x_i2c_read(BME68X_REG_VARIANT_ID, chip_id, 1, NULL, BME68X_OK);
-    uint8_t calib_data_1[BME68X_LEN_COEFF1] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF1, calib_data_1, BME68X_LEN_COEFF1, NULL, BME68X_OK);
-    uint8_t calib_data_2[BME68X_LEN_COEFF2] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF2, calib_data_2, BME68X_LEN_COEFF2, NULL, BME68X_OK);
-    uint8_t calib_data_3[BME68X_LEN_COEFF3] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_COEFF3, calib_data_3, BME68X_LEN_COEFF3, NULL, BME68X_OK);
     uint8_t ctrl_meas_1[] = {0x0};
     mock_assert_call_bme68x_i2c_read(BME68X_REG_CTRL_MEAS, ctrl_meas_1, 1, NULL, BME68X_OK);
-    uint8_t res_heat_0[] = {0xda};
+    uint8_t res_heat_0[] = {0xcc};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_RES_HEAT0, res_heat_0, 1, NULL, BME68X_OK);
     uint8_t gas_wait_0[] = {0xbe};
     mock_assert_call_bme68x_i2c_write(BME68X_REG_GAS_WAIT0, gas_wait_0, 1, NULL, BME68X_OK);
@@ -366,7 +486,7 @@ int main(void) {
         cmocka_unit_test(test_bme680_device_is_not_found),
         cmocka_unit_test(test_bme680_device_is_configured),
         cmocka_unit_test(test_bme680_device_is_operated),
-        //cmocka_unit_test(test_bme680_device_is_self_tested),
+        cmocka_unit_test(test_bme680_device_is_self_tested),
         cmocka_unit_test(test_bme680_device_is_not_self_tested),
     };
 
