@@ -88,10 +88,6 @@ static void bme68x_delay_us(uint32_t period, void *intf_ptr) {
     (void)intf_ptr;
 }
 
-typedef struct {
-    
-} test_fixture_s;
-
 static int setup(void **state) {
     struct bme68x_dev *sensor = calloc(1, sizeof(struct bme68x_dev));
     uint8_t dev_addr = bme680_dev_addr;
