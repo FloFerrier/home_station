@@ -10,6 +10,7 @@ add_executable(${BUILD_TARGET}
     sysmem.c
     console.c
     shell.c
+    sensor.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE
@@ -20,6 +21,7 @@ target_compile_options(${BUILD_TARGET} PRIVATE
 target_link_libraries(${BUILD_TARGET} PRIVATE
     stm32_hal_driver
     freertos_kernel
+    bme68x
 )
 
 target_link_options(${BUILD_TARGET} PUBLIC
