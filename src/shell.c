@@ -22,14 +22,14 @@ typedef struct {
   const char *desc;
 } shell_command_s;
 
-STATIC bool shell_cmd_isFound(char *cmd, uint32_t cmd_size);
-STATIC void shell_cmd_dataGet(uint32_t argc, char *argv[]);
+STATIC bool shellCommand_isFound(char *cmd, uint32_t cmd_size);
+STATIC void shellCommand_dataGet(uint32_t argc, char *argv[]);
 
 STATIC const shell_command_s shell_commands[] = {
-  {"data_get", shell_cmd_dataGet, "Display data measurements"},
+  {"data_get", shellCommand_dataGet, "Display data measurements"},
 };
 
-STATIC bool shell_cmd_isFound(char *cmd, uint32_t cmd_size) {
+STATIC bool shellCommand_isFound(char *cmd, uint32_t cmd_size) {
     (void)cmd_size;
     for(uint32_t i=0; i < sizeof(shell_commands)/sizeof(shell_commands[0]); i++) {
         uint32_t cmp = strncmp(cmd, shell_commands[i].name, 255);
@@ -41,7 +41,7 @@ STATIC bool shell_cmd_isFound(char *cmd, uint32_t cmd_size) {
     return false;
 }
 
-STATIC void shell_cmd_dataGet(uint32_t argc, char *argv[]) {
+STATIC void shellCommand_dataGet(uint32_t argc, char *argv[]) {
     (void)argc;
     (void)argv;
     console_send("> SUCCESS\r\n");
@@ -75,7 +75,7 @@ void shell_task(void *params) {
         }
         if(cmdIsAvailable == true) {
             cmdIsAvailable = false;
-            bool cmdIsFound = shell_cmd_isFound(command_string, command_len);
+            bool cmdIsFound = shellCommand_isFound(command_string, command_len);
             if(cmdIsFound == true) {
                 shell_commands[0].handler(0, NULL);
             }

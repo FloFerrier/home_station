@@ -23,10 +23,9 @@ static int setup(void **state) {
     test_fixture_s *fixture = calloc(1, sizeof(test_fixture_s));
     fixture->loopCnt = &loopCnt;
     fixture->shell = &shell;
-
-    *fixture->loopCnt = 0;
-    (void)memset(fixture->shell->buffer, '\0', RING_BUFFER_LEN_MAX);
+    (void)memset(fixture->loopCnt, 0, sizeof(int));
     fixture->shell->index = 0;
+    (void)memset(fixture->shell->buffer, '\0', RING_BUFFER_LEN_MAX);
 
     *state = fixture;
     return 0;
@@ -38,66 +37,64 @@ static int teardown(void **state) {
     return 0;
 }
 
-static void test_fail_to_receive_character(void **state) {
+static void test_shell_should_failed_to_receive_a_character(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = 0;
 
-    uint32_t params;
     mock_assert_call_console_init();
     mock_assert_call_console_receive('a', false);
 
+    uint32_t params;
     shell_task(&params);
 }
 
-static void test_receive_one_character(void **state) {
+static void test_shell_should_received_a_character(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = 0;
 
-    uint32_t params;
     mock_assert_call_console_init();
     mock_assert_call_console_receive('a', true);
 
+    uint32_t params;
     shell_task(&params);
 }
 
-static void test_receive_command_unknown(void **state) {
-    test_fixture_s *fixture = (test_fixture_s *)*state;
-    uint32_t params;
-    mock_assert_call_console_init();
+static void test_shell_should_received_an_unknown_command(void **state) {
     const char TEST_DATA[] = "Hello world\n";
+    test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
+    mock_assert_call_console_init();
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-
     mock_assert_call_console_send("> Unknown command\r\n");
 
+    uint32_t params;
     shell_task(&params);
 }
 
-static void test_receive_command_dataGet(void **state) {
-    test_fixture_s *fixture = (test_fixture_s *)*state;
-    uint32_t params;
-    mock_assert_call_console_init();
+static void test_shell_should_received_a_known_command(void **state) {
     const char TEST_DATA[] = "data_get\n";
+    test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
+    mock_assert_call_console_init();
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-
     mock_assert_call_console_send("> SUCCESS\r\n");
 
+    uint32_t params;
     shell_task(&params);
 }
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test_setup_teardown(test_fail_to_receive_character, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_receive_one_character, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_receive_command_unknown, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_receive_command_dataGet, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_failed_to_receive_a_character, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_a_character, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_an_unknown_command, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_a_known_command, setup, teardown),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
