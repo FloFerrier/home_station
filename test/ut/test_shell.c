@@ -75,7 +75,7 @@ static void test_shell_should_received_an_unknown_command(void **state) {
 }
 
 static void test_shell_should_received_a_known_command(void **state) {
-    const char TEST_DATA[] = "data_get\n";
+    const char TEST_DATA[] = "sensor_selfTest\n";
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 

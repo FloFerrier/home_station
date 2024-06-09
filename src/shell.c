@@ -23,10 +23,12 @@ typedef struct {
 } shell_command_s;
 
 STATIC bool shellCommand_isFound(char *cmd, uint32_t cmd_size);
-STATIC void shellCommand_dataGet(uint32_t argc, char *argv[]);
+STATIC void shellCommand_sensorSelfTest(uint32_t argc, char *argv[]);
+STATIC void shellCommand_sensorGetData(uint32_t argc, char *argv[]);
 
 STATIC const shell_command_s shell_commands[] = {
-  {"data_get", shellCommand_dataGet, "Display data measurements"},
+  {"sensor_selfTest", shellCommand_sensorSelfTest, "Performing a sensor self-test"},
+  {"sensor_getData", shellCommand_sensorGetData, "Request a sensor to get data"},
 };
 
 STATIC bool shellCommand_isFound(char *cmd, uint32_t cmd_size) {
@@ -41,7 +43,13 @@ STATIC bool shellCommand_isFound(char *cmd, uint32_t cmd_size) {
     return false;
 }
 
-STATIC void shellCommand_dataGet(uint32_t argc, char *argv[]) {
+STATIC void shellCommand_sensorSelfTest(uint32_t argc, char *argv[]) {
+    (void)argc;
+    (void)argv;
+    console_send("> SUCCESS\r\n");
+}
+
+STATIC void shellCommand_sensorGetData(uint32_t argc, char *argv[]) {
     (void)argc;
     (void)argv;
     console_send("> SUCCESS\r\n");
