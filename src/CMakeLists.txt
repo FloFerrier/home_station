@@ -11,6 +11,7 @@ add_executable(${BUILD_TARGET}
     console.c
     shell.c
     sensor.c
+    commands.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE

@@ -20,6 +20,7 @@ endmacro()
 add_unit_test(test_shell
     ${CMAKE_SOURCE_DIR}/src/shell.c
     mock/mock_console.c
+    mock/mock_commands.c
     ut/test_shell.c
 )
 

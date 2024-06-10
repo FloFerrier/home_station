@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "console.h"
+#include "commands.h"
 #include <ctype.h>
 #include <string.h>
 
@@ -24,9 +25,6 @@ typedef struct {
 
 STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size);
 
-STATIC void shellCommand_sensorSelfTest(uint32_t argc, char *argv[]);
-STATIC void shellCommand_sensorGetData(uint32_t argc, char *argv[]);
-
 STATIC const shell_command_s shell_commands[] = {
   {"sensor_selfTest", shellCommand_sensorSelfTest, "Performing a sensor self-test"},
   {"sensor_getData", shellCommand_sensorGetData, "Request a sensor to get data"},
@@ -44,18 +42,6 @@ STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size) {
     }
 
     return index;
-}
-
-STATIC void shellCommand_sensorSelfTest(uint32_t argc, char *argv[]) {
-    (void)argc;
-    (void)argv;
-    console_send("> sensor_selfTest command done !\r\n");
-}
-
-STATIC void shellCommand_sensorGetData(uint32_t argc, char *argv[]) {
-    (void)argc;
-    (void)argv;
-    console_send("> sensor_getData command done !\r\n");
 }
 
 void shell_task(void *params) {
