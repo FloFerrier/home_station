@@ -9,19 +9,19 @@
 
 #include "mock_commands.h"
 
-void mock_assert_call_shellCommand_sensorSelfTest(void) {
-    expect_function_call(shellCommand_sensorSelfTest);
+void mock_assert_call_command_sensorSelfTest(void) {
+    expect_function_call(command_sensorSelfTest);
 }
-void shellCommand_sensorSelfTest(uint32_t argc, char *argv[]) {
+void command_sensorSelfTest(uint32_t argc, char *argv[]) {
     function_called();
     (void)argc;
     (void)argv;
 }
 
-void mock_assert_call_shellCommand_sensorGetData(void) {
-    expect_function_call(shellCommand_sensorGetData);
+void mock_assert_call_command_sensorGetData(void) {
+    expect_function_call(command_sensorGetData);
 }
-void shellCommand_sensorGetData(uint32_t argc, char *argv[]) {
+void command_sensorGetData(uint32_t argc, char *argv[]) {
     function_called();
     (void)argc;
     (void)argv;

@@ -84,7 +84,7 @@ static void test_shell_should_received_command_sensor_selfTest(void **state) {
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-    mock_assert_call_shellCommand_sensorSelfTest();
+    mock_assert_call_command_sensorSelfTest();
 
     uint32_t params;
     shell_task(&params);
@@ -99,7 +99,7 @@ static void test_shell_should_received_command_sensor_getData(void **state) {
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-    mock_assert_call_shellCommand_sensorGetData();
+    mock_assert_call_command_sensorGetData();
 
     uint32_t params;
     shell_task(&params);

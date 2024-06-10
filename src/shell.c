@@ -26,8 +26,8 @@ typedef struct {
 STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size);
 
 STATIC const shell_command_s shell_commands[] = {
-  {"sensor_selfTest", shellCommand_sensorSelfTest, "Performing a sensor self-test"},
-  {"sensor_getData", shellCommand_sensorGetData, "Request a sensor to get data"},
+  {"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
+  {"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
 };
 
 STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size) {
