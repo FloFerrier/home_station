@@ -74,7 +74,7 @@ static void test_shell_should_received_an_unknown_command(void **state) {
     shell_task(&params);
 }
 
-static void test_shell_should_received_a_known_command(void **state) {
+static void test_shell_should_received_command_sensor_selfTest(void **state) {
     const char TEST_DATA[] = "sensor_selfTest\n";
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
@@ -83,7 +83,22 @@ static void test_shell_should_received_a_known_command(void **state) {
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-    mock_assert_call_console_send("> SUCCESS\r\n");
+    mock_assert_call_console_send("> sensor_selfTest command done !\r\n");
+
+    uint32_t params;
+    shell_task(&params);
+}
+
+static void test_shell_should_received_command_sensor_getData(void **state) {
+    const char TEST_DATA[] = "sensor_getData\n";
+    test_fixture_s *fixture = (test_fixture_s *)*state;
+    *fixture->loopCnt = strlen(TEST_DATA) - 1;
+
+    mock_assert_call_console_init();
+    for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
+        mock_assert_call_console_receive(TEST_DATA[index], true);
+    }
+    mock_assert_call_console_send("> sensor_getData command done !\r\n");
 
     uint32_t params;
     shell_task(&params);
@@ -94,7 +109,8 @@ int main(void) {
         cmocka_unit_test_setup_teardown(test_shell_should_failed_to_receive_a_character, setup, teardown),
         cmocka_unit_test_setup_teardown(test_shell_should_received_a_character, setup, teardown),
         cmocka_unit_test_setup_teardown(test_shell_should_received_an_unknown_command, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_shell_should_received_a_known_command, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_command_sensor_selfTest, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_command_sensor_getData, setup, teardown),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
