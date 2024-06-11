@@ -1,5 +1,4 @@
 #include "sensor.h"
-#include "console.h"
 
 #include <bme68x.h>
 
@@ -11,63 +10,53 @@
 
 STATIC struct bme68x_dev dev = {0};
 
-bool sensor_init(void) {
-    int8_t bme68x_rslt = bme68x_init(&dev);
-    if(bme68x_rslt != BME68X_OK) {
-        return false;
-    }
-    return true;
+int8_t sensor_init(void) {
+    return (int8_t)bme68x_init(&dev);
 }
 
-bool sensor_selfTest(void) {
-    int8_t bme68x_rslt = bme68x_selftest_check(&dev);
-    if(bme68x_rslt != BME68X_OK) {
-        return false;
-    }
-    return true;
+int8_t sensor_selfTest(void) {
+    return (int8_t)bme68x_selftest_check(&dev);
 }
 
-bool sensor_getData(void) {
+int8_t sensor_getData(sensor_data_s *data, uint32_t *number_of_data) {
+    int8_t bme68x_rslt = BME68X_OK;
+    if((data == NULL) || (number_of_data == NULL)) {
+        bme68x_rslt = BME68X_E_NULL_PTR;
+        return bme68x_rslt;
+    }
+
     struct bme68x_conf conf = {0};
-    int8_t bme68x_rslt = bme68x_set_conf(&conf, &dev);
+    bme68x_rslt = bme68x_set_conf(&conf, &dev);
     if(bme68x_rslt != BME68X_OK) {
-        return false;
+        return bme68x_rslt;
     }
 
     struct bme68x_heatr_conf heatr_conf = {0};
     bme68x_rslt = bme68x_set_heatr_conf(BME68X_FORCED_MODE, &heatr_conf, &dev);
     if(bme68x_rslt != BME68X_OK) {
-        return false;
+        return bme68x_rslt;
     }
 
     bme68x_rslt = bme68x_set_op_mode(BME68X_FORCED_MODE, &dev);
     if(bme68x_rslt != BME68X_OK) {
-        return false;
+        return bme68x_rslt;
     }
 
     uint32_t delay_in_us = bme68x_get_meas_dur(BME68X_FORCED_MODE, &conf, &dev);
-    console_send("(sensor)> Wait %d us before get data\r\n", delay_in_us);
+    /* Todo: Add delay function here with API */
 
-    struct bme68x_data data = {0};
-    uint8_t n_data = 0;
-    bme68x_rslt = bme68x_get_data(BME68X_FORCED_MODE, &data, &n_data, &dev);
-    switch (bme68x_rslt)
-    {
-    case BME68X_OK: {
-        console_send("(sensor)> %d data available\r\n", n_data);
-        console_send("(sensor)> %.1f°C %.1f%Rh %.1fhPa\r\n", (float)data.temperature, (float)data.humidity, (float)data.pressure/100.0f);
+    struct bme68x_data bme68x_data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
+    uint8_t bme68x_n_data = 0;
+    bme68x_rslt = bme68x_get_data(BME68X_FORCED_MODE, bme68x_data, &bme68x_n_data, &dev);
+    if(bme68x_rslt == BME68X_OK) {
+        *number_of_data = bme68x_n_data;
+        for(uint32_t index=0; index<bme68x_n_data; index++) {
+            data[index].temperature_in_deg = bme68x_data[index].temperature;
+            data[index].pressure_in_pascal = bme68x_data[index].pressure;
+            data[index].humidity_in_per100 = bme68x_data[index].humidity;
+            data[index].gas_resistance_in_ohms = bme68x_data[index].gas_resistance;
+        }
     }
-        break;
-    case BME68X_W_NO_NEW_DATA : {
-        console_send("(sensor)> No new data available\r\n");
-        return false;
-    }
-        break;
-    default: {
-        console_send("(sensor)> Error to get data %d\r\n", bme68x_rslt);
-        return false;
-    }
-        break;
-    }
-    return true;
+
+    return bme68x_rslt;
 }
