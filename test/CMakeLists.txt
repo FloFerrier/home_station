@@ -3,12 +3,11 @@ enable_testing()
 setup_target_for_coverage_lcov(
     NAME coverage
     EXECUTABLE ctest
-    EXCLUDE ${CMAKE_SOURCE_DIR}/test/*
 )
 
 macro(add_unit_test unitestname)
     add_executable(${ARGV0} ${ARGN})
-    target_include_directories(${ARGV0} PRIVATE ${CMAKE_SOURCE_DIR}/src mock ${CMAKE_SOURCE_DIR}/lib/driver/bme68x/src)
+    target_include_directories(${ARGV0} PRIVATE ${CMAKE_SOURCE_DIR}/src mock)
     target_compile_definitions(${ARGV0} PRIVATE -DTEST)
     target_compile_options(${ARGV0} PRIVATE -std=c99 -Og -g -Wall -W -Wextra --coverage)
     target_link_libraries(${ARGV0} PRIVATE cmocka-static bme68x)
