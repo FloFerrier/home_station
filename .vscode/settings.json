@@ -2,6 +2,13 @@
     "files.associations": {
         "string.h": "c",
         "stdint.h": "c",
-        "bme68x.h": "c"
+        "bme68x.h": "c",
+        "stdio.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "bme68x_defs.h": "c",
+        "sensor.h": "c",
+        "mock_sensor.h": "c",
+        "mock_stm32f4x.h": "c"
     }
 }
