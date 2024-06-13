@@ -31,6 +31,7 @@ add_unit_test(test_bme680
 add_unit_test(test_sensor
     ${CMAKE_SOURCE_DIR}/src/sensor.c
     mock/mock_bme68x.c
+    mock/mock_stm32f4x.c
     ut/test_sensor.c
 )
 
