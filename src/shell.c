@@ -47,7 +47,6 @@ STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size) {
 void shell_task(void *params) {
     (void)params;
 
-    console_init();
     (void)memset(shell.buffer, '\0', RING_BUFFER_LEN_MAX);
     shell.index = 0u;
 

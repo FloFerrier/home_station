@@ -42,7 +42,6 @@ static void test_shell_should_failed_to_receive_a_character(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = 0;
 
-    mock_assert_call_console_init();
     mock_assert_call_console_receive('a', false);
 
     uint32_t params;
@@ -53,7 +52,6 @@ static void test_shell_should_received_a_character(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = 0;
 
-    mock_assert_call_console_init();
     mock_assert_call_console_receive('a', true);
 
     uint32_t params;
@@ -65,7 +63,6 @@ static void test_shell_should_received_an_unknown_command(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
-    mock_assert_call_console_init();
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
@@ -80,7 +77,6 @@ static void test_shell_should_received_command_sensor_selfTest(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
-    mock_assert_call_console_init();
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
@@ -95,7 +91,6 @@ static void test_shell_should_received_command_sensor_getData(void **state) {
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
-    mock_assert_call_console_init();
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }

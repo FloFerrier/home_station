@@ -31,6 +31,7 @@ target_link_options(${BUILD_TARGET} PUBLIC
     -specs=nosys.specs
     -Wl,-Map=output.map,--cref
     -Wl,--print-memory-usage
+    -u _printf_float
 )
 
 add_custom_target(flash

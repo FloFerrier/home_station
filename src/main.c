@@ -5,6 +5,8 @@
 #include <task.h>
 #include <stm32f4xx_hal.h>
 #include "shell.h"
+#include "sensor.h"
+#include "console.h"
 
 void HAL_MspInit(void); // Use on HAL_Init() function
 
@@ -13,7 +15,10 @@ void SysTick_Handler(void);
 int main(void) {
     HAL_Init();
 
-    (void)xTaskCreate(shell_task, "shell", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
+    console_init();
+    (void)sensor_init();
+
+    (void)xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL);
 
     vTaskStartScheduler();
 
