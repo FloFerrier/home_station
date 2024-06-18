@@ -19,7 +19,7 @@ static void test_command_sensorSelfTest_should_failed(void **state) {
     (void)state;
 
     mock_assert_call_sensor_selfTest(BME68X_E_SELF_TEST);
-    mock_assert_call_console_send("(sensor)> Self-test failed ... -5\r\n");
+    mock_assert_call_console_send("(sensor)> Self-test failed ... -5\r\n", true);
 
     command_sensorSelfTest(0, NULL);
 }
@@ -28,7 +28,7 @@ static void test_command_sensorSelfTest_should_passed(void **state) {
     (void)state;
 
     mock_assert_call_sensor_selfTest(BME68X_OK);
-    mock_assert_call_console_send("(sensor)> Self-test passed !\r\n");
+    mock_assert_call_console_send("(sensor)> Self-test passed !\r\n", true);
 
     command_sensorSelfTest(0, NULL);
 }
@@ -39,7 +39,7 @@ static void test_command_sensorGetData_should_failed(void **state) {
     sensor_data_s expected_data = {0};
     uint32_t expected_number_of_data = 0;
     mock_assert_call_sensor_getData(&expected_data, expected_number_of_data, BME68X_W_NO_NEW_DATA);
-    mock_assert_call_console_send("(sensor)> Get data failed ... 2\r\n");
+    mock_assert_call_console_send("(sensor)> Get data failed ... 2\r\n", true);
 
     command_sensorGetData(0, NULL);
 }
@@ -61,9 +61,9 @@ static void test_command_sensorGetData_should_send_several_data(void **state) {
     };
     uint32_t expected_number_of_data = sizeof(expected_data) / sizeof(sensor_data_s);
     mock_assert_call_sensor_getData(expected_data, expected_number_of_data, BME68X_OK);
-    mock_assert_call_console_send("(sensor)> Number of data available 4\r\n");
+    mock_assert_call_console_send("(sensor)> Number of data available 4\r\n", true);
     for(uint32_t index=0; index<expected_number_of_data; index++) {
-        mock_assert_call_console_send(expected_message[index]);
+        mock_assert_call_console_send(expected_message[index], true);
     }
 
     command_sensorGetData(0, NULL);

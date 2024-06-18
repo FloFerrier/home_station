@@ -15,7 +15,7 @@ void SysTick_Handler(void);
 int main(void) {
     HAL_Init();
 
-    console_init();
+    (void)console_init();
     (void)sensor_init();
 
     (void)xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL);

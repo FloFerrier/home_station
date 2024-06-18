@@ -40,3 +40,9 @@ add_unit_test(test_commands
     mock/mock_console.c
     ut/test_commands.c
 )
+
+add_unit_test(test_console
+    ${CMAKE_SOURCE_DIR}/src/console.c
+    mock/mock_stm32f4x.c
+    ut/test_console.c
+)

@@ -10,8 +10,11 @@ typedef enum {
     HAL_TIMEOUT  = 0x03U
 } HAL_StatusTypeDef;
 
+#define GPIO_PIN_2 (0u)
+#define GPIO_PIN_3 (0u)
 #define GPIO_PIN_8 (0u)
 #define GPIO_PIN_9 (0u)
+#define GPIO_MODE_AF_PP (0u)
 #define GPIO_MODE_AF_OD (0u)
 #define GPIO_NOPULL (0u)
 #define GPIO_SPEED_FREQ_VERY_HIGH (0u)
@@ -19,6 +22,9 @@ typedef enum {
 typedef struct {
     uint32_t dummy;
 } GPIO_TypeDef;
+
+extern GPIO_TypeDef mock_GPIOA;
+#define GPIOA (&mock_GPIOA)
 
 extern GPIO_TypeDef mock_GPIOB;
 #define GPIOB (&mock_GPIOB)
@@ -62,11 +68,17 @@ typedef struct {
     I2C_InitTypeDef Init;  
 } I2C_HandleTypeDef;
 
+void mock_assert_call_HAL_RCC_GPIOA_CLK_ENABLE(void);
+void __HAL_RCC_GPIOA_CLK_ENABLE(void);
+
 void mock_assert_call_HAL_RCC_GPIOB_CLK_ENABLE(void);
 void __HAL_RCC_GPIOB_CLK_ENABLE(void);
 
 void mock_assert_call_HAL_RCC_I2C1_CLK_ENABLE(void);
 void __HAL_RCC_I2C1_CLK_ENABLE(void);
+
+void mock_assert_call_HAL_RCC_USART2_CLK_ENABLE(void);
+void __HAL_RCC_USART2_CLK_ENABLE(void);
 
 void mock_assert_call_HAL_GPIO_Init(void);
 void HAL_GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_Init);
@@ -82,5 +94,46 @@ HAL_StatusTypeDef HAL_I2C_Mem_Write(I2C_HandleTypeDef *hi2c, uint16_t DevAddress
 
 void mock_assert_call_HAL_Delay(uint32_t Delay);
 void HAL_Delay(uint32_t Delay);
+
+#define GPIO_AF7_USART2 (0u)
+#define UART_WORDLENGTH_8B (0u)
+#define UART_STOPBITS_1 (0u)
+#define UART_PARITY_NONE (0u)
+#define UART_MODE_TX_RX (0u)
+#define UART_HWCONTROL_NONE (0u)
+#define UART_OVERSAMPLING_16 (0u)
+
+typedef struct {
+    uint32_t dummy;
+} USART_TypeDef;
+
+extern USART_TypeDef mock_USART2;
+#define USART2 (&mock_USART2)
+
+typedef uint32_t HAL_UART_RxTypeTypeDef;
+
+typedef struct {
+  uint32_t BaudRate;
+  uint32_t WordLength;
+  uint32_t StopBits;
+  uint32_t Parity;
+  uint32_t Mode;
+  uint32_t HwFlowCtl;
+  uint32_t OverSampling;
+} UART_InitTypeDef;
+
+typedef struct __UART_HandleTypeDef {
+    USART_TypeDef *Instance;
+    UART_InitTypeDef Init;
+} UART_HandleTypeDef;
+
+void mock_assert_call_HAL_UART_Init(HAL_StatusTypeDef ret);
+HAL_StatusTypeDef HAL_UART_Init(UART_HandleTypeDef *huart);
+
+void mock_assert_call_HAL_UART_Transmit(const uint8_t *pData, uint16_t Size, uint32_t Timeout, HAL_StatusTypeDef ret);
+HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
+
+void mock_assert_call_HAL_UART_Receive(const uint8_t *pData, uint16_t Size, uint32_t Timeout, HAL_StatusTypeDef ret);
+HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 
 #endif  // TEST_MOCK_STM32F4X_H

@@ -66,7 +66,7 @@ static void test_shell_should_received_an_unknown_command(void **state) {
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-    mock_assert_call_console_send("> Unknown command\r\n");
+    mock_assert_call_console_send("> Unknown command\r\n", true);
 
     uint32_t params;
     shell_task(&params);
