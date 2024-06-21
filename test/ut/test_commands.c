@@ -15,38 +15,79 @@
 
 #define MESSAGE_LEN_MAX (225u)
 
-static void test_command_sensorSelfTest_should_failed(void **state) {
-    (void)state;
+static void test_command_get_index_should_be_help() {
+    command_index_e command_is_available = command_getIndex("help");
 
+    assert_int_equal(command_is_available, COMMAND_HELP);
+}
+
+static void test_command_get_index_should_be_unknown() {
+    command_index_e command_is_available = command_getIndex("");
+
+    assert_int_equal(command_is_available, COMMAND_UNKNOWN);
+}
+
+static void test_command_should_avoid_incorrect_parameter() {
+    command_index_e command_is_available = command_getIndex(NULL);
+
+    assert_int_equal(command_is_available, COMMAND_UNKNOWN);
+}
+
+static void test_command_execute_should_avoid_incorrect_parameter() {
+    bool command_is_executed = command_execute(-1);
+
+    assert_int_equal(command_is_executed, false);
+}
+
+static void test_command_execute_should_be_unknown_command() {
+    mock_assert_call_console_send("> Unknown command\r\n", true);
+    mock_assert_call_console_send("Tap \"help\" command : Display all commands available\r\n", true);
+
+    bool command_is_executed = command_execute(COMMAND_UNKNOWN);
+
+    assert_int_equal(command_is_executed, true);
+}
+
+static void test_command_execute_should_display_all_available_command() {
+    mock_assert_call_console_send("(help)> List of available command :\r\n", true);
+    mock_assert_call_console_send("\tsensor_selfTest : Performing a sensor self-test\r\n", true);
+    mock_assert_call_console_send("\tsensor_getData : Request a sensor to get data\r\n", true);
+
+    bool command_is_executed = command_execute(COMMAND_HELP);
+
+    assert_int_equal(command_is_executed, true);
+}
+
+static void test_command_execute_should_failed_sensor_selftest() {
     mock_assert_call_sensor_selfTest(BME68X_E_SELF_TEST);
     mock_assert_call_console_send("(sensor)> Self-test failed ... -5\r\n", true);
 
-    command_sensorSelfTest(0, NULL);
+    bool command_is_executed = command_execute(COMMAND_SENSOR_SELF_TEST);
+
+    assert_int_equal(command_is_executed, true);
 }
 
-static void test_command_sensorSelfTest_should_passed(void **state) {
-    (void)state;
-
+static void test_command_execute_should_passed_sensor_selftest() {
     mock_assert_call_sensor_selfTest(BME68X_OK);
     mock_assert_call_console_send("(sensor)> Self-test passed !\r\n", true);
 
-    command_sensorSelfTest(0, NULL);
+    bool command_is_executed = command_execute(COMMAND_SENSOR_SELF_TEST);
+
+    assert_int_equal(command_is_executed, true);
 }
 
-static void test_command_sensorGetData_should_failed(void **state) {
-    (void)state;
-
+static void test_command_execute_should_failed_sensor_get_data() {
     sensor_data_s expected_data = {0};
     uint32_t expected_number_of_data = 0;
     mock_assert_call_sensor_getData(&expected_data, expected_number_of_data, BME68X_W_NO_NEW_DATA);
     mock_assert_call_console_send("(sensor)> Get data failed ... 2\r\n", true);
 
-    command_sensorGetData(0, NULL);
+    bool command_is_executed = command_execute(COMMAND_SENSOR_GET_DATA);
+
+    assert_int_equal(command_is_executed, true);
 }
 
-static void test_command_sensorGetData_should_send_several_data(void **state) {
-    (void)state;
-
+static void test_command_execute_should_passed_sensor_get_data() {
     sensor_data_s expected_data[SENSOR_MAX_DATA_AVAILABLE] = {
         {.temperature_in_deg = 15.0f, .pressure_in_pascal = 98000.0f, .humidity_in_per100 = 50.0f, .gas_resistance_in_ohms = 0.0f},
         {.temperature_in_deg = 20.0f, .pressure_in_pascal = 99000.0f, .humidity_in_per100 = 55.0f, .gas_resistance_in_ohms = 0.0f},
@@ -66,15 +107,23 @@ static void test_command_sensorGetData_should_send_several_data(void **state) {
         mock_assert_call_console_send(expected_message[index], true);
     }
 
-    command_sensorGetData(0, NULL);
+    bool command_is_executed = command_execute(COMMAND_SENSOR_GET_DATA);
+
+    assert_int_equal(command_is_executed, true);
 }
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_command_sensorSelfTest_should_failed),
-        cmocka_unit_test(test_command_sensorSelfTest_should_passed),
-        cmocka_unit_test(test_command_sensorGetData_should_failed),
-        cmocka_unit_test(test_command_sensorGetData_should_send_several_data),
+        cmocka_unit_test(test_command_get_index_should_be_help),
+        cmocka_unit_test(test_command_get_index_should_be_unknown),
+        cmocka_unit_test(test_command_should_avoid_incorrect_parameter),
+        cmocka_unit_test(test_command_execute_should_avoid_incorrect_parameter),
+        cmocka_unit_test(test_command_execute_should_be_unknown_command),
+        cmocka_unit_test(test_command_execute_should_display_all_available_command),
+        cmocka_unit_test(test_command_execute_should_failed_sensor_selftest),
+        cmocka_unit_test(test_command_execute_should_passed_sensor_selftest),
+        cmocka_unit_test(test_command_execute_should_failed_sensor_get_data),
+        cmocka_unit_test(test_command_execute_should_passed_sensor_get_data),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

@@ -17,33 +17,6 @@ int loopCnt;
 
 STATIC shell_s shell = {0};
 
-typedef struct {
-  const char *name;
-  void (*handler)(uint32_t argc, char *argv[]);
-  const char *desc;
-} shell_command_s;
-
-STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size);
-
-STATIC const shell_command_s shell_commands[] = {
-  {"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
-  {"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
-};
-
-STATIC int8_t shell_commandIndex(char *cmd, uint32_t cmd_size) {
-    (void)cmd_size;
-    int8_t index = -1;
-    for(uint32_t i=0; i < sizeof(shell_commands)/sizeof(shell_commands[0]); i++) {
-        uint32_t cmp = strncmp(cmd, shell_commands[i].name, COMMAND_STRING_LEN_MAX);
-        if(cmp == 0) {
-            index = (int8_t)i;
-            return index;
-        }
-    }
-
-    return index;
-}
-
 void shell_task(void *params) {
     (void)params;
 

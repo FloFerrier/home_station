@@ -9,20 +9,25 @@
 
 #include "mock_commands.h"
 
-void mock_assert_call_command_sensorSelfTest(void) {
-    expect_function_call(command_sensorSelfTest);
+void mock_assert_call_command_getIndex(const char *cmd, command_index_e ret) {
+    expect_function_call(command_getIndex);
+    assert_non_null(cmd);
+    expect_string(command_getIndex, cmd, cmd);
+    will_return(command_getIndex, ret);
 }
-void command_sensorSelfTest(uint32_t argc, char *argv[]) {
+command_index_e command_getIndex(const char *cmd) {
     function_called();
-    (void)argc;
-    (void)argv;
+    check_expected(cmd);
+    return mock();
 }
 
-void mock_assert_call_command_sensorGetData(void) {
-    expect_function_call(command_sensorGetData);
+void mock_assert_call_command_execute(command_index_e command_index, bool ret) {
+    expect_function_call(command_execute);
+    expect_value(command_execute, command_index, command_index);
+    will_return(command_execute, ret);
 }
-void command_sensorGetData(uint32_t argc, char *argv[]) {
+bool command_execute(command_index_e command_index) {
     function_called();
-    (void)argc;
-    (void)argv;
+    check_expected(command_index);
+    return mock();
 }
