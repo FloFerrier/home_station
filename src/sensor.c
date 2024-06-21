@@ -126,13 +126,23 @@ sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data
         return SENSOR_NULL_POINTER;
     }
 
-    struct bme68x_conf conf = {0};
+    struct bme68x_conf conf = {
+        .os_temp = BME68X_OS_2X,
+        .os_hum = BME68X_OS_16X,
+        .os_pres = BME68X_OS_1X,
+        .odr = BME68X_ODR_NONE,
+        .filter = BME68X_FILTER_OFF,
+    };
     int8_t bme68x_rslt = bme68x_set_conf(&conf, &sensor);
     if(bme68x_rslt != BME68X_OK) {
         return convertBme68xToSensorReturnCode(bme68x_rslt);
     }
 
-    struct bme68x_heatr_conf heatr_conf = {0};
+    struct bme68x_heatr_conf heatr_conf = {
+        .enable = BME68X_ENABLE,
+        .heatr_temp = 300,
+        .heatr_dur = 100,
+    };
     bme68x_rslt = bme68x_set_heatr_conf(BME68X_FORCED_MODE, &heatr_conf, &sensor);
     if(bme68x_rslt != BME68X_OK) {
         return convertBme68xToSensorReturnCode(bme68x_rslt);
