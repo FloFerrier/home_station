@@ -108,9 +108,9 @@ static void test_sensor_should_failed_on_i2c_init(void **state) {
     mock_assert_call_HAL_RCC_I2C1_CLK_ENABLE();
     mock_assert_call_HAL_I2C_Init(HAL_ERROR);
 
-    int8_t rslt = sensor_init();
+    sensor_returnCode_e rslt = sensor_init();
 
-    assert_int_equal(rslt, BME68X_E_COM_FAIL);
+    assert_int_equal(rslt, SENSOR_I2C_FAILURE);
 }
 
 static void test_sensor_should_failed_on_device_init(void **state) {
@@ -123,9 +123,9 @@ static void test_sensor_should_failed_on_device_init(void **state) {
     struct bme68x_dev dev = {0};
     mock_assert_call_bme68x_init(&dev, BME68X_E_DEV_NOT_FOUND);
 
-    int8_t rslt = sensor_init();
+    sensor_returnCode_e rslt = sensor_init();
 
-    assert_int_equal(rslt, BME68X_E_DEV_NOT_FOUND);
+    assert_int_equal(rslt, SENSOR_NOT_FOUND);
 }
 
 static void test_sensor_should_be_initialized(void **state) {
@@ -138,9 +138,9 @@ static void test_sensor_should_be_initialized(void **state) {
     struct bme68x_dev dev;
     mock_assert_call_bme68x_init(&dev, BME68X_OK);
 
-    int8_t rslt = sensor_init();
+    sensor_returnCode_e rslt = sensor_init();
 
-    assert_int_equal(rslt, BME68X_OK);
+    assert_int_equal(rslt, SENSOR_OK);
 }
 
 static void test_sensor_should_failed_selftest(void **state) {
@@ -149,9 +149,9 @@ static void test_sensor_should_failed_selftest(void **state) {
     struct bme68x_dev dev = {0};
     mock_assert_call_bme68x_selftest_check(&dev, BME68X_E_SELF_TEST);
 
-    int8_t rslt = sensor_selfTest();
+    sensor_returnCode_e rslt = sensor_selfTest();
 
-    assert_int_equal(rslt, BME68X_E_SELF_TEST);
+    assert_int_equal(rslt, SENSOR_SELF_TEST_FAILURE);
 }
 
 static void test_sensor_should_be_selftested(void **state) {
@@ -160,17 +160,17 @@ static void test_sensor_should_be_selftested(void **state) {
     struct bme68x_dev dev = {0};
     mock_assert_call_bme68x_selftest_check(&dev, BME68X_OK);
 
-    int8_t rslt = sensor_selfTest();
+    sensor_returnCode_e rslt = sensor_selfTest();
 
-    assert_int_equal(rslt, BME68X_OK);
+    assert_int_equal(rslt, SENSOR_OK);
 }
 
 static void test_sensor_should_have_invalid_parameters(void **state) {
     (void)state;
 
-    int8_t rslt = sensor_getData(NULL, 0);
+    sensor_returnCode_e rslt = sensor_getData(NULL, 0);
 
-    assert_int_equal(rslt, BME68X_E_NULL_PTR);
+    assert_int_equal(rslt, SENSOR_NULL_POINTER);
 }
 
 static void test_sensor_should_failed_set_conf(void **state) {
@@ -182,9 +182,9 @@ static void test_sensor_should_failed_set_conf(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_I_PARAM_CORR);
+    assert_int_equal(rslt, SENSOR_MISC_FAILURE);
 }
 
 static void test_sensor_should_failed_set_heatr_conf(void **state) {
@@ -198,9 +198,9 @@ static void test_sensor_should_failed_set_heatr_conf(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_I_PARAM_CORR);
+    assert_int_equal(rslt, SENSOR_MISC_FAILURE);
 }
 
 static void test_sensor_should_failed_set_forced_mode(void **state) {
@@ -215,9 +215,9 @@ static void test_sensor_should_failed_set_forced_mode(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_I_PARAM_CORR);
+    assert_int_equal(rslt, SENSOR_MISC_FAILURE);
 }
 
 static void test_sensor_should_no_available_data(void **state) {
@@ -239,9 +239,9 @@ static void test_sensor_should_no_available_data(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_W_NO_NEW_DATA);
+    assert_int_equal(rslt, SENSOR_MISC_FAILURE);
 }
 
 static void test_sensor_should_failed_get_data(void **state) {
@@ -263,9 +263,9 @@ static void test_sensor_should_failed_get_data(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_E_COM_FAIL);
+    assert_int_equal(rslt, SENSOR_I2C_FAILURE);
 }
 
 static void test_sensor_should_get_several_data(void **state) {
@@ -292,9 +292,9 @@ static void test_sensor_should_get_several_data(void **state) {
 
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
-    int8_t rslt = sensor_getData(data, &number_of_data);
+    sensor_returnCode_e rslt = sensor_getData(data, &number_of_data);
 
-    assert_int_equal(rslt, BME68X_OK);
+    assert_int_equal(rslt, SENSOR_OK);
     sensor_data_s expected_data[SENSOR_MAX_DATA_AVAILABLE] = {
         {.temperature_in_deg = 15.0f, .pressure_in_pascal = 98000.0f, .humidity_in_per100 = 45.0f},
         {.temperature_in_deg = 20.0f, .pressure_in_pascal = 99000.0f, .humidity_in_per100 = 50.0f},

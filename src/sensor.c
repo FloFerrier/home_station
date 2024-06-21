@@ -20,6 +20,34 @@ STATIC struct bme68x_dev sensor = {0};
 
 STATIC const uint8_t BME68X_DEV_ADDR = BME68X_I2C_ADDR_LOW;
 
+STATIC sensor_returnCode_e convertBme68xToSensorReturnCode(int8_t bme68x_return_code) {
+    sensor_returnCode_e sensor_return_code;
+    switch (bme68x_return_code) {
+    case BME68X_OK:
+        sensor_return_code = SENSOR_OK;
+        break;
+    case BME68X_E_NULL_PTR:
+        sensor_return_code = SENSOR_NULL_POINTER;
+        break;
+    case BME68X_E_COM_FAIL:
+        sensor_return_code = SENSOR_I2C_FAILURE;
+        break;
+    case BME68X_E_DEV_NOT_FOUND:
+        sensor_return_code = SENSOR_NOT_FOUND;
+        break;
+    case BME68X_E_INVALID_LENGTH:
+        sensor_return_code = SENSOR_INVALID_PARAM;
+        break;
+    case BME68X_E_SELF_TEST:
+        sensor_return_code = SENSOR_SELF_TEST_FAILURE;
+        break;
+    default:
+        sensor_return_code = SENSOR_MISC_FAILURE;
+        break;
+    }
+    return sensor_return_code;
+}
+
 STATIC int8_t bme68x_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr) {
     if((reg_data == NULL) || (intf_ptr == NULL)) {
         return BME68X_E_NULL_PTR;
@@ -50,7 +78,7 @@ STATIC void bme68x_delay_us(uint32_t period, void *intf_ptr) {
     HAL_Delay(delay_in_ms);
 }
 
-int8_t sensor_init(void) {
+sensor_returnCode_e sensor_init(void) {
     __HAL_RCC_GPIOB_CLK_ENABLE();
     /* I2C1 Configuration
         PB8 ------> I2C1_SCL
@@ -73,9 +101,9 @@ int8_t sensor_init(void) {
     i2c_handle.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
     i2c_handle.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
     i2c_handle.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-    HAL_StatusTypeDef result = HAL_I2C_Init(&i2c_handle);
-    if(result != HAL_OK) {
-        return BME68X_E_COM_FAIL;
+    HAL_StatusTypeDef hal_rslt = HAL_I2C_Init(&i2c_handle);
+    if(hal_rslt != HAL_OK) {
+        return SENSOR_I2C_FAILURE;
     }
 
     sensor.intf = BME68X_I2C_INTF;
@@ -84,35 +112,35 @@ int8_t sensor_init(void) {
     sensor.read = bme68x_i2c_read;
     sensor.write = bme68x_i2c_write;
     sensor.amb_temp = BME68X_AMBIANT_TEMPERATURE;
-    return (int8_t)bme68x_init(&sensor);
+    int8_t bme68x_rslt = bme68x_init(&sensor);
+    return convertBme68xToSensorReturnCode(bme68x_rslt);
 }
 
-int8_t sensor_selfTest(void) {
-    return (int8_t)bme68x_selftest_check(&sensor);
+sensor_returnCode_e sensor_selfTest(void) {
+    int8_t bme68x_rslt = bme68x_selftest_check(&sensor);
+    return convertBme68xToSensorReturnCode(bme68x_rslt);
 }
 
-int8_t sensor_getData(sensor_data_s *data, uint32_t *number_of_data) {
-    int8_t bme68x_rslt = BME68X_OK;
+sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data) {
     if((data == NULL) || (number_of_data == NULL)) {
-        bme68x_rslt = BME68X_E_NULL_PTR;
-        return bme68x_rslt;
+        return SENSOR_NULL_POINTER;
     }
 
     struct bme68x_conf conf = {0};
-    bme68x_rslt = bme68x_set_conf(&conf, &sensor);
+    int8_t bme68x_rslt = bme68x_set_conf(&conf, &sensor);
     if(bme68x_rslt != BME68X_OK) {
-        return bme68x_rslt;
+        return convertBme68xToSensorReturnCode(bme68x_rslt);
     }
 
     struct bme68x_heatr_conf heatr_conf = {0};
     bme68x_rslt = bme68x_set_heatr_conf(BME68X_FORCED_MODE, &heatr_conf, &sensor);
     if(bme68x_rslt != BME68X_OK) {
-        return bme68x_rslt;
+        return convertBme68xToSensorReturnCode(bme68x_rslt);
     }
 
     bme68x_rslt = bme68x_set_op_mode(BME68X_FORCED_MODE, &sensor);
     if(bme68x_rslt != BME68X_OK) {
-        return bme68x_rslt;
+        return convertBme68xToSensorReturnCode(bme68x_rslt);
     }
 
     uint32_t delay_in_us = bme68x_get_meas_dur(BME68X_FORCED_MODE, &conf, &sensor);
@@ -130,6 +158,5 @@ int8_t sensor_getData(sensor_data_s *data, uint32_t *number_of_data) {
             data[index].gas_resistance_in_ohms = bme68x_data[index].gas_resistance;
         }
     }
-
-    return bme68x_rslt;
+    return convertBme68xToSensorReturnCode(bme68x_rslt);
 }
