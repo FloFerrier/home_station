@@ -11,6 +11,13 @@
 #include "mock_commands.h"
 #include "shell.h"
 
+#define RING_BUFFER_LEN_MAX (255u)
+
+typedef struct {
+    char *buffer[RING_BUFFER_LEN_MAX+1];
+    uint32_t index;
+} shell_s;
+
 extern int loopCnt;
 extern shell_s shell;
 extern void shell_task(void *params);
@@ -48,53 +55,16 @@ static void test_shell_should_failed_to_receive_a_character(void **state) {
     shell_task(&params);
 }
 
-static void test_shell_should_received_a_character(void **state) {
-    test_fixture_s *fixture = (test_fixture_s *)*state;
-    *fixture->loopCnt = 0;
-
-    mock_assert_call_console_receive('a', true);
-
-    uint32_t params;
-    shell_task(&params);
-}
-
-static void test_shell_should_received_an_unknown_command(void **state) {
-    const char TEST_DATA[] = "Hello world\n";
+static void test_shell_should_received_a_command(void **state) {
+    const char TEST_DATA[] = "a fake command\n";
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
     for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
-    mock_assert_call_console_send("> Unknown command\r\n", true);
-
-    uint32_t params;
-    shell_task(&params);
-}
-
-static void test_shell_should_received_command_sensor_selfTest(void **state) {
-    const char TEST_DATA[] = "sensor_selfTest\n";
-    test_fixture_s *fixture = (test_fixture_s *)*state;
-    *fixture->loopCnt = strlen(TEST_DATA) - 1;
-
-    for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
-        mock_assert_call_console_receive(TEST_DATA[index], true);
-    }
-    mock_assert_call_command_sensorSelfTest();
-
-    uint32_t params;
-    shell_task(&params);
-}
-
-static void test_shell_should_received_command_sensor_getData(void **state) {
-    const char TEST_DATA[] = "sensor_getData\n";
-    test_fixture_s *fixture = (test_fixture_s *)*state;
-    *fixture->loopCnt = strlen(TEST_DATA) - 1;
-
-    for(int index=0; index < (int)(strlen(TEST_DATA)); index++) {
-        mock_assert_call_console_receive(TEST_DATA[index], true);
-    }
-    mock_assert_call_command_sensorGetData();
+    mock_assert_call_command_getIndex("a fake command", COMMAND_UNKNOWN);
+    mock_assert_call_command_execute(COMMAND_UNKNOWN, true);
 
     uint32_t params;
     shell_task(&params);
@@ -103,10 +73,7 @@ static void test_shell_should_received_command_sensor_getData(void **state) {
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test_setup_teardown(test_shell_should_failed_to_receive_a_character, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_shell_should_received_a_character, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_shell_should_received_an_unknown_command, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_shell_should_received_command_sensor_selfTest, setup, teardown),
-        cmocka_unit_test_setup_teardown(test_shell_should_received_command_sensor_getData, setup, teardown),
+        cmocka_unit_test_setup_teardown(test_shell_should_received_a_command, setup, teardown),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
