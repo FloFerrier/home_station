@@ -12,6 +12,7 @@ lib/rtos/freertos_kernel
 lib/driver/bme68x/src
 
 # Python folders
-test/end-to-end/virtualenv
-test/end-to-end/__pycache__
-test/end-to-end/.pytest_cache
+test/acceptance/virtualenv
+test/acceptance/__pycache__
+test/acceptance/.pytest_cache
+test/acceptance/output

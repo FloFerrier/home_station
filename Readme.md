@@ -55,7 +55,7 @@ $ gdb-multiarch --tui build/Debug/src/weather_sensors.elf
 (gdb) monitor halt # With renode only
 (gdb) continue
 ```
-## End-to-end Test
+## Acceptance Test
 ### Prerequisites
 1. Get your python version on your distro:
 ```bash
@@ -84,11 +84,11 @@ $ source virtualenv/bin/activate
 (virtualenv) deactivate
 ```
 ### Run test suite
-Start emulator:
+Start emulator(or plug the board with firmware)
 ```bash
 $ renode --disable-gui config/nucleo-f446re.resc
 ```
 Launch python script:
 ```bash
-(virtualenv) pytest -v -s
+(virtualenv) robot -d output TestShell.robot
 ```
