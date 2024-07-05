@@ -4,3 +4,5 @@ UserLed: Miscellaneous.LED @ gpioPortA
 
 gpioPortA:
     5 -> UserLed@0
+
+bme680: I2C.BME680 @ i2c1 0x76

@@ -3,6 +3,8 @@
 $CONFIG_FILE?=@config/nucleo-f446re.repl
 $FIRMWARE_FILE?=@build/Release/src/weather_sensors.elf
 
+include @test/acceptance/emulator/bme680.cs
+
 emulation CreateUartPtyTerminal "console" "/tmp/console"
 
 mach create
