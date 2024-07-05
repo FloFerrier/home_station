@@ -86,7 +86,7 @@ $ source virtualenv/bin/activate
 ### Run test suite
 Start emulator(or plug the board with firmware)
 ```bash
-$ renode --disable-gui config/nucleo-f446re.resc
+$ renode --disable-gui config/nucleo-f446re.resc &>/dev/null &
 ```
 Launch python script:
 ```bash
