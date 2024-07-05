@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Registers>
+    # COEFF 3
+    <reg><Addr>0x00</Addr><Val>0x33</Val></reg> # <7:0> res_heat_val
+    <reg><Addr>0x01</Addr><Val>0xaa</Val></reg>
+    <reg><Addr>0x02</Addr><Val>0x16</Val></reg> # <5:4> res_heat_range
+    <reg><Addr>0x03</Addr><Val>0xc9</Val></reg>
+    <reg><Addr>0x04</Addr><Val>0xf3</Val></reg> # <7:0> range_switching_error
+    # Status Registers
+    <reg><Addr>0x1d</Addr><Val>0x0</Val></reg> # <7> new_data_0 <6> gas_measuring <5> measuring <3:0> gas_meas_index
+    # Pressure Data
+    <reg><Addr>0x1f</Addr><Val>0x80</Val></reg> # <7:0> press_msb
+    <reg><Addr>0x20</Addr><Val>0x0</Val></reg> # <7:0> press_lsb
+    <reg><Addr>0x21</Addr><Val>0x0</Val></reg> # <7:4> press_xlsb
+    # Temperature Data
+    <reg><Addr>0x22</Addr><Val>0x80</Val></reg> # <7:0> temp_msb
+    <reg><Addr>0x23</Addr><Val>0x0</Val></reg> # <7:0> temp_lsb
+    <reg><Addr>0x24</Addr><Val>0x0</Val></reg> # <7:4> temp_xlsb
+    # Humidity Data
+    <reg><Addr>0x25</Addr><Val>0x80</Val></reg> # <7:0> hum_msb
+    <reg><Addr>0x26</Addr><Val>0x0</Val></reg> # <7:0> hum_lsb
+    # Gas Sensor Resistance Data/Range
+    <reg><Addr>0x2a</Addr><Val>0x0</Val></reg> # <7:0> gas_r_msb
+    <reg><Addr>0x2b</Addr><Val>0x4</Val></reg> # <7:6> gas_r_lsb <5> gas_valid_r <4> heat_stab_r <3:0> gas_range_r
+    # IDAC_HEAT_x
+    <reg><Addr>0x50</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_0
+    <reg><Addr>0x51</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_1
+    <reg><Addr>0x52</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_2
+    <reg><Addr>0x53</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_3
+    <reg><Addr>0x54</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_4
+    <reg><Addr>0x55</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_5
+    <reg><Addr>0x56</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_6
+    <reg><Addr>0x57</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_7
+    <reg><Addr>0x58</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_8
+    <reg><Addr>0x59</Addr><Val>0x0</Val></reg> # <7:0> idac_heat_9
+    # RES_HEAT_x
+    <reg><Addr>0x5a</Addr><Val>0x0</Val></reg> # <7:0> res_heat_0
+    <reg><Addr>0x5b</Addr><Val>0x0</Val></reg> # <7:0> res_heat_1
+    <reg><Addr>0x5c</Addr><Val>0x0</Val></reg> # <7:0> res_heat_2
+    <reg><Addr>0x5d</Addr><Val>0x0</Val></reg> # <7:0> res_heat_3
+    <reg><Addr>0x5e</Addr><Val>0x0</Val></reg> # <7:0> res_heat_4
+    <reg><Addr>0x5f</Addr><Val>0x0</Val></reg> # <7:0> res_heat_5
+    <reg><Addr>0x60</Addr><Val>0x0</Val></reg> # <7:0> res_heat_6
+    <reg><Addr>0x61</Addr><Val>0x0</Val></reg> # <7:0> res_heat_7
+    <reg><Addr>0x62</Addr><Val>0x0</Val></reg> # <7:0> res_heat_8
+    <reg><Addr>0x63</Addr><Val>0x0</Val></reg> # <7:0> res_heat_9
+    # GAS_WAIT_x
+    <reg><Addr>0x64</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_0
+    <reg><Addr>0x65</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_1
+    <reg><Addr>0x66</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_2
+    <reg><Addr>0x67</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_3
+    <reg><Addr>0x68</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_4
+    <reg><Addr>0x69</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_5
+    <reg><Addr>0x6a</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_6
+    <reg><Addr>0x6b</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_7
+    <reg><Addr>0x6c</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_8
+    <reg><Addr>0x6d</Addr><Val>0x0</Val></reg> # <7:0> gas_wait_9
+    #
+    <reg><Addr>0x70</Addr><Val>0x0</Val></reg> # <3> heat_off
+    <reg><Addr>0x71</Addr><Val>0x0</Val></reg> # <4> run_gas <3:0> nb_conv
+    <reg><Addr>0x72</Addr><Val>0x0</Val></reg> # <6> spi_3w_int_en <2:0> osrs_h
+    <reg><Addr>0x73</Addr><Val>0x0</Val></reg> # <4> spi_mem_page
+    <reg><Addr>0x74</Addr><Val>0x0</Val></reg> # <7:5> osrs_t <4:2> osrs_p <1:0> mode
+    <reg><Addr>0x75</Addr><Val>0x0</Val></reg> # <4:2> filter <0> spi_3w_en
+    # COEFF 1
+    <reg><Addr>0x8a</Addr><Val>0x2f</Val></reg> # par_t2
+    <reg><Addr>0x8b</Addr><Val>0x66</Val></reg> # par_t2
+    <reg><Addr>0x8c</Addr><Val>0x3</Val></reg> # par_t3
+    <reg><Addr>0x8d</Addr><Val>0x10</Val></reg>
+    <reg><Addr>0x8e</Addr><Val>0x90</Val></reg> # par_p1
+    <reg><Addr>0x8f</Addr><Val>0x91</Val></reg> # par_p1
+    <reg><Addr>0x90</Addr><Val>0x91</Val></reg> # par_p2
+    <reg><Addr>0x91</Addr><Val>0xd6</Val></reg> # par_p2
+    <reg><Addr>0x92</Addr><Val>0x58</Val></reg> # par_p3
+    <reg><Addr>0x93</Addr><Val>0x0</Val></reg>
+    <reg><Addr>0x94</Addr><Val>0x93</Val></reg> # par_p4
+    <reg><Addr>0x95</Addr><Val>0x18</Val></reg> # par_p4
+    <reg><Addr>0x96</Addr><Val>0xa</Val></reg> # par_p5
+    <reg><Addr>0x97</Addr><Val>0x0</Val></reg> # par_p5
+    <reg><Addr>0x98</Addr><Val>0x32</Val></reg> # par_p7
+    <reg><Addr>0x99</Addr><Val>0x1e</Val></reg> # par_p6
+    <reg><Addr>0x9a</Addr><Val>0x0</Val></reg>
+    <reg><Addr>0x9b</Addr><Val>0x0</Val></reg>
+    <reg><Addr>0x9c</Addr><Val>0x95</Val></reg> # par_p8
+    <reg><Addr>0x9d</Addr><Val>0xf1</Val></reg> # par_p8
+    <reg><Addr>0x9e</Addr><Val>0x88</Val></reg> # par_p9
+    <reg><Addr>0x9f</Addr><Val>0xf7</Val></reg> # par_p9
+    <reg><Addr>0xa0</Addr><Val>0x1e</Val></reg> # par_p10
+    # MISC
+    <reg><Addr>0xd0</Addr><Val>0x61</Val></reg> # id
+    <reg><Addr>0xe0</Addr><Val>0x0</Val></reg> # reset
+    # COEFF 2
+    <reg><Addr>0xe1</Addr><Val>0x3f</Val></reg> # par_h2
+    <reg><Addr>0xe2</Addr><Val>0x95</Val></reg> # <7:4> par_h2 <3:0> par_h1
+    <reg><Addr>0xe3</Addr><Val>0x2e</Val></reg> # par_h1
+    <reg><Addr>0xe4</Addr><Val>0x0</Val></reg> # par_h3
+    <reg><Addr>0xe5</Addr><Val>0x2d</Val></reg> # par_h4
+    <reg><Addr>0xe6</Addr><Val>0x14</Val></reg> # par_h5
+    <reg><Addr>0xe7</Addr><Val>0x78</Val></reg> # par_h6
+    <reg><Addr>0xe8</Addr><Val>0x9c</Val></reg> # par_h7
+    <reg><Addr>0xe9</Addr><Val>0x44</Val></reg> # par_t1
+    <reg><Addr>0xea</Addr><Val>0x66</Val></reg> # par_t1
+    <reg><Addr>0xeb</Addr><Val>0x0</Val></reg> # par_g2
+    <reg><Addr>0xec</Addr><Val>0xdc</Val></reg> # par_g2
+    <reg><Addr>0xed</Addr><Val>0xec</Val></reg> # par_g1
+    <reg><Addr>0xee</Addr><Val>0x12</Val></reg> # par_g3
+</Registers>
