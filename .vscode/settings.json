@@ -9,6 +9,8 @@
         "bme68x_defs.h": "c",
         "sensor.h": "c",
         "mock_sensor.h": "c",
-        "mock_stm32f4x.h": "c"
+        "mock_stm32f4x.h": "c",
+        "mock_console.h": "c",
+        "mock_commands.h": "c"
     }
 }
