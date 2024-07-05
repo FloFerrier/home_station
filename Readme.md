@@ -3,7 +3,7 @@
 ## Prerequisites
 All packages are for Ubuntu distribution.
 ```bash
-$ sudo apt install build-essential clang-format cmake gcc gcc-arm-none-eabi gdb-multiarch lcov ninja-build openocd
+$ sudo apt install build-essential clang-format cmake gcc gcc-arm-none-eabi gdb-multiarch lcov openocd
 ```
 Download Renode and install it.
 ## Build project
