@@ -1,0 +1,12 @@
+# template_config.yaml
+
+openweathermap:
+  url: ""
+  city: ""
+  key: ""
+
+influxdb:
+  url: ""
+  token: ""
+  org: ""
+  bucket: ""

@@ -1,0 +1,12 @@
+# test_config.yaml
+
+openweathermap:
+  url: "openweathermap-url"
+  city: "openweathermap-city"
+  key: "openweathermap-key"
+
+influxdb:
+  url: "influxdb-url"
+  token: "influxdb-token"
+  org: "influxdb-org"
+  bucket: "influxdb-bucket"

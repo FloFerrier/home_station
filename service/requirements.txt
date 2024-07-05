@@ -1,0 +1,6 @@
+pytest
+pytest-mock
+
+influxdb-client
+pyyaml
+requests
