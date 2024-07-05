@@ -24,7 +24,7 @@ $ cmake --build build/Test --target coverage # Generate code coverage report
 ## Open a debug session on board
 Start gdb server with Openocd :
 ```bash
-$ openocd -f config/openocd.cfg -c "setup stm32f4x" -c "program_debug"
+$ openocd -f config/openocd.cfg -c "setup stm32f4x" -c "program_debug build/Debug/src/weather_sensors.elf"
 ```
 Use gdb to debug your program :
 ```bash
