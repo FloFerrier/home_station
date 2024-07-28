@@ -1,4 +1,4 @@
-from database import Database
+from src.database import Database
 
 def test_init_success(mocker):
     database = Database()

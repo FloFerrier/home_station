@@ -1,4 +1,4 @@
-from openweathermap import OpenWeatherMap
+from src.openweathermap import OpenWeatherMap
 
 def test_init_fail(mocker):
     test_data = OpenWeatherMap()

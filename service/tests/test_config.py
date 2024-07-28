@@ -1,7 +1,10 @@
-from config import config_read
+import os
+
+from src.config import config_read
 
 def test_Config():
-    config = config_read("test_config.yaml")
+    test_filename = os. getcwd() + "/tests/test_config.yaml"
+    config = config_read(test_filename)
     assert config is not None
     assert "openweathermap" in config is not None
     assert config["openweathermap"]["url"] == "openweathermap-url"
