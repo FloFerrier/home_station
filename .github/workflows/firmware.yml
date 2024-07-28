@@ -1,0 +1,31 @@
+name: Firmware
+run-name: Weather sensors pipelines for firmware
+on: [push]
+jobs:
+  build_firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi make
+      - name: Build firmware
+        run: |
+          cd firmware
+          ./build.sh Release
+  build_and_run_unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq build-essential cmake gcc lcov make
+      - name: Build and run test suite
+        run: |
+          cd firmware
+          ./build.sh Test
+          ./run.sh UnitTest

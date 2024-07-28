@@ -1,0 +1,23 @@
+name: Service
+run-name: Weather sensors pipelines for service
+on: [push]
+jobs:
+  build_test_suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq python3 python3-venv
+      - name: Setup virtual environment
+        run: |
+          cd service
+          python3 -m venv virtualenv
+          source virtualenv/bin/activate
+          pip install -r requirements.txt
+      - name: Run test suite
+        run: |
+          cd tests
+          pytest -v
