@@ -3,18 +3,9 @@
 ### Host Operating System
 All the following commands are running on a Linux distribution:
 - Ubuntu:22.04
-### Python virtual environment
-1. Intall the python3-venv package:
+### Python tools
 ```bash
-$ sudo apt install python3.10-venv
-``` 
-2. Create a Python virtual environment for the project:
-```bash
-$ python3 -m venv virtualenv
-```
-3. Activate this:
-```bash
-$ source virtualenv/bin/activate
+$ sudo apt install make python3 python3-venv
 ```
 ### InfluxDB v2 OSS
 [Website Link](https://docs.influxdata.com/influxdb/v2/install/?t=Linux)
@@ -82,8 +73,16 @@ $ sudo systemctl restart grafana-server
 #### Run Grafana UI
 Open a browser on the following link:
 - http://localhost:3000/
-## Python dependencies
-Install dependencies with this command:
+
+## CLI commands
+The project has a Makefile to run and clean application or test suite with a virtual environment,
+refer you to the help command :
 ```bash
-(virtualenv)$ pip install -r requirements.txt
+$ make help
+clean                          Clean the workspace
+run                            Run the application
+test                           Run the test suite
 ```
+
+## Production setup
+Linux service with SystemD and virtual environment for python.
