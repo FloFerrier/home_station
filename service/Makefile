@@ -20,6 +20,5 @@ test: $(VENV)/bin/activate ## Run the test suite
 
 .PHONY: clean
 clean: ## Clean the workspace
-	rm -rf src/__pycache__
-	rm -rf tests/__pycache__
-	rm -rf $(VENV)
+	rm -rf $(VENV) */__pycache__ */*/__pycache__ .pytest_cache */.pytest_cache
+
