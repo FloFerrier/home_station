@@ -1,11 +1,11 @@
 set(BUILD_TARGET weather_sensors)
 
-message("OPENOCD_TARGET_BOARD=${OPENOCD_TARGET_BOARD}")
-
 set(FIRMWARE_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf)
-message("FIRMWARE_FILE=${FIRMWARE_FILE}")
+message(NOTICE "Firmware will be available on the following folder: ${FIRMWARE_FILE}")
 
-add_executable(${BUILD_TARGET}
+add_executable(${BUILD_TARGET})
+
+target_sources(${BUILD_TARGET} PRIVATE
     main.c
     sysmem.c
     console.c
@@ -32,10 +32,4 @@ target_link_options(${BUILD_TARGET} PUBLIC
     -Wl,-Map=output.map,--cref
     -Wl,--print-memory-usage
     -u _printf_float
-)
-
-add_custom_target(flash
-    COMMAND openocd -f config/openocd.cfg -c "setup ${OPENOCD_TARGET_BOARD}" -c "program_release ${FIRMWARE_FILE}"
-    DEPENDS ${FIRMWARE_FILE}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )

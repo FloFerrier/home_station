@@ -27,7 +27,6 @@ function execute_build() {
     local arg_build_mode=$1
     check_build_mode_is_available ${arg_build_mode}
     if [ $? -eq 1 ]; then
-        echo "Build on ${arg_build_mode} mode"
         cmake -B build/${arg_build_mode} -DCMAKE_BUILD_TYPE=${arg_build_mode}
         cmake --build build/${arg_build_mode}
     else
@@ -84,17 +83,14 @@ function execute_run() {
     local arg_mode=$1
     case ${arg_mode} in
         "release")
-            echo "Release mode"
             flash_firmware "build/release/src/weather_sensors.elf"
             ;;
 
         "debug")
-            echo "Debug mode"
             run_debug_session "build/debug/src/weather_sensors.elf"
             ;;
 
         "test")
-            echo "Test mode"
             run_test_suite "build/test"
             ;;
         *)

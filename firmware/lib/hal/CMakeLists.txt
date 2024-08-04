@@ -4,7 +4,9 @@ file(GLOB STM32_HAL_SRC_FILES CONFIGURE_DEPENDS
     cmsis/Device/Source/Templates/gcc/${STARTUP_FILE}
 )
 
-add_library(stm32_hal_driver STATIC ${STM32_HAL_SRC_FILES})
+add_library(stm32_hal_driver STATIC)
+
+target_sources(stm32_hal_driver PRIVATE ${STM32_HAL_SRC_FILES})
 
 target_include_directories(stm32_hal_driver PUBLIC
     Inc

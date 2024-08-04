@@ -20,6 +20,8 @@ FetchContent_Declare(
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/lib/hal/stm32
 )
 
+message(NOTICE "stm32f4xx hal driver v1.8.1 is using.")
+
 FetchContent_MakeAvailable(STM32_HAL_Driver)
 
 FetchContent_Declare(
@@ -28,5 +30,7 @@ FetchContent_Declare(
   GIT_TAG v2.6.8
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/lib/hal/cmsis/Device
 )
+
+message(NOTICE "cmsis device f4 v2.6.8 is using.")
 
 FetchContent_MakeAvailable(STM32_CMSIS_Device)

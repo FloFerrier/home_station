@@ -7,4 +7,6 @@ FetchContent_Declare(
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/lib/driver/bme68x/src
 )
 
+message(NOTICE "bme680x driver v4.4.8 is using.")
+
 FetchContent_MakeAvailable(bme68x_driver)

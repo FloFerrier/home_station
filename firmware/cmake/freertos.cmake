@@ -10,4 +10,6 @@ FetchContent_Declare(
     SOURCE_DIR ${RTOS_DIRECTORY}/freertos_kernel
 )
 
+message(NOTICE "FreeRTOS v10.5.1 kernel is using.")
+
 FetchContent_MakeAvailable(freertos_kernel)
