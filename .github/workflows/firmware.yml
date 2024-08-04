@@ -14,7 +14,7 @@ jobs:
       - name: Build firmware
         run: |
           cd firmware
-          ./build.sh Release
+          ./build.sh --build release
   build_and_run_unit_test:
     runs-on: ubuntu-latest
     steps:
@@ -27,5 +27,5 @@ jobs:
       - name: Build and run test suite
         run: |
           cd firmware
-          ./build.sh Test
-          ./run.sh UnitTest
+          ./build.sh --build test
+          ./build.sh --run test

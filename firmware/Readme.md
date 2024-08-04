@@ -1,5 +1,4 @@
-# STM32_Framework_Template
-## Nucleo-f446re board
+# README
 ## Prerequisites
 All packages are for Ubuntu distribution.
 ```bash
@@ -7,28 +6,22 @@ $ sudo apt install build-essential clang-format cmake gcc gcc-arm-none-eabi gdb-
 ```
 Download Renode and install it.
 ## Build project
-### Build and flash embedded firmware (cross-compilation)
+A bash script is available to build and debug/run firmware or test suite.
+The entrypoint for the script is to pass help option.
 ```bash
-$ cmake -B build/<Debug or Release> -DCMAKE_BUILD_TYPE=<Debug or Release>
-$ cmake --build build/<Debug or Release> # Build sources
-$ cmake --build build/<Debug or Release> --target flash # Flash the firmware
-$ cmake --build build/<Debug or Release> --target clean # Clean the build
+$ ./build.sh --help
 ```
-### Build tests (native compilation)
+You can build, clean or run on a MODE context (MODE=<debug, release or test>)
 ```bash
-$ cmake -B build/Test -DCMAKE_BUILD_TYPE=Test
-$ cmake --build build/Test
-$ ctest -V --test-dir build/Test # Run all tests with verbose output
-$ cmake --build build/Test --target coverage # Generate code coverage report
+$ ./build.sh --build <MODE>
+$ ./build.sh --run <MODE>
+$ ./build.sh --clean <MODE>
 ```
 ## Open a debug session on board
-Start gdb server with Openocd :
+Use build script to debug your program on the target :
 ```bash
-$ openocd -f config/openocd.cfg -c "setup stm32f4x" -c "program_debug build/Debug/src/weather_sensors.elf"
-```
-Use gdb to debug your program :
-```bash
-$ gdb-multiarch --tui build/Debug/src/weather_sensors.elf
+$ ./build.sh --build debug
+$ ./build.sh --run debug
 (gdb) target extended-remote localhost:3333
 (gdb) load
 (gdb) monitor reset halt
@@ -54,41 +47,4 @@ $ gdb-multiarch --tui build/Debug/src/weather_sensors.elf
 (gdb) monitor start # With renode only
 (gdb) monitor halt # With renode only
 (gdb) continue
-```
-## Acceptance Test
-### Prerequisites
-1. Get your python version on your distro:
-```bash
-$ python3 --version
-Python 3.XX.YY
-```
-2. Install the python virtual package:
-```bash
-$ sudo apt install python3.XX-venv
-```
-3. Create a Python virtual environment:
-```bash
-$ python3 -m venv virtualenv
-```
-### Use virtual environment to development
-1. Activate this:
-```bash
-$ source virtualenv/bin/activate
-```
-2. Install dependencies:
-```bash
-(virtualenv) pip install -r requirements.txt
-```
-3. And when you have finished to deactivate:
-```bash
-(virtualenv) deactivate
-```
-### Run test suite
-Start emulator(or plug the board with firmware)
-```bash
-$ renode --disable-gui config/nucleo-f446re.resc &>/dev/null &
-```
-Launch python script:
-```bash
-(virtualenv) robot -d output TestShell.robot
 ```
