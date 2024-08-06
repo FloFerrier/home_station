@@ -3,12 +3,13 @@
 BUILD_MODE=("debug" "release" "test")
 
 function display_help() {
-    echo "Usage: $(basename $0) [-h] [-b|c|r MODE]"
+    echo "Usage: $(basename $0) [-h] [-b|c|r MODE] [-t]"
     echo "Options:"
-    echo "  -h, --help     Display this help message"
-    echo "  -b, --build    Configure workspace and build sources for selected MODE"
-    echo "  -c, --clean    Remove workspace fir selected MODE"
-    echo "  -r, --run      Run the selected MODE"
+    echo "  -h, --help         Display this help message"
+    echo "  -b, --build        Configure workspace and build sources for selected MODE"
+    echo "  -c, --clean        Remove workspace fir selected MODE"
+    echo "  -r, --run          Run the selected MODE"
+    echo "  -t, --test-bench   Launch acceptance test on the emulator"
 }
 
 # 0 => False
@@ -99,7 +100,28 @@ function execute_run() {
     esac
 }
 
-OPTS=$(getopt --options b:c:r:h --longoptions "build:,clean:,run:,help"  -n "parse-arg" -- $@)
+function execute_test_bench() {
+    echo "Run acceptance test on the emulator !"
+    echo "Launch renode as emulator"
+    renode --disable-gui config/nucleo-f446re.resc &> test/acceptance/output/renode.log &
+    echo "Wait emulator is running ..."
+    sleep 2
+    cd test/acceptance
+    VENV=virtualenv
+    PYTHON=${VENV}/bin/python
+    PIP=${VENV}/bin/pip
+    python3 -m venv ${VENV}
+    ${PIP} install -r requirements.txt
+    source ${VENV}/bin/activate
+    robot --outputdir output TestShell.robot
+    deactivate
+    kill %1
+    rm -rf /tmp/console
+    echo "Emulator stopped."
+    echo "Check emulator log on test/acceptance/renode.log"
+}
+
+OPTS=$(getopt --options b:c:r:th --longoptions "build:,clean:,run:,test-bench,help"  -n "parse-arg" -- $@)
 while [ $# -gt 0 ]; do
     case "$1" in
         -h | --help)
@@ -116,6 +138,10 @@ while [ $# -gt 0 ]; do
             ;;
         -r | --run)
             execute_run $2
+            break
+            ;;
+        -t | --test-bench)
+            execute_test_bench
             break
             ;;
         *)
