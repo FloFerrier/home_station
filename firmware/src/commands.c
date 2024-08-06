@@ -34,15 +34,11 @@ STATIC const command_s command_list[] = {
 };
 
 STATIC void command_unknown(void) {
-    console_send("> Unknown command\r\n");
-    console_send("Tap \"%s\" command : %s\r\n", command_list[COMMAND_HELP].name, command_list[COMMAND_HELP].desc);
+    console_send("{\"code\":400, \"message\":\"Bad request\", \"response\":\"Tap help to display all available command.\"}\r\n");
 }
 
 STATIC void command_help(void) {
-    console_send("(help)> List of available command :\r\n");
-    for(uint32_t index = COMMAND_HELP+1; index < sizeof(command_list)/sizeof(command_s); index++) {
-        console_send("\t%s : %s\r\n", command_list[index].name, command_list[index].desc);
-    }
+    console_send("{\"code\":200, \"message\":\"Success\", \"response\":\"\"}\r\n");
 }
 
 STATIC void command_sensorSelfTest(void) {
@@ -51,7 +47,7 @@ STATIC void command_sensorSelfTest(void) {
         console_send("(sensor)> Self-test passed !\r\n");
     }
     else {
-        console_send("(sensor)> Self-test failed ... %d\r\n", result);
+        console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n");
     }
 }
 
@@ -60,7 +56,7 @@ STATIC void command_sensorGetData(void) {
     uint32_t number_of_data = 0;
     int8_t result = sensor_getData(data, &number_of_data);
     if (result != BME68X_OK) {
-        console_send("(sensor)> Get data failed ... %d\r\n", result);
+        console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n");
     }
     else {
         console_send("(sensor)> Number of data available %d\r\n", number_of_data);

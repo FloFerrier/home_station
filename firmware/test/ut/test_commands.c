@@ -40,8 +40,7 @@ static void test_command_execute_should_avoid_incorrect_parameter() {
 }
 
 static void test_command_execute_should_be_unknown_command() {
-    mock_assert_call_console_send("> Unknown command\r\n", true);
-    mock_assert_call_console_send("Tap \"help\" command : Display all commands available\r\n", true);
+    mock_assert_call_console_send("{\"code\":400, \"message\":\"Bad request\", \"response\":\"Tap help to display all available command.\"}\r\n", true);
 
     bool command_is_executed = command_execute(COMMAND_UNKNOWN);
 
@@ -49,9 +48,7 @@ static void test_command_execute_should_be_unknown_command() {
 }
 
 static void test_command_execute_should_display_all_available_command() {
-    mock_assert_call_console_send("(help)> List of available command :\r\n", true);
-    mock_assert_call_console_send("\tsensor_selfTest : Performing a sensor self-test\r\n", true);
-    mock_assert_call_console_send("\tsensor_getData : Request a sensor to get data\r\n", true);
+    mock_assert_call_console_send("{\"code\":200, \"message\":\"Success\", \"response\":\"\"}\r\n", true);
 
     bool command_is_executed = command_execute(COMMAND_HELP);
 
@@ -60,7 +57,7 @@ static void test_command_execute_should_display_all_available_command() {
 
 static void test_command_execute_should_failed_sensor_selftest() {
     mock_assert_call_sensor_selfTest(BME68X_E_SELF_TEST);
-    mock_assert_call_console_send("(sensor)> Self-test failed ... -5\r\n", true);
+    mock_assert_call_console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n", true);
 
     bool command_is_executed = command_execute(COMMAND_SENSOR_SELF_TEST);
 
@@ -80,7 +77,7 @@ static void test_command_execute_should_failed_sensor_get_data() {
     sensor_data_s expected_data = {0};
     uint32_t expected_number_of_data = 0;
     mock_assert_call_sensor_getData(&expected_data, expected_number_of_data, BME68X_W_NO_NEW_DATA);
-    mock_assert_call_console_send("(sensor)> Get data failed ... 2\r\n", true);
+    mock_assert_call_console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n", true);
 
     bool command_is_executed = command_execute(COMMAND_SENSOR_GET_DATA);
 
