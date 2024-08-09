@@ -310,6 +310,37 @@ static void test_sensor_should_get_several_data(void **state) {
     }
 }
 
+static void test_sensor_should_return_code_as_string(void **state) {
+    (void)state;
+    sensor_returnCode_e code = SENSOR_OK;
+    char *data;
+
+    data = sensor_returnCodeAsString(code);
+
+    assert_string_equal(data, "Sensor ok");
+}
+
+static void test_sensor_should_return_code_as_out_of_bound(void **state) {
+    {
+        (void)state;
+        sensor_returnCode_e code = -1;
+        char *data;
+
+        data = sensor_returnCodeAsString(code);
+
+        assert_string_equal(data, "Sensor misc failure");
+    }
+    {
+        (void)state;
+        sensor_returnCode_e code = 255;
+        char *data;
+
+        data = sensor_returnCodeAsString(code);
+
+        assert_string_equal(data, "Sensor misc failure");
+    }
+}
+
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_delay_interface_should_worked),
@@ -329,6 +360,8 @@ int main(void) {
         cmocka_unit_test(test_sensor_should_no_available_data),
         cmocka_unit_test(test_sensor_should_failed_get_data),
         cmocka_unit_test(test_sensor_should_get_several_data),
+        cmocka_unit_test(test_sensor_should_return_code_as_string),
+        cmocka_unit_test(test_sensor_should_return_code_as_out_of_bound),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

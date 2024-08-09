@@ -44,3 +44,14 @@ sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data
     memcpy(data, expected_data, expected_nb_of_data * sizeof(sensor_data_s));
     return mock();
 }
+
+void mock_assert_call_sensor_returnCodeAsString(sensor_returnCode_e code, char *ret) {
+    expect_function_call(sensor_returnCodeAsString);
+    expect_value(sensor_returnCodeAsString, code, code);
+    will_return(sensor_returnCodeAsString, ret);
+}
+char* sensor_returnCodeAsString(sensor_returnCode_e code) {
+    function_called();
+    check_expected(code);
+    return mock();
+}

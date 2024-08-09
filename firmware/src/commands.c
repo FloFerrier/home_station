@@ -34,20 +34,20 @@ STATIC const command_s command_list[] = {
 };
 
 STATIC void command_unknown(void) {
-    console_send("{\"code\":400, \"message\":\"Bad request\", \"response\":\"Tap help to display all available command.\"}\r\n");
+    console_send("{\"code\":\"FAILURE\", \"message\":\"Command unknown\", \"response\":\"Tap help to display all available command.\"}\r\n");
 }
 
 STATIC void command_help(void) {
-    console_send("{\"code\":200, \"message\":\"Success\", \"response\":\"\"}\r\n");
+    console_send("{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"%s: %s, %s: %s\"}\r\n", command_list[COMMAND_SENSOR_SELF_TEST].name, command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
 }
 
 STATIC void command_sensorSelfTest(void) {
     int8_t result = sensor_selfTest();
-    if(result == BME68X_OK) {
-        console_send("(sensor)> Self-test passed !\r\n");
+    if(result == SENSOR_OK) {
+        console_send("{\"code\":\"SUCCESS\", \"message\":\"%s\", \"response\":\"\"}\r\n", sensor_returnCodeAsString(result));
     }
     else {
-        console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n");
+        console_send("{\"code\":\"FAILURE\", \"message\":\"%s\", \"response\":\"\"}\r\n", sensor_returnCodeAsString(result));
     }
 }
 
@@ -55,15 +55,11 @@ STATIC void command_sensorGetData(void) {
     sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
     uint32_t number_of_data = 0;
     int8_t result = sensor_getData(data, &number_of_data);
-    if (result != BME68X_OK) {
-        console_send("{\"code\":503, \"message\":\"Service Unavailable\", \"response\":\"\"}\r\n");
+    if(result == SENSOR_OK) {
+        console_send("{\"code\":\"SUCCESS\", \"message\":\"%s\", \"response\":\"%.1f deg, %.1f hPa %.1f rH\"}\r\n", sensor_returnCodeAsString(result), data[0].temperature_in_deg, data[0].pressure_in_pascal / 100.0f, data[0].humidity_in_per100);
     }
     else {
-        console_send("(sensor)> Number of data available %d\r\n", number_of_data);
-        for(uint32_t index=0; index<number_of_data; index++) {
-            console_send("(sensor)> Temperature %.1f deg, Pressure %.1f hPa, Humidity %.1f %rH\r\n",
-                data[index].temperature_in_deg, data[index].pressure_in_pascal / 100.0f, data[index].humidity_in_per100);
-        }
+        console_send("{\"code\":\"FAILURE\", \"message\":\"%s\", \"response\":\"\"}\r\n", sensor_returnCodeAsString(result));
     }
 }
 

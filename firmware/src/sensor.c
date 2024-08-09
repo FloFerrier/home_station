@@ -15,10 +15,22 @@
     
 #define BME68X_AMBIANT_TEMPERATURE (25u)
 
+#define SENSOR_RETURN_CODE_LEN_MAX (255)
+
 STATIC I2C_HandleTypeDef i2c_handle = {0};
 STATIC struct bme68x_dev sensor = {0};
 
 STATIC const uint8_t BME68X_DEV_ADDR = BME68X_I2C_ADDR_LOW;
+
+STATIC const char SENSOR_RETURN_CODE[][SENSOR_RETURN_CODE_LEN_MAX+1] = {
+    [SENSOR_OK] = "Sensor ok",
+    [SENSOR_NULL_POINTER] = "Sensor null pointer",
+    [SENSOR_I2C_FAILURE] = "Sensor i2c failure",
+    [SENSOR_NOT_FOUND] = "Sensor not found",
+    [SENSOR_INVALID_PARAM] = "Sensor invalid param",
+    [SENSOR_SELF_TEST_FAILURE] = "Sensor self test failure",
+    [SENSOR_MISC_FAILURE] = "Sensor misc failure",
+};
 
 STATIC sensor_returnCode_e convertBme68xToSensorReturnCode(int8_t bme68x_return_code) {
     sensor_returnCode_e sensor_return_code;
@@ -169,4 +181,11 @@ sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data
         }
     }
     return convertBme68xToSensorReturnCode(bme68x_rslt);
+}
+
+char* sensor_returnCodeAsString(sensor_returnCode_e code) {
+    if((code < SENSOR_OK) || (code > SENSOR_MISC_FAILURE)) {
+        code = SENSOR_MISC_FAILURE;
+    }
+    return (char*)SENSOR_RETURN_CODE[code];
 }
