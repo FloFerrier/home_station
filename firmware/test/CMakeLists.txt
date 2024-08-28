@@ -19,7 +19,6 @@ add_unit_test(test_sensor
 add_unit_test(test_commands
     ${CMAKE_SOURCE_DIR}/src/commands.c
     mock/mock_sensor.c
-    mock/mock_console.c
     ut/test_commands.c
 )
 

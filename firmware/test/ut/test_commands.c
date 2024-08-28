@@ -33,60 +33,65 @@ static void test_command_should_avoid_incorrect_parameter() {
 }
 
 static void test_command_execute_should_avoid_incorrect_parameter() {
-    bool command_is_executed = command_execute(-1);
-
-    assert_int_equal(command_is_executed, false);
+    command_execute(-1, 0, NULL);
 }
 
 static void test_command_execute_should_be_unknown_command() {
-    mock_assert_call_console_send("{\"code\":\"FAILURE\", \"message\":\"Command unknown\", \"response\":\"Tap help to display all available command.\"}\r\n", true);
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
 
-    bool command_is_executed = command_execute(COMMAND_UNKNOWN);
+    command_execute(COMMAND_UNKNOWN, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"FAILURE\", \"message\":\"Command unknown\", \"response\":\"Tap help to display all available command.\"}\r\n");
 }
 
 static void test_command_execute_should_display_all_available_command() {
-    mock_assert_call_console_send("{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"sensor_selfTest: Performing a sensor self-test, sensor_getData: Request a sensor to get data\"}\r\n", true);
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
 
-    bool command_is_executed = command_execute(COMMAND_HELP);
+    command_execute(COMMAND_HELP, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"sensor_selfTest: Performing a sensor self-test, sensor_getData: Request a sensor to get data\"}\r\n");
 }
 
 static void test_command_execute_should_failed_sensor_selftest() {
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
     mock_assert_call_sensor_selfTest(SENSOR_SELF_TEST_FAILURE);
     mock_assert_call_sensor_returnCodeAsString(SENSOR_SELF_TEST_FAILURE, "Sensor self test failure");
-    mock_assert_call_console_send("{\"code\":\"FAILURE\", \"message\":\"Sensor self test failure\", \"response\":\"\"}\r\n", true);
 
-    bool command_is_executed = command_execute(COMMAND_SENSOR_SELF_TEST);
+    command_execute(COMMAND_SENSOR_SELF_TEST, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"FAILURE\", \"message\":\"Sensor self test failure\", \"response\":\"\"}\r\n");
 }
 
 static void test_command_execute_should_passed_sensor_selftest() {
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
     mock_assert_call_sensor_selfTest(SENSOR_OK);
     mock_assert_call_sensor_returnCodeAsString(SENSOR_OK, "Sensor ok");
-    mock_assert_call_console_send("{\"code\":\"SUCCESS\", \"message\":\"Sensor ok\", \"response\":\"\"}\r\n", true);
 
-    bool command_is_executed = command_execute(COMMAND_SENSOR_SELF_TEST);
+    command_execute(COMMAND_SENSOR_SELF_TEST, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"SUCCESS\", \"message\":\"Sensor ok\", \"response\":\"\"}\r\n");
 }
 
 static void test_command_execute_should_failed_sensor_get_data() {
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
     sensor_data_s expected_data = {0};
     uint32_t expected_number_of_data = 0;
     mock_assert_call_sensor_getData(&expected_data, expected_number_of_data, SENSOR_MISC_FAILURE);
     mock_assert_call_sensor_returnCodeAsString(SENSOR_MISC_FAILURE, "Sensor misc failure");
-    mock_assert_call_console_send("{\"code\":\"FAILURE\", \"message\":\"Sensor misc failure\", \"response\":\"\"}\r\n", true);
 
-    bool command_is_executed = command_execute(COMMAND_SENSOR_GET_DATA);
+    command_execute(COMMAND_SENSOR_GET_DATA, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"FAILURE\", \"message\":\"Sensor misc failure\", \"response\":\"\"}\r\n");
 }
 
 static void test_command_execute_should_passed_sensor_get_data() {
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
     sensor_data_s expected_data = {
         .temperature_in_deg = 15.0f,
         .pressure_in_pascal = 98000.0f,
@@ -96,11 +101,10 @@ static void test_command_execute_should_passed_sensor_get_data() {
 
     mock_assert_call_sensor_getData(&expected_data, 1u, SENSOR_OK);
     mock_assert_call_sensor_returnCodeAsString(SENSOR_OK, "Sensor ok");
-    mock_assert_call_console_send("{\"code\":\"SUCCESS\", \"message\":\"Sensor ok\", \"response\":\"15.0 deg, 980.0 hPa 50.0 rH\"}\r\n", true);
 
-    bool command_is_executed = command_execute(COMMAND_SENSOR_GET_DATA);
+    command_execute(COMMAND_SENSOR_GET_DATA, RESPONSE_LEN_MAX, response);
 
-    assert_int_equal(command_is_executed, true);
+    assert_string_equal(response, "{\"code\":\"SUCCESS\", \"message\":\"Sensor ok\", \"response\":\"15.0 deg, 980.0 hPa 50.0 rH\"}\r\n");
 }
 
 int main(void) {

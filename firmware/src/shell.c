@@ -56,7 +56,9 @@ void shell_task(void *params) {
         }
         if(command_is_available == true) {
             command_index_e command_index = command_getIndex(command_string);
-            (void)command_execute(command_index);
+            char response[COMMAND_STRING_LEN_MAX+1] = "";
+            command_execute(command_index, COMMAND_STRING_LEN_MAX, response);
+            console_send(response);
             command_is_available = false;
         }
     } while(FOREVER());

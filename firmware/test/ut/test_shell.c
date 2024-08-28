@@ -57,6 +57,8 @@ static void test_shell_should_failed_to_receive_a_character(void **state) {
 
 static void test_shell_should_received_a_command(void **state) {
     const char TEST_DATA[] = "a fake command\n";
+    const char EXPECTED_RESPONSE[] = "Unknown command\r\n";
+    const uint32_t EXPECTED_RESPONSE_LEN_MAX = 255u;
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
@@ -64,7 +66,8 @@ static void test_shell_should_received_a_command(void **state) {
         mock_assert_call_console_receive(TEST_DATA[index], true);
     }
     mock_assert_call_command_getIndex("a fake command", COMMAND_UNKNOWN);
-    mock_assert_call_command_execute(COMMAND_UNKNOWN, true);
+    mock_assert_call_command_execute(COMMAND_UNKNOWN, EXPECTED_RESPONSE_LEN_MAX, EXPECTED_RESPONSE);
+    mock_assert_call_console_send("Unknown command\r\n", true);
 
     uint32_t params;
     shell_task(&params);

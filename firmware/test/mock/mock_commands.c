@@ -21,13 +21,18 @@ command_index_e command_getIndex(const char *cmd) {
     return mock();
 }
 
-void mock_assert_call_command_execute(command_index_e command_index, bool ret) {
+void mock_assert_call_command_execute(command_index_e command_index, const uint32_t response_len_max, const char *expected_response) {
     expect_function_call(command_execute);
     expect_value(command_execute, command_index, command_index);
-    will_return(command_execute, ret);
+    expect_value(command_execute, response_len_max, response_len_max);
+    assert_non_null(expected_response);
+    will_return(command_execute, expected_response);
 }
-bool command_execute(command_index_e command_index) {
+void command_execute(command_index_e command_index, const uint32_t response_len_max, char *response) {
     function_called();
     check_expected(command_index);
-    return mock();
+    check_expected(response_len_max);
+    assert_non_null(response);
+    char *expected_response = mock_ptr_type(char *);
+    (void)strncpy(response, expected_response, response_len_max);
 }

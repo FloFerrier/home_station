@@ -12,6 +12,6 @@ typedef enum {
 } command_index_e;
 
 command_index_e command_getIndex(const char *cmd);
-bool command_execute(command_index_e command_index);
+void command_execute(command_index_e command_index, const uint32_t response_len_max, char *response);
 
 #endif  /* COMMANDS_H */
