@@ -5,13 +5,20 @@ message(NOTICE "Firmware will be available on the following folder: ${FIRMWARE_F
 
 add_executable(${BUILD_TARGET})
 
+target_include_directories(${BUILD_TARGET} PRIVATE
+    console
+    commands
+    sensor
+    shell
+)
+
 target_sources(${BUILD_TARGET} PRIVATE
     main.c
     sysmem.c
-    console.c
-    shell.c
-    sensor.c
-    commands.c
+    console/console.c
+    commands/commands.c
+    sensor/sensor.c
+    shell/shell.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE

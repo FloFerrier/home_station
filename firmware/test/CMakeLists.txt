@@ -1,5 +1,5 @@
 add_unit_test(test_shell
-    ${CMAKE_SOURCE_DIR}/src/shell.c
+    ${CMAKE_SOURCE_DIR}/src/shell/shell.c
     mock/mock_console.c
     mock/mock_commands.c
     ut/test_shell.c
@@ -10,20 +10,20 @@ add_unit_test(test_bme680
 )
 
 add_unit_test(test_sensor
-    ${CMAKE_SOURCE_DIR}/src/sensor.c
+    ${CMAKE_SOURCE_DIR}/src/sensor/sensor.c
     mock/mock_bme68x.c
     mock/mock_stm32f4x.c
     ut/test_sensor.c
 )
 
 add_unit_test(test_commands
-    ${CMAKE_SOURCE_DIR}/src/commands.c
+    ${CMAKE_SOURCE_DIR}/src/commands/commands.c
     mock/mock_sensor.c
     ut/test_commands.c
 )
 
 add_unit_test(test_console
-    ${CMAKE_SOURCE_DIR}/src/console.c
+    ${CMAKE_SOURCE_DIR}/src/console/console.c
     mock/mock_stm32f4x.c
     ut/test_console.c
 )
