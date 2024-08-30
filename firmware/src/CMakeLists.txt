@@ -12,6 +12,7 @@ target_include_directories(${BUILD_TARGET} PRIVATE
     shell
     led
     fsm
+    protocol
 )
 
 target_sources(${BUILD_TARGET} PRIVATE
@@ -23,6 +24,7 @@ target_sources(${BUILD_TARGET} PRIVATE
     shell/shell.c
     led/led.c
     fsm/fsm.c
+    protocol/protocol.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE

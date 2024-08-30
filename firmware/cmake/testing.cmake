@@ -13,6 +13,7 @@ macro(add_unit_test unitestname)
         ${CMAKE_SOURCE_DIR}/src/shell
         ${CMAKE_SOURCE_DIR}/src/led
         ${CMAKE_SOURCE_DIR}/src/fsm
+        ${CMAKE_SOURCE_DIR}/src/protocol
         ${CMAKE_SOURCE_DIR}/test/mock
     )
     target_sources(${ARGV0} PRIVATE ${ARGN})

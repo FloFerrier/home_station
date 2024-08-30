@@ -19,8 +19,7 @@ add_unit_test(test_sensor
 add_unit_test(test_commands
     ${CMAKE_SOURCE_DIR}/src/commands/commands.c
     mock/mock_sensor.c
-    mock/mock_console.c
-    mock/mock_stm32f4x.c
+    mock/mock_protocol.c
     ut/test_commands.c
 )
 
@@ -45,4 +44,8 @@ add_unit_test(test_fsm
     mock/mock_led.c
     mock/mock_sensor.c
     mock/mock_shell.c
+)
+add_unit_test(test_protocol
+    ${CMAKE_SOURCE_DIR}/src/protocol/protocol.c
+    ut/test_protocol.c
 )
