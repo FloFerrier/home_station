@@ -1,15 +1,16 @@
 #!/bin/bash
 
 BUILD_MODE=("debug" "release" "test")
+TARGET_MODE=("emulator" "device")
 
 function display_help() {
-    echo "Usage: $(basename $0) [-h] [-b|c|r MODE] [-t]"
+    echo "Usage: $(basename $0) [-h] [-b|c|r MODE] [-t TARGET]"
     echo "Options:"
-    echo "  -h, --help         Display this help message"
-    echo "  -b, --build        Configure workspace and build sources for selected MODE"
-    echo "  -c, --clean        Remove workspace fir selected MODE"
-    echo "  -r, --run          Run the selected MODE"
-    echo "  -t, --test-bench   Launch acceptance test on the emulator"
+    echo "  -h, --help              Display this help message"
+    echo "  -b, --build             Configure workspace and build sources for selected MODE"
+    echo "  -c, --clean             Remove workspace for selected MODE"
+    echo "  -r, --run               Run the selected MODE"
+    echo "  -t, --acceptance-test   Launch acceptance test on the TARGET"
 }
 
 # 0 => False
@@ -100,8 +101,8 @@ function execute_run() {
     esac
 }
 
-function execute_test_bench() {
-    echo "Run acceptance test on the emulator !"
+function run_acceptance_test_on_emulator() {
+    echo "Execute acceptance test on emulator"
     echo "Launch renode as emulator"
     renode --disable-gui config/nucleo-f446re.resc &> test/acceptance/output/renode.log &
     echo "Wait emulator is running ..."
@@ -113,7 +114,7 @@ function execute_test_bench() {
     python3 -m venv ${VENV}
     ${PIP} install -r requirements.txt
     source ${VENV}/bin/activate
-    robot --outputdir output TestShell.robot
+    robot --outputdir output --variable SERIAL_PORT:/tmp/console TestShell.robot
     deactivate
     kill %1
     rm -rf /tmp/console
@@ -121,7 +122,41 @@ function execute_test_bench() {
     echo "Check emulator log on test/acceptance/renode.log"
 }
 
-OPTS=$(getopt --options b:c:r:th --longoptions "build:,clean:,run:,test-bench,help"  -n "parse-arg" -- $@)
+function run_acceptance_test_on_device() {
+    echo "Execute acceptance test on device"
+    flash_firmware "build/debug/src/weather_sensors.elf"
+    echo "Wait firmware on debug mode is flashing ..."
+    sleep 2
+    cd test/acceptance
+    VENV=virtualenv
+    PYTHON=${VENV}/bin/python
+    PIP=${VENV}/bin/pip
+    python3 -m venv ${VENV}
+    ${PIP} install -r requirements.txt
+    source ${VENV}/bin/activate
+    robot --outputdir output --variable SERIAL_PORT:/dev/ttyACM0 TestShell.robot
+    deactivate
+}
+
+function execute_acceptance_test() {
+    local arg_target_mode=$1
+    case ${arg_target_mode} in
+    "emulator")
+        run_acceptance_test_on_emulator
+        ;;
+
+    "device")
+        run_acceptance_test_on_device
+        ;;
+
+    *)
+        echo "Selected target is incorrect ..."
+        echo "TARGET=[${TARGET_MODE[@]}]"
+        ;;
+    esac
+}
+
+OPTS=$(getopt --options b:c:r:t:h --longoptions "build:,clean:,run:,acceptance-test:,help"  -n "parse-arg" -- $@)
 while [ $# -gt 0 ]; do
     case "$1" in
         -h | --help)
@@ -140,8 +175,8 @@ while [ $# -gt 0 ]; do
             execute_run $2
             break
             ;;
-        -t | --test-bench)
-            execute_test_bench
+        -t | --acceptance-test)
+            execute_acceptance_test $2
             break
             ;;
         *)
