@@ -7,6 +7,7 @@
 #include "shell.h"
 #include "sensor.h"
 #include "console.h"
+#include "led.h"
 
 void HAL_MspInit(void); // Use on HAL_Init() function
 
@@ -15,6 +16,7 @@ void SysTick_Handler(void);
 int main(void) {
     HAL_Init();
 
+    (void)led_init();
     (void)console_init();
     (void)sensor_init();
 

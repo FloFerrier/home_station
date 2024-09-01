@@ -27,3 +27,9 @@ add_unit_test(test_console
     mock/mock_stm32f4x.c
     ut/test_console.c
 )
+
+add_unit_test(test_led
+    ${CMAKE_SOURCE_DIR}/src/led/led.c
+    mock/mock_stm32f4x.c
+    ut/test_led.c
+)

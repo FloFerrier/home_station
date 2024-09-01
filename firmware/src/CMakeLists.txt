@@ -10,6 +10,7 @@ target_include_directories(${BUILD_TARGET} PRIVATE
     commands
     sensor
     shell
+    led
 )
 
 target_sources(${BUILD_TARGET} PRIVATE
@@ -19,6 +20,7 @@ target_sources(${BUILD_TARGET} PRIVATE
     commands/commands.c
     sensor/sensor.c
     shell/shell.c
+    led/led.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE

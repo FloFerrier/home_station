@@ -10,13 +10,17 @@ typedef enum {
     HAL_TIMEOUT  = 0x03U
 } HAL_StatusTypeDef;
 
+#define GPIO_PIN_0 (0u)
+#define GPIO_PIN_1 (0u)
 #define GPIO_PIN_2 (0u)
 #define GPIO_PIN_3 (0u)
 #define GPIO_PIN_8 (0u)
 #define GPIO_PIN_9 (0u)
+#define GPIO_MODE_OUTPUT_OD (0u)
 #define GPIO_MODE_AF_PP (0u)
 #define GPIO_MODE_AF_OD (0u)
 #define GPIO_NOPULL (0u)
+#define GPIO_SPEED_FREQ_LOW (0u)
 #define GPIO_SPEED_FREQ_VERY_HIGH (0u)
 
 typedef struct {
@@ -29,6 +33,9 @@ extern GPIO_TypeDef mock_GPIOA;
 extern GPIO_TypeDef mock_GPIOB;
 #define GPIOB (&mock_GPIOB)
 
+extern GPIO_TypeDef mock_GPIOC;
+#define GPIOC (&mock_GPIOC)
+
 typedef struct {
     uint32_t Pin;
     uint32_t Mode;
@@ -36,6 +43,11 @@ typedef struct {
     uint32_t Speed;
     uint32_t Alternate;
 } GPIO_InitTypeDef;
+
+typedef enum {
+    GPIO_PIN_RESET = 0,
+    GPIO_PIN_SET
+} GPIO_PinState;
 
 typedef struct {
     uint32_t dummy;
@@ -80,8 +92,14 @@ void __HAL_RCC_I2C1_CLK_ENABLE(void);
 void mock_assert_call_HAL_RCC_USART2_CLK_ENABLE(void);
 void __HAL_RCC_USART2_CLK_ENABLE(void);
 
+void mock_assert_call_HAL_RCC_GPIOC_CLK_ENABLE(void);
+void __HAL_RCC_GPIOC_CLK_ENABLE(void);
+
 void mock_assert_call_HAL_GPIO_Init(void);
 void HAL_GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_Init);
+
+void mock_assert_call_HAL_GPIO_WritePin(GPIO_PinState PinState);
+void HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState);
 
 void mock_assert_call_HAL_I2C_Init(HAL_StatusTypeDef ret);
 HAL_StatusTypeDef HAL_I2C_Init(I2C_HandleTypeDef *hi2c);

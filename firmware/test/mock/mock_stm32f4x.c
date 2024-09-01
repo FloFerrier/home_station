@@ -11,6 +11,7 @@
 
 GPIO_TypeDef mock_GPIOA = {0};
 GPIO_TypeDef mock_GPIOB = {0};
+GPIO_TypeDef mock_GPIOC = {0};
 I2C_TypeDef mock_I2C1 = {0};
 USART_TypeDef mock_USART2 = {0};
 
@@ -25,6 +26,13 @@ void mock_assert_call_HAL_RCC_GPIOB_CLK_ENABLE(void) {
     expect_function_call(__HAL_RCC_GPIOB_CLK_ENABLE);
 }
 void __HAL_RCC_GPIOB_CLK_ENABLE(void) {
+    function_called();
+}
+
+void mock_assert_call_HAL_RCC_GPIOC_CLK_ENABLE(void) {
+    expect_function_call(__HAL_RCC_GPIOC_CLK_ENABLE);
+}
+void __HAL_RCC_GPIOC_CLK_ENABLE(void) {
     function_called();
 }
 
@@ -49,6 +57,17 @@ void HAL_GPIO_Init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_Init) {
     function_called();
     assert_non_null(GPIOx);
     assert_non_null(GPIO_Init);
+}
+
+void mock_assert_call_HAL_GPIO_WritePin(GPIO_PinState PinState) {
+    expect_function_call(HAL_GPIO_WritePin);
+    expect_value(HAL_GPIO_WritePin, PinState, PinState);
+}
+void HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState) {
+    function_called();
+    assert_non_null(GPIOx);
+    (void)GPIO_Pin;
+    check_expected(PinState);
 }
 
 void mock_assert_call_HAL_I2C_Init(HAL_StatusTypeDef ret) {
