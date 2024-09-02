@@ -1,6 +1,7 @@
 #include "commands.h"
 
 #include "sensor.h"
+#include "console.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -8,7 +9,9 @@
 
 #ifndef TEST
 #define STATIC static
+#include <stm32f4xx_hal.h>
 #else
+#include "mock_stm32f4x.h"
 #define STATIC
 #endif // TEST
 
@@ -22,12 +25,14 @@ typedef struct {
 
 STATIC void command_unknown(char *response, const uint32_t response_len_max);
 STATIC void command_help(char *response, const uint32_t response_len_max);
+STATIC void command_reboot(char *response, const uint32_t response_len_max);
 STATIC void command_sensorSelfTest(char *response, const uint32_t response_len_max);
 STATIC void command_sensorGetData(char *response, const uint32_t response_len_max);
 
 STATIC const command_s command_list[] = {
     [COMMAND_UNKNOWN] {"", command_unknown, ""},
     [COMMAND_HELP] {"help", command_help, "Display all commands available"},
+    [COMMAND_REBOOT] {"reboot", command_reboot, "Performing a system reboot"},
     [COMMAND_SENSOR_SELF_TEST]{"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
     [COMMAND_SENSOR_GET_DATA]{"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
 };
@@ -38,6 +43,14 @@ STATIC void command_unknown(char *response, const uint32_t response_len_max) {
 
 STATIC void command_help(char *response, const uint32_t response_len_max) {
     (void)snprintf(response, response_len_max, "{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"%s: %s, %s: %s\"}\r\n", command_list[COMMAND_SENSOR_SELF_TEST].name, command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
+}
+
+STATIC void command_reboot(char *response, const uint32_t response_len_max) {
+    (void)response;
+    (void)response_len_max;
+    /* Response must be done directly by console due to reset */
+    console_send("{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"\"}\r\n");
+    NVIC_SystemReset();
 }
 
 STATIC void command_sensorSelfTest(char *response, const uint32_t response_len_max) {
@@ -80,7 +93,7 @@ void command_execute(command_index_e command_index, const uint32_t response_len_
         return;
     }
 
-    if((command_index >= COMMAND_UNKNOWN) && (command_index <= COMMAND_SENSOR_GET_DATA)) {
+    if((command_index >= COMMAND_UNKNOWN) && (command_index < COMMAND_INDEX_MAX)) {
         command_list[command_index].handler(response, response_len_max);
     }
 }

@@ -10,6 +10,7 @@
 
 #include "mock_sensor.h"
 #include "mock_console.h"
+#include "mock_stm32f4x.h"
 #include "commands.h"
 
 #define MESSAGE_LEN_MAX (255u)
@@ -52,6 +53,15 @@ static void test_command_execute_should_display_all_available_command() {
     command_execute(COMMAND_HELP, RESPONSE_LEN_MAX, response);
 
     assert_string_equal(response, "{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"sensor_selfTest: Performing a sensor self-test, sensor_getData: Request a sensor to get data\"}\r\n");
+}
+
+static void test_command_execute_should_reboot_the_system() {
+    #define RESPONSE_LEN_MAX (255u)
+    char response[RESPONSE_LEN_MAX+1] = "";
+    mock_assert_call_console_send("{\"code\":\"SUCCESS\", \"message\":\"\", \"response\":\"\"}\r\n", true);
+    mock_assert_call_NVIC_SystemReset();
+
+    command_execute(COMMAND_REBOOT, RESPONSE_LEN_MAX, response);
 }
 
 static void test_command_execute_should_failed_sensor_selftest() {
@@ -115,6 +125,7 @@ int main(void) {
         cmocka_unit_test(test_command_execute_should_avoid_incorrect_parameter),
         cmocka_unit_test(test_command_execute_should_be_unknown_command),
         cmocka_unit_test(test_command_execute_should_display_all_available_command),
+        cmocka_unit_test(test_command_execute_should_reboot_the_system),
         cmocka_unit_test(test_command_execute_should_failed_sensor_selftest),
         cmocka_unit_test(test_command_execute_should_passed_sensor_selftest),
         cmocka_unit_test(test_command_execute_should_failed_sensor_get_data),

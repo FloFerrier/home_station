@@ -5,10 +5,12 @@
 #include <stdbool.h>
 
 typedef enum {
-    COMMAND_UNKNOWN = 0,
+    COMMAND_UNKNOWN = 0, // Must keep on first
     COMMAND_HELP = 1,
-    COMMAND_SENSOR_SELF_TEST = 2,
-    COMMAND_SENSOR_GET_DATA = 3,
+    COMMAND_REBOOT = 2,
+    COMMAND_SENSOR_SELF_TEST = 3,
+    COMMAND_SENSOR_GET_DATA = 4,
+    COMMAND_INDEX_MAX = 5, // Must keep on last
 } command_index_e;
 
 command_index_e command_getIndex(const char *cmd);

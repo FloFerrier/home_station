@@ -186,3 +186,10 @@ HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, ui
     memcpy(pData, expected_data, Size * sizeof(uint8_t));
     return mock();
 }
+
+void mock_assert_call_NVIC_SystemReset(void) {
+    expect_function_call(NVIC_SystemReset);
+}
+void NVIC_SystemReset(void) {
+    function_called();
+}
