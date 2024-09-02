@@ -10,17 +10,27 @@
 #include "led.h"
 
 void HAL_MspInit(void); // Use on HAL_Init() function
-
 void SysTick_Handler(void);
+void Error_Handler(void);
+void Warning_Handler(void);
 
 int main(void) {
-    HAL_Init();
+    (void)HAL_Init();
+    led_init();
+    (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 
-    (void)led_init();
-    (void)console_init();
-    (void)sensor_init();
+    if(console_init() != true) {
+        Error_Handler();
+    }
+    if(sensor_init() != SENSOR_OK) {
+        Warning_Handler();
+    }
 
-    (void)xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL);
+    if(xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+        Error_Handler();
+    }
+
+    (void)console_send("Hello world\r\n");
 
     vTaskStartScheduler();
 
@@ -43,4 +53,14 @@ void SysTick_Handler(void) {
 #if (INCLUDE_xTaskGetSchedulerState == 1)
     }
 #endif /* INCLUDE_xTaskGetSchedulerState */
+}
+
+void Error_Handler(void) {
+    (void)led_setState(LED_ID_RED, LED_STATE_ON);
+    (void)led_setState(LED_ID_GREEN, LED_STATE_OFF);
+}
+
+void Warning_Handler(void) {
+    (void)led_setState(LED_ID_RED, LED_STATE_ON);
+    (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 }
