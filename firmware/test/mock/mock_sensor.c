@@ -53,5 +53,5 @@ void mock_assert_call_sensor_returnCodeAsString(sensor_returnCode_e code, char *
 char* sensor_returnCodeAsString(sensor_returnCode_e code) {
     function_called();
     check_expected(code);
-    return mock();
+    return mock_ptr_type(char *);
 }

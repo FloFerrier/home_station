@@ -93,7 +93,7 @@ void command_execute(command_index_e command_index, const uint32_t response_len_
         return;
     }
 
-    if((command_index >= COMMAND_UNKNOWN) && (command_index < COMMAND_INDEX_MAX)) {
+    if(command_index < COMMAND_INDEX_MAX) {
         command_list[command_index].handler(response, response_len_max);
     }
 }

@@ -184,7 +184,7 @@ sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data
 }
 
 char* sensor_returnCodeAsString(sensor_returnCode_e code) {
-    if((code < SENSOR_OK) || (code > SENSOR_MISC_FAILURE)) {
+    if(code > SENSOR_MISC_FAILURE) {
         code = SENSOR_MISC_FAILURE;
     }
     return (char*)SENSOR_RETURN_CODE[code];

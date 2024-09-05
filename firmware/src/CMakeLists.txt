@@ -28,6 +28,7 @@ target_sources(${BUILD_TARGET} PRIVATE
 target_compile_options(${BUILD_TARGET} PRIVATE
     -Wall
     -Wextra
+    -Werror
 )
 
 target_link_libraries(${BUILD_TARGET} PRIVATE

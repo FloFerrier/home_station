@@ -53,11 +53,11 @@ void led_init(void) {
 }
 
 STATIC bool led_idIsAvailable(led_id_e id) {
-    return ((id < LED_ID_BLUE) || (id > LED_ID_RED)) ? false : true;
+    return ((id > LED_ID_RED) ? false : true);
 }
 
 STATIC bool led_stateIsAvailable(led_state_e state) {
-    return ((state < LED_STATE_OFF) || (state > LED_STATE_ON)) ? false : true;
+    return ((state > LED_STATE_ON) ? false : true);
 }
 
 bool led_setState(led_id_e id, led_state_e state) {
