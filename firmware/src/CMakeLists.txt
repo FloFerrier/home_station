@@ -11,6 +11,7 @@ target_include_directories(${BUILD_TARGET} PRIVATE
     sensor
     shell
     led
+    fsm
 )
 
 target_sources(${BUILD_TARGET} PRIVATE
@@ -21,6 +22,7 @@ target_sources(${BUILD_TARGET} PRIVATE
     sensor/sensor.c
     shell/shell.c
     led/led.c
+    fsm/fsm.c
 )
 
 target_compile_options(${BUILD_TARGET} PRIVATE

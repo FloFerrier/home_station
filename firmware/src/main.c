@@ -1,36 +1,28 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
+
 #include <FreeRTOS.h>
 #include <task.h>
 #include <stm32f4xx_hal.h>
+
 #include "shell.h"
 #include "sensor.h"
 #include "console.h"
 #include "led.h"
+#include "fsm.h"
+
+extern TaskHandle_t fsm_task_handle;
 
 void HAL_MspInit(void); // Use on HAL_Init() function
 void SysTick_Handler(void);
-void Error_Handler(void);
-void Warning_Handler(void);
 
 int main(void) {
+    /* Minimal to setup FSM */
     (void)HAL_Init();
-    led_init();
-    (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 
-    if(console_init() != true) {
-        Error_Handler();
-    }
-    if(sensor_init() != SENSOR_OK) {
-        Warning_Handler();
-    }
-
-    if(xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
-        Error_Handler();
-    }
-
-    (void)console_send("Hello world\r\n");
+    /* Must keep the most priority */
+    (void)xTaskCreate(fsm_task, "fsm", 1024u, NULL, (configMAX_PRIORITIES - 1), &fsm_task_handle);
 
     vTaskStartScheduler();
 
@@ -53,14 +45,4 @@ void SysTick_Handler(void) {
 #if (INCLUDE_xTaskGetSchedulerState == 1)
     }
 #endif /* INCLUDE_xTaskGetSchedulerState */
-}
-
-void Error_Handler(void) {
-    (void)led_setState(LED_ID_RED, LED_STATE_ON);
-    (void)led_setState(LED_ID_GREEN, LED_STATE_OFF);
-}
-
-void Warning_Handler(void) {
-    (void)led_setState(LED_ID_RED, LED_STATE_ON);
-    (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 }

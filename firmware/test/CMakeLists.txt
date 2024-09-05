@@ -35,3 +35,14 @@ add_unit_test(test_led
     mock/mock_stm32f4x.c
     ut/test_led.c
 )
+
+add_unit_test(test_fsm
+    ${CMAKE_SOURCE_DIR}/src/fsm/fsm.c
+    ut/test_fsm.c
+    mock/mock_freertos.c
+    mock/mock_stm32f4x.c
+    mock/mock_console.c
+    mock/mock_led.c
+    mock/mock_sensor.c
+    mock/mock_shell.c
+)
