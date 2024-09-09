@@ -50,7 +50,7 @@ STATIC void command_help(char *response, const uint32_t response_len_max) {
         .message = "",
         .response = "",
     };
-    (void)snprintf(data.response, response_len_max, "\"%s\": %s, \"%s\": %s, \"%s\": %s", command_list[COMMAND_REBOOT].name, command_list[COMMAND_REBOOT].desc,command_list[COMMAND_SENSOR_SELF_TEST].name, command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
+    (void)snprintf(data.response, response_len_max, "%s: %s, %s: %s, %s: %s", command_list[COMMAND_REBOOT].name, command_list[COMMAND_REBOOT].desc,command_list[COMMAND_SENSOR_SELF_TEST].name, command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
     protocol_serialize(data, response_len_max, response);
 }
 
