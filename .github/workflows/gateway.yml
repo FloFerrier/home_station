@@ -1,5 +1,5 @@
-name: Service
-run-name: Weather sensors pipelines for service
+name: Gateway
+run-name: Home station pipelines for gateway
 on: [push]
 jobs:
   build_test_suite:
@@ -13,5 +13,5 @@ jobs:
           sudo apt-get install -yq make python3 python3-venv
       - name: Configure virtual environment and run test suite
         run: |
-          cd service
+          cd gateway
           make test

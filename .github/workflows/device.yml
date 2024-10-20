@@ -1,5 +1,5 @@
-name: Firmware
-run-name: Weather sensors pipelines for firmware
+name: Device
+run-name: Home Station pipelines for device
 on: [push]
 jobs:
   build_firmware:
@@ -13,7 +13,7 @@ jobs:
           sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi make
       - name: Build firmware
         run: |
-          cd firmware
+          cd device
           ./build.sh --build release
   build_and_run_unit_test:
     runs-on: ubuntu-latest
@@ -26,6 +26,6 @@ jobs:
           sudo apt-get install -yq build-essential cmake gcc lcov make
       - name: Build and run test suite
         run: |
-          cd firmware
+          cd device
           ./build.sh --build test
           ./build.sh --run test

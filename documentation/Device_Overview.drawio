@@ -1,0 +1,77 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.8.0">
+  <diagram name="Page-1" id="zFyxZJ9HDvcPgiqDjyft">
+    <mxGraphModel dx="1140" dy="628" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-36" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Device&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.iot_thing_freertos_device;" parent="1" vertex="1">
+          <mxGeometry x="449" y="135" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-44" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Gateway&lt;/font&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#000000;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.iot_device_gateway;" parent="1" vertex="1">
+          <mxGeometry x="138" y="137.5" width="78" height="73" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-45" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" source="P_Gc4P2CAjgiyAQ91wl4-36" target="P_Gc4P2CAjgiyAQ91wl4-44" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="846" y="329" as="sourcePoint" />
+            <mxPoint x="968" y="331.0078802588996" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-9" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Wire/Wireless&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="P_Gc4P2CAjgiyAQ91wl4-45">
+          <mxGeometry x="-0.0815" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-47" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=90;" parent="1" vertex="1">
+          <mxGeometry x="463" y="65" width="50" height="428" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-48" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;Middleware&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Shell&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="300" y="301" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-49" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;Driver&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Sensor&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="572" y="301" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-50" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Hal&lt;/font&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Stm32f4x&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" parent="1" vertex="1">
+          <mxGeometry x="438" y="301" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-52" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;FreeRTOS&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="563" y="246" width="165" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-53" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Transfer data&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="320" y="409" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-54" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Abstract hardware&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="458" y="409" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P_Gc4P2CAjgiyAQ91wl4-56" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Collect data&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="568.5" y="409" width="107" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-1" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Sensor&lt;/font&gt;" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#000000;strokeColor=#ffffff;verticalAlign=top;align=center;points=[[0,0.5,0],[0.125,0.25,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[0.875,0.25,0],[1,0.5,0],[0.875,0.75,0],[0.75,1,0],[0.5,1,0],[0.125,0.75,0]];pointerEvents=1;shape=mxgraph.cisco_safe.compositeIcon;bgIcon=mxgraph.cisco_safe.design.blank_device;resIcon=mxgraph.cisco_safe.design.sensor;" vertex="1" parent="1">
+          <mxGeometry x="827" y="138.75" width="80" height="70.5" as="geometry" />
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-2" value="" style="endArrow=none;dashed=1;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4d924XXsivOdKpDsXE7V-1" target="P_Gc4P2CAjgiyAQ91wl4-36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="173.5" as="sourcePoint" />
+            <mxPoint x="547" y="173.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-10" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Wire&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="4d924XXsivOdKpDsXE7V-2">
+          <mxGeometry x="-0.02" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-4" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="842" y="190" width="50" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-6" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Nucleo-F446RE&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="257" y="246" width="165" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-7" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;BME680&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="817" y="298" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="4d924XXsivOdKpDsXE7V-8" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Temperature/Pressure/Humidity&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="813.5" y="406" width="107" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
