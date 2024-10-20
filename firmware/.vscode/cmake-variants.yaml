@@ -2,14 +2,14 @@ buildType:
   default: debug
   choices:
     debug:
-      short: Debug
+      short: debug
       long: Emit debug information
-      buildType: Debug
+      buildType: debug
     release:
-      short: Release
+      short: release
       long: Optimize generated code
-      buildType: Release
+      buildType: release
     test:
-      short: Test
+      short: test
       long: Test suite
-      buildType: Test
+      buildType: test
