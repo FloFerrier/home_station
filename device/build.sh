@@ -85,11 +85,11 @@ function execute_run() {
     local arg_mode=$1
     case ${arg_mode} in
         "release")
-            flash_firmware "build/release/src/weather_sensors.elf"
+            flash_firmware "build/release/src/device_firmware.elf"
             ;;
 
         "debug")
-            run_debug_session "build/debug/src/weather_sensors.elf"
+            run_debug_session "build/debug/src/device_firmware.elf"
             ;;
 
         "test")
@@ -124,7 +124,7 @@ function run_acceptance_test_on_emulator() {
 
 function run_acceptance_test_on_device() {
     echo "Execute acceptance test on device"
-    flash_firmware "build/debug/src/weather_sensors.elf"
+    flash_firmware "build/debug/src/device_firmware.elf"
     echo "Wait firmware on debug mode is flashing ..."
     sleep 2
     cd test/acceptance

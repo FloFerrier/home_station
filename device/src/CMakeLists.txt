@@ -1,4 +1,4 @@
-set(BUILD_TARGET weather_sensors)
+set(BUILD_TARGET ${CMAKE_PROJECT_NAME}_firmware)
 
 set(FIRMWARE_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf)
 message(NOTICE "Firmware will be available on the following folder: ${FIRMWARE_FILE}")
