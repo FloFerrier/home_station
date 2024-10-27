@@ -17,7 +17,7 @@ target_include_directories(${BUILD_TARGET} PRIVATE
 
 target_sources(${BUILD_TARGET} PRIVATE
     main.c
-    sysmem.c
+    syscalls.c
     console/console.c
     commands/commands.c
     sensor/sensor.c

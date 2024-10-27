@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdint.h>
+#include <sys/stat.h>
 
 static uint8_t *__sbrk_heap_end = NULL;
 
@@ -25,4 +26,50 @@ void *_sbrk(ptrdiff_t incr) {
     __sbrk_heap_end += incr;
 
     return (void *)prev_heap_end;
+}
+
+int _close(int file) {
+    (void)file;
+    return -1;
+}
+
+int _fstat(int file, struct stat *st) {
+    (void)file;
+    (void)st;
+    return -1;
+}
+
+int _isatty(int file) {
+    (void)file;
+    return -1;
+}
+
+int _lseek(int file, int ptr, int dir) {
+    (void)file;
+    (void)ptr;
+    (void)dir;
+    return -1;
+}
+
+void _kill(int pid, int sig) {
+    (void)pid;
+    (void)sig;
+}
+
+int _getpid(void) {
+  return -1;
+}
+
+int _write (int file, char *ptr, int len) {
+    (void)file;
+    (void)ptr;
+    (void)len;
+    return -1;
+}
+
+int _read (int file, char *ptr, int len) {
+    (void)file;
+    (void)ptr;
+    (void)len;
+    return -1;
 }
