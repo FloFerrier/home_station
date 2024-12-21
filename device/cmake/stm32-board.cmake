@@ -5,12 +5,9 @@ include(FetchContent)
 set(CPU cortex-m4 CACHE STRING "")
 set(FPU fpv4-sp-d16 CACHE STRING "")
 set(FLOAT_ABI hard CACHE STRING "")
-set(FREERTOS_HEAP 4 CACHE STRING "")
-set(FREERTOS_PORT GCC_ARM_CM4F CACHE STRING "")
-set(OPENOCD_TARGET_BOARD stm32f4x CACHE STRING "")
 
 set(SPECIFIC_BOARD_HAL STM32F446xx)
-set(LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/config/stm32f446retx.ld)
+set(LINKER_FILE ${CMAKE_SOURCE_DIR}/config/stm32f446retx.ld)
 set(STARTUP_FILE startup_stm32f446xx.s)
 
 FetchContent_Declare(

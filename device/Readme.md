@@ -1,21 +1,36 @@
 # README
 ## Prerequisites
-All packages are for Ubuntu distribution.
+Todo: Should be cross-platform.
+## Configure and build cross-compiling firmware
+### Configure workspace
 ```bash
-$ sudo apt install build-essential clang-format cmake gcc gcc-arm-none-eabi gdb-multiarch lcov openocd
+$ cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild/debug
 ```
-Download Renode and install it.
-## Build project
-A bash script is available to build and debug/run firmware or test suite.
-The entrypoint for the script is to pass help option.
+Note:
+- **CMAKE_BUILD_TYPE** can be debug or release.
+- **CMAKE_TOOLCHAIN_FILE** can be replace by **--toolchain**
+- Add **--fresh** to configure with new tree folder
+### Build source
 ```bash
-$ ./build.sh --help
+$ cmake --build build/debug
 ```
-You can build, clean or run on a MODE context (MODE=<debug, release or test>)
+### Flash firmware
+Todo
+## Configure and build native test suite
+### Configure workspace
 ```bash
-$ ./build.sh --build <MODE>
-$ ./build.sh --run <MODE>
-$ ./build.sh --clean <MODE>
+$ cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild/test
+```
+Note:
+- Add **--fresh** to configure with new tree folder
+- **CMAKE_TOOLCHAIN_FILE** is not used here because CMake find native toolchain automatically.
+### Build source
+```bash
+$ cmake --build build/test
+```
+### Run test suite
+```bash
+$ ctest -V --test-dir build/test
 ```
 ## Open a debug session on board
 Use build script to debug your program on the target :

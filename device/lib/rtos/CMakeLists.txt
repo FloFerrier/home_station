@@ -7,7 +7,6 @@ target_include_directories(freertos_config SYSTEM
     include
 )
 
-target_compile_definitions(freertos_config
-  INTERFACE
+target_compile_definitions(freertos_config INTERFACE
   projCOVERAGE_TEST=0
 )

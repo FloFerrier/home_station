@@ -10,11 +10,12 @@ jobs:
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi make
+          sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi ninja-build openocd
       - name: Build firmware
         run: |
           cd device
-          ./build.sh --build release
+          cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild
+          cmake --build build
   build_and_run_unit_test:
     runs-on: ubuntu-latest
     steps:
@@ -23,9 +24,10 @@ jobs:
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc lcov make
+          sudo apt-get install -yq build-essential cmake gcc lcov ninja-build
       - name: Build and run test suite
         run: |
           cd device
-          ./build.sh --build test
-          ./build.sh --run test
+          cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild
+          cmake --build build
+          ctest -V --test-dir build
