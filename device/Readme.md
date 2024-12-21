@@ -24,6 +24,7 @@ $ cmake --build build/debug --target flash
 $ cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild/test
 ```
 Note:
+- Use **-G"Visual Studio 17 2022"** as generator on Windows
 - Add **--fresh** to configure with new tree folder
 - **CMAKE_TOOLCHAIN_FILE** is not used here because CMake find native toolchain automatically.
 ### Build source
@@ -34,6 +35,8 @@ $ cmake --build build/test
 ```bash
 $ ctest -V --test-dir build/test
 ```
+Note:
+- Add **-C Debug** on Windows
 ## Open a debug session on target board
 After steps configure workspace and build source as debug mode, it is possible to launch a session debug with this command :
 ```bash

@@ -28,11 +28,11 @@ STATIC void command_sensorSelfTest(char *response, const uint32_t response_len_m
 STATIC void command_sensorGetData(char *response, const uint32_t response_len_max);
 
 STATIC const command_s command_list[] = {
-    [COMMAND_UNKNOWN] {"", command_unknown, ""},
-    [COMMAND_HELP] {"help", command_help, "Display all commands available"},
-    [COMMAND_REBOOT] {"reboot", command_reboot, "Performing a system reboot"},
-    [COMMAND_SENSOR_SELF_TEST]{"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
-    [COMMAND_SENSOR_GET_DATA]{"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
+    [COMMAND_UNKNOWN] = {"", command_unknown, ""},
+    [COMMAND_HELP] = {"help", command_help, "Display all commands available"},
+    [COMMAND_REBOOT] = {"reboot", command_reboot, "Performing a system reboot"},
+    [COMMAND_SENSOR_SELF_TEST] = {"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
+    [COMMAND_SENSOR_GET_DATA] = {"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
 };
 
 STATIC void command_unknown(char *response, const uint32_t response_len_max) {
