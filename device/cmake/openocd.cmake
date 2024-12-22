@@ -1,22 +1,31 @@
 find_program(OPENOCD_Executable Name openocd REQUIRED)
 
-set(OPENOCD_TARGET_BOARD stm32f4x)
-set(OPENOCD_CFG_FILE ${CMAKE_SOURCE_DIR}/config/openocd.cfg)
+function(openocd_add_custom_target)
+    cmake_parse_arguments(PARSE_ARGV 1 ARG "" "NAME;BOARD;CFG;FW" "")
 
-message("Firmware is available on the following folder : ${FIRMWARE_FILENAME}")
+    if(NOT ARG_BOARD)
+        message(FATAL_ERROR "Need to specify a BOARD (ex: \"st_nucleo_f4\" or \"custom\")")
+    endif()
 
-function(openocd_custom_target_flash FIRMWARE_FILENAME)
-    message("A custom target is available to flash firmware: \"cmake --build <build_folder> --target flash\"")
-    add_custom_target(flash
-        COMMAND ${OPENOCD_Executable} -f ${OPENOCD_CFG_FILE} -c "setup ${OPENOCD_TARGET_BOARD}" -c "program_release ${FIRMWARE_FILENAME}"
-        DEPENDS ${FIRMWARE_FILENAME} ${OPENOCD_CFG_FILE}
-    )
-endfunction()
+    if(ARG_BOARD STREQUAL "custom")
+        if(NOT ARG_CFG)
+            message(FATAL_ERROR "Need to specify a CFG (filename for openocd config file)")
+        endif()
+        set(OPENOCD_CFG_FILE ${CFG})
+    else()
+        set(OPENOCD_CFG_FILE board/${ARG_BOARD}.cfg)
+    endif()
 
-function(openocd_custom_target_debug_session)
-    message("A custom target is available to open a debug session : \"cmake --build <build_folder> --target debug\"")
-    add_custom_target(debug
-        COMMAND ${OPENOCD_Executable} -f ${OPENOCD_CFG_FILE} -c "setup ${OPENOCD_TARGET_BOARD}"
-        DEPENDS ${OPENOCD_CFG_FILE}
+    if(ARG_NAME STREQUAL "flash")
+        if(NOT ARG_FW)
+            message(FATAL_ERROR "Need to specify a FW (filename for firmware binary)")
+        endif()
+        set(OPENOCD_COMMAND "-c program ${ARG_FW} verify reset exit")
+    else()
+        set(OPENOCD_COMMAND "")
+    endif()
+
+    add_custom_target(${ARG_NAME}
+        COMMAND ${OPENOCD_Executable} -f ${OPENOCD_CFG_FILE} ${OPENOCD_COMMAND}
     )
 endfunction()
