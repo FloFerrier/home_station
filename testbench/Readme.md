@@ -1,6 +1,15 @@
 # README
-## Setup and run Docker container
+## Prerequisites
+Only Python3 and Make.
+## Run script on a virtual environment
 ```bash
-$ docker build -t weather_sensors-testbench .
-$ docker run -it --rm weather_sensors-testbench
+$ make run
+```
+## Run test suite on a virtual environment
+```bash
+$ make test
+```
+## Clean environment
+```bash
+$ make clean
 ```
