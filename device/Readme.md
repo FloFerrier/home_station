@@ -32,11 +32,21 @@ Note:
 $ cmake --build build/test
 ```
 ### Run test suite
+For running all test binaries, launch this command :
 ```bash
-$ ctest -V --test-dir build/test
+$ ctest --test-dir build/test
+```
+For displaying all test binaries, launch this command :
+```bash
+$ ctest --test-dir build/test -N
+```
+For running only a specific test binary, launch this command :
+```bash
+$ ctest --test-dir build/test -R <test_name>
 ```
 Note:
 - Add **-C Debug** on Windows
+- Add **-V** to have a verbose mode or **-VV** to have an extra verbose mode
 ## Open a debug session on target board
 After steps configure workspace and build source as debug mode, it is possible to launch a session debug with this command :
 ```bash
