@@ -18,134 +18,134 @@ static void test_protocol_should_have_incorrect_parameters(void **state) {
 
 static void test_protocol_should_fillin_request_only(void **state) {
     (void)state;
-    #define PROTOCOL_STRING_LEN_MAX (255u)
+    #define PROTOCOL_STRING_LEN_MAX (512u)
     char string[PROTOCOL_STRING_LEN_MAX+1] = "";
-    protocol_request_s request = {
-        .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-        .message = "test message",
-    };
     protocol_s protocol = {
-        .request = &request,
-        .data = NULL,
-        .metadata = NULL,
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+            .message = "test message",
+        },
+        .data_nb = 0,
     };
 
-    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX, string);
+    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
     assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"}}\r\n");
 }
 
-static void test_protocol_should_fillin_data(void **state) {
+static void test_protocol_should_fillin_all_data(void **state) {
     (void)state;
-    #define PROTOCOL_STRING_LEN_MAX (255u)
+    #define PROTOCOL_STRING_LEN_MAX (512u)
     char string[PROTOCOL_STRING_LEN_MAX+1] = "";
-    protocol_request_s request = {
-        .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-        .message = "test message",
-    };
-    protocol_data_s data = {
-        .field = PROTOCOL_DATA_FIELD_0,
-        .value = 0.0f,
-        .unit = PROTOCOL_DATA_UNIT_0,
-    };
     protocol_s protocol = {
-        .request = &request,
-        .data = &data,
-        .metadata = NULL,
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+            .message = "test message",
+        },
+        .data_nb = 3,
+        .data = {
+            {
+                .field = PROTOCOL_DATA_FIELD_TEMPERATURE,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_DEGREE_CELSIUS,
+            },
+            {
+                .field = PROTOCOL_DATA_FIELD_HUMIDITY,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_PERCENTAGE,
+            },
+            {
+                .field = PROTOCOL_DATA_FIELD_PRESSURE,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_PASCAL,
+            },
+        },
     };
 
-    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX, string);
+    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":{\"field\":\"field0\",\"value\":0.0,\"unit\":\"unit0\"}}\r\n");
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"},]}\r\n");
 }
 
-static void test_protocol_should_fillin_metadata(void **state) {
+static void test_protocol_should_fillin_all_metadata(void **state) {
     (void)state;
-    #define PROTOCOL_STRING_LEN_MAX (255u)
-    char string[PROTOCOL_STRING_LEN_MAX+1] = "";
-    protocol_request_s request = {
-        .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-        .message = "test message",
-    };
-    protocol_metadata_s metadata = {
-        .field = PROTOCOL_METADATA_FIELD_0,
-        .value = PROTOCOL_METADATA_VALUE_0,
-    };
+    #define PROTOCOL_STRING_LEN_MAX (512u)
+    char string[PROTOCOL_STRING_LEN_MAX] = "";
     protocol_s protocol = {
-        .request = &request,
-        .data = NULL,
-        .metadata = &metadata,
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+            .message = "test message",
+        },
+        .metadata_nb = 2,
+        .metadata = {
+            {
+                .field = PROTOCOL_METADATA_FIELD_0,
+                .value = PROTOCOL_METADATA_VALUE_0,
+            },
+            {
+                .field = PROTOCOL_METADATA_FIELD_1,
+                .value = PROTOCOL_METADATA_VALUE_1,
+            },
+        },
     };
 
-    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX, string);
+    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"metadata\":{\"field\":\"field0\",\"value\":\"value0\"}}\r\n");
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"},]}\r\n");
 }
 
 static void test_protocol_should_fillin_all(void **state) {
     (void)state;
-    #define PROTOCOL_STRING_LEN_MAX (255u)
-    char string[PROTOCOL_STRING_LEN_MAX+1] = "";
-    protocol_request_s request = {
-        .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-        .message = "test message",
-    };
-    protocol_data_s data = {
-        .field = PROTOCOL_DATA_FIELD_0,
-        .value = 0.0f,
-        .unit = PROTOCOL_DATA_UNIT_0,
-    };
-    protocol_metadata_s metadata = {
-        .field = PROTOCOL_METADATA_FIELD_0,
-        .value = PROTOCOL_METADATA_VALUE_0,
-    };
+    #define PROTOCOL_STRING_LEN_MAX (512u)
+    char string[PROTOCOL_STRING_LEN_MAX] = "";
     protocol_s protocol = {
-        .request = &request,
-        .data = &data,
-        .metadata = &metadata,
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+            .message = "test message",
+        },
+        .data_nb = 3,
+        .data = {
+            {
+                .field = PROTOCOL_DATA_FIELD_TEMPERATURE,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_DEGREE_CELSIUS,
+            },
+            {
+                .field = PROTOCOL_DATA_FIELD_HUMIDITY,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_PERCENTAGE,
+            },
+            {
+                .field = PROTOCOL_DATA_FIELD_PRESSURE,
+                .value = 0.0f,
+                .unit = PROTOCOL_DATA_UNIT_PASCAL,
+            },
+        },
+        .metadata_nb = 2,
+        .metadata = {
+            {
+                .field = PROTOCOL_METADATA_FIELD_0,
+                .value = PROTOCOL_METADATA_VALUE_0,
+            },
+            {
+                .field = PROTOCOL_METADATA_FIELD_1,
+                .value = PROTOCOL_METADATA_VALUE_1,
+            },
+        },
     };
 
-    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX, string);
+    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":{\"field\":\"field0\",\"value\":0.0,\"unit\":\"unit0\"},\"metadata\":{\"field\":\"field0\",\"value\":\"value0\"}}\r\n");
-}
-
-static void test_protocol_should_message_overflow(void **state) {
-    (void)state;
-    #define PROTOCOL_STRING_LEN_MAX (255u)
-    char string[PROTOCOL_STRING_LEN_MAX+1] = "";
-    protocol_request_s request = {
-        .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-    };
-    (void)memset(request.message, 'a', PROTOCOL_REQUEST_MESSAGE_LEN_MAX);
-    protocol_data_s data = {
-        .field = PROTOCOL_DATA_FIELD_0,
-        .value = 0.0f,
-        .unit = PROTOCOL_DATA_UNIT_0,
-    };
-    protocol_metadata_s metadata = {
-        .field = PROTOCOL_METADATA_FIELD_0,
-        .value = PROTOCOL_METADATA_VALUE_0,
-    };
-    protocol_s protocol = {
-        .request = &request,
-        .data = &data,
-        .metadata = &metadata,
-    };
-
-    protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX, string);
-
-    skip();
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"},],\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"},]}\r\n");
 }
 
 int main(void) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_protocol_should_have_incorrect_parameters),
         cmocka_unit_test(test_protocol_should_fillin_request_only),
-        cmocka_unit_test(test_protocol_should_fillin_data),
-        cmocka_unit_test(test_protocol_should_fillin_metadata),
+        cmocka_unit_test(test_protocol_should_fillin_all_data),
+        cmocka_unit_test(test_protocol_should_fillin_all_metadata),
         cmocka_unit_test(test_protocol_should_fillin_all),
-        cmocka_unit_test(test_protocol_should_message_overflow),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

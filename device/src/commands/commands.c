@@ -36,52 +36,71 @@ STATIC const command_s command_list[] = {
 };
 
 STATIC void command_unknown(char *response, const uint32_t response_len_max) {
-    protocol_s data = {
-        .code = PROTOCOL_CODE_FAILURE,
-        .message = "Command unknown",
-        .response = "Tap help to display all available command.",
+    protocol_s protocol = {
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_FAILURE,
+            .message = "Command unknown, tap \"help\" to display all available command.",
+        }
     };
-    protocol_serialize(data, response_len_max, response);
+    protocol_serialize(protocol, response_len_max, response);
 }
 
 STATIC void command_help(char *response, const uint32_t response_len_max) {
-    protocol_s data = {
-        .code = PROTOCOL_CODE_SUCCESS,
-        .message = "",
-        .response = "",
+    protocol_s protocol = {
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+        },
     };
-    (void)snprintf(data.response, response_len_max, "\"%s\": %s, \"%s\": %s, \"%s\": %s", command_list[COMMAND_REBOOT].name, command_list[COMMAND_REBOOT].desc,command_list[COMMAND_SENSOR_SELF_TEST].name, command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
-    protocol_serialize(data, response_len_max, response);
+    (void)snprintf(protocol.request.message, response_len_max, "\"%s\": %s, \"%s\": %s, \"%s\": %s",
+        command_list[COMMAND_REBOOT].name, command_list[COMMAND_REBOOT].desc, command_list[COMMAND_SENSOR_SELF_TEST].name,
+        command_list[COMMAND_SENSOR_SELF_TEST].desc, command_list[COMMAND_SENSOR_GET_DATA].name, command_list[COMMAND_SENSOR_GET_DATA].desc);
+    protocol_serialize(protocol, response_len_max, response);
 }
 
 STATIC void command_reboot(char *response, const uint32_t response_len_max) {
-    protocol_s data = {
-        .code = PROTOCOL_CODE_SUCCESS,
-        .message = "",
-        .response = "",
+    protocol_s protocol = {
+        .request = {
+            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
+        },
     };
-    protocol_serialize(data, response_len_max, response);
+    (void)snprintf(protocol.request.message, response_len_max, "%s", command_list[COMMAND_REBOOT].desc);
+    protocol_serialize(protocol, response_len_max, response);
 }
 
 STATIC void command_sensorSelfTest(char *response, const uint32_t response_len_max) {
-    protocol_s data = {0};
     int8_t result = sensor_selfTest();
-    data.code = (result == SENSOR_OK) ? PROTOCOL_CODE_SUCCESS : PROTOCOL_CODE_FAILURE;
-    (void)snprintf(data.message, response_len_max, "%s", sensor_returnCodeAsString(result));
-    protocol_serialize(data, response_len_max, response);
+    protocol_s protocol = {0};
+    protocol.request.code = (result == SENSOR_OK) ? PROTOCOL_REQUEST_CODE_SUCCESS : PROTOCOL_REQUEST_CODE_FAILURE,
+    (void)snprintf(protocol.request.message, response_len_max, "%s", sensor_returnCodeAsString(result));
+
+    protocol_serialize(protocol, response_len_max, response);
 }
 
 STATIC void command_sensorGetData(char *response, const uint32_t response_len_max) {
-    protocol_s protocol_data = {0};
-    sensor_data_s data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
-    uint32_t number_of_data = 0;
-    int8_t result = sensor_getData(data, &number_of_data);
+    sensor_data_s sensor_data[SENSOR_MAX_DATA_AVAILABLE] = {{0}};
+    uint32_t sensor_data_number = 0;
+    int8_t result = sensor_getData(sensor_data, &sensor_data_number);
+    protocol_s protocol = {0};
+    /* Get only the first data from sensor */
     if(result == SENSOR_OK) {
-        (void)snprintf(protocol_data.response, response_len_max, "%.1f deg, %.1f hPa %.1f rH", data[0].temperature_in_deg, data[0].pressure_in_pascal / 100.0f, data[0].humidity_in_per100);
+        protocol.data_nb = 3;
+        /* Temperature field */
+        protocol.data[0].field = PROTOCOL_DATA_FIELD_TEMPERATURE;
+        protocol.data[0].value = sensor_data[0].temperature_in_deg;
+        protocol.data[0].unit = PROTOCOL_DATA_UNIT_DEGREE_CELSIUS;
+        /* Humidity field */
+        protocol.data[1].field = PROTOCOL_DATA_FIELD_HUMIDITY;
+        protocol.data[1].value = sensor_data[0].humidity_in_per100;
+        protocol.data[1].unit = PROTOCOL_DATA_UNIT_PERCENTAGE;
+        /* Pressure field */
+        protocol.data[2].field = PROTOCOL_DATA_FIELD_PRESSURE;
+        protocol.data[2].value = sensor_data[0].pressure_in_pascal;
+        protocol.data[2].unit = PROTOCOL_DATA_UNIT_PASCAL;
     }
-    protocol_data.code = (result == SENSOR_OK) ? PROTOCOL_CODE_SUCCESS : PROTOCOL_CODE_FAILURE;
-    (void)snprintf(protocol_data.message, response_len_max, "%s", sensor_returnCodeAsString(result));
-    protocol_serialize(protocol_data, response_len_max, response);
+    protocol.request.code = (result == SENSOR_OK) ? PROTOCOL_REQUEST_CODE_SUCCESS : PROTOCOL_REQUEST_CODE_FAILURE;
+    (void)snprintf(protocol.request.message, response_len_max, "%s", sensor_returnCodeAsString(result));
+
+    protocol_serialize(protocol, response_len_max, response);
 }
 
 command_index_e command_getIndex(const char *cmd) {
