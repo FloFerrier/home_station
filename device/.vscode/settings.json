@@ -12,5 +12,27 @@
         "mock_stm32f4x.h": "c",
         "mock_console.h": "c",
         "mock_commands.h": "c"
-    }
+    },
+
+    /* CMake Config */
+    "cmake.automaticReconfigure": false,
+    "cmake.autoSelectActiveFolder": false,
+    "cmake.configureOnEdit": false,
+    "cmake.configureOnOpen": false,
+    "cmake.configureSettings": {
+
+    },
+    "cmake.enableAutomaticKitScan": false,
+    "cmake.setBuildTypeOnMultiConfig": true,
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.buildTask": false,
+    "cmake.options.statusBarVisibility": "compact",
+
+    /* Debugger Config */
+    "cortex-debug.enableTelemetry": false,
+    "cortex-debug.openocdPath": "/usr/local/bin/openocd",
+    "cortex-debug.armToolchainPath.linux": "/opt/arm-gnu-toolchain/bin/arm-none-eabi-gcc",
+    "cortex-debug.armToolchainPath.windows": "",
+    "cortex-debug.gdbPath.linux": "/usr/bin/gdb-multiarch",
+    "cortex-debug.gdbPath.windows": ""
 }

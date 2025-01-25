@@ -2,21 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Start gdb server with openocd",
-            "type": "cppdbg",
-            "request": "attach",
-            "program": "openocd -f config/openocd.cfg -c \"setup stm32f4x\" -c \"program_debug\""
-        },
-        {
-			"name": "Launch Debug on target",
-			"type": "cppdbg",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"program": "${workspaceFolder}/build/Debug/src/weather_sensors.elf",
-			"MIMode": "gdb",
-			"miDebuggerPath": "gdb-multiarch",
-			"miDebuggerServerAddress": "localhost:3333",
-			"useExtendedRemote": true,
-		}
+            "cwd": "${workspaceRoot}",
+            "executable": "build/debug/src/device_firmware.elf",
+            "name": "Debug with OpenOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": [
+                "board/st_nucleo_f4.cfg",
+            ],
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "preLaunchCommands": [
+                "monitor reset init",
+            ],
+        }
     ]
 }

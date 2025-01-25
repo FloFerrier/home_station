@@ -1,7 +1,7 @@
 # Filename: nucleo-f446re.resc
 
 $CONFIG_FILE?=@config/nucleo-f446re.repl
-$FIRMWARE_FILE?=@build/debug/src/weather_sensors.elf
+$FIRMWARE_FILE?=@build/debug/src/device_firmware.elf
 
 include @test/acceptance/emulator/bme680.cs
 
