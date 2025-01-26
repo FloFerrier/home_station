@@ -68,9 +68,14 @@ void protocol_serialize(protocol_s protocol, const uint32_t string_len_max, char
     /* Serialize data field */
     if(protocol.data_nb > 0) {
         (void)memset(string_list_data, 0, STRING_LIST_DATA_LEN_MAX);
-        for(uint8_t i=0; i<protocol.data_nb;i++) {
-            (void)snprintf(string_data, STRING_DATA_LEN_MAX-1, "{\"field\":\"%s\",\"value\":%.1f,\"unit\":\"%s\"},",
-                PROTOCOL_DATA_FIELD[protocol.data[i].field], protocol.data[i].value, PROTOCOL_DATA_UNIT[protocol.data[i].unit]);
+        for(uint8_t i=0; i< protocol.data_nb; i++) {
+            char comma = ',';
+            /* Remove comma if it's the last element*/
+            if(i == (protocol.data_nb - 1)) {
+                comma = '\0';
+            }
+            (void)snprintf(string_data, STRING_DATA_LEN_MAX-1, "{\"field\":\"%s\",\"value\":%.1f,\"unit\":\"%s\"}%c",
+                PROTOCOL_DATA_FIELD[protocol.data[i].field], protocol.data[i].value, PROTOCOL_DATA_UNIT[protocol.data[i].unit], comma);
             (void)strncat(string_list_data, string_data, STRING_LIST_DATA_LEN_MAX-1);
         }
     }
@@ -78,9 +83,14 @@ void protocol_serialize(protocol_s protocol, const uint32_t string_len_max, char
     /* Serialize metadata field */
     if(protocol.metadata_nb > 0) {
         (void)memset(string_list_metadata, 0, STRING_LIST_METADATA_LEN_MAX);
-        for(uint8_t i=0; i<protocol.metadata_nb;i++) {
-            (void)snprintf(string_metadata, STRING_METADATA_LEN_MAX-1, "{\"field\":\"%s\",\"value\":\"%s\"},",
-                PROTOCOL_METADATA_FIELD[protocol.metadata[i].field], PROTOCOL_METADATA_VALUE[protocol.metadata[i].value]);
+        for(uint8_t i=0; i< protocol.metadata_nb; i++) {
+            char comma = ',';
+            /* Remove comma if it's the last element*/
+            if(i == (protocol.metadata_nb - 1)) {
+                comma = '\0';
+            }
+            (void)snprintf(string_metadata, STRING_METADATA_LEN_MAX-1, "{\"field\":\"%s\",\"value\":\"%s\"}%c",
+                PROTOCOL_METADATA_FIELD[protocol.metadata[i].field], PROTOCOL_METADATA_VALUE[protocol.metadata[i].value], comma);
             (void)strncat(string_list_metadata, string_metadata, STRING_LIST_METADATA_LEN_MAX-1);
         }
     }

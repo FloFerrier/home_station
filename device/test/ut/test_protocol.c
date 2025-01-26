@@ -64,7 +64,7 @@ static void test_protocol_should_fillin_all_data(void **state) {
 
     protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"},]}\r\n");
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"}]}\r\n");
 }
 
 static void test_protocol_should_fillin_all_metadata(void **state) {
@@ -91,7 +91,7 @@ static void test_protocol_should_fillin_all_metadata(void **state) {
 
     protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"},]}\r\n");
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"}]}\r\n");
 }
 
 static void test_protocol_should_fillin_all(void **state) {
@@ -136,7 +136,7 @@ static void test_protocol_should_fillin_all(void **state) {
 
     protocol_serialize(protocol, PROTOCOL_STRING_LEN_MAX-1, string);
 
-    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"},],\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"},]}\r\n");
+    assert_string_equal(string, "{\"request\":{\"code\":\"SUCCESS\",\"message\":\"test message\"},\"data\":[{\"field\":\"temperature\",\"value\":0.0,\"unit\":\"degC\"},{\"field\":\"humidity\",\"value\":0.0,\"unit\":\"per100\"},{\"field\":\"pressure\",\"value\":0.0,\"unit\":\"Pa\"}],\"metadata\":[{\"field\":\"field0\",\"value\":\"value0\"},{\"field\":\"field1\",\"value\":\"value1\"}]}\r\n");
 }
 
 int main(void) {
