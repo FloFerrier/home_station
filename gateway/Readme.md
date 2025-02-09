@@ -34,41 +34,36 @@ Open a browser on the following link:
 - http://localhost:8086/
 
 ### Grafana OSS
-[Website Link](https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/)
+[Website Link](https://grafana.com/grafana/download?pg=get&plcmt=selfmanaged-box1-cta1&edition=oss)
 #### Install Grafana
 1. Install the prerequisite packages:
 ```bash
-$ sudo apt-get install -y apt-transport-https software-properties-common wget
+$ sudo apt-get install -y adduser libfontconfig1 musl
 ```
-2. Import the GPG key:
+2. Import the Grafana package:
 ```bash
-$ sudo mkdir -p /etc/apt/keyrings/
-$ wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+$ wget https://dl.grafana.com/oss/release/grafana_11.5.1_amd64.deb
 ```
-3. Add a repository for stable releases:
+3. Install the Grafana package:
 ```bash
-$ echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
-```
-4. Update the list of available packages and install grafana OSS:
-```bash
-$ sudo apt-get update && sudo apt-get install grafana
+$ sudo dpkg -i grafana_11.5.1_amd64.deb
 ```
 #### Start the Grafana server
 1. Start the server with systemd:
 ```bash
-$ sudo systemctl daemon-reload && sudo systemctl start grafana-server
+$ sudo systemctl daemon-reload && sudo service grafana-server start
 ```
 2. Verify that the server is running:
 ```bash
-$ sudo systemctl status grafana-server
+$ sudo service grafana-server status
 ```
 3. Configure the Grafana server to start at boot:
 ```bash
-$ sudo systemctl enable grafana-server.service
+$ sudo sservice grafana-server enable
 ```
 4. Restart the Grafana server:
 ```bash
-$ sudo systemctl restart grafana-server
+$ sudo service grafana-server restart
 ```
 #### Run Grafana UI
 Open a browser on the following link:
