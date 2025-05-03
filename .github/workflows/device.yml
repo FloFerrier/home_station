@@ -16,6 +16,11 @@ jobs:
           cd device
           cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild
           cmake --build build
+      - name: Archive linker map file
+        uses: actions/upload-artifact@v4
+        with:
+          name: linker-map-file
+          path: build/output.map
   build_and_run_unit_test:
     runs-on: ubuntu-latest
     steps:
