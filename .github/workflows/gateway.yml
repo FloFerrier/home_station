@@ -1,6 +1,9 @@
 name: Gateway
 run-name: Home station pipelines for gateway
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build_test_suite:
     runs-on: ubuntu-latest

@@ -1,6 +1,9 @@
 name: Device
 run-name: Home Station pipelines for device
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build_firmware:
     runs-on: ubuntu-latest
