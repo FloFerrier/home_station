@@ -39,11 +39,11 @@ target_compile_options(${BUILD_TARGET} PUBLIC
     -Wextra
 )
 
+set(LINKER_FILE ${CMAKE_SOURCE_DIR}/config/stm32f446retx.ld)
+message("Linker file is : ${LINKER_FILE}")
+
 target_link_options(${BUILD_TARGET} PUBLIC
     -T${LINKER_FILE}
-    -mcpu=${CPU}
-    -mfpu=${FPU}
-    -mfloat-abi=${FLOAT_ABI}
     -specs=nano.specs
     -specs=nosys.specs
     -Wl,-Map=output.map,--cref

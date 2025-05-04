@@ -1,6 +1,11 @@
 # README
 ## Prerequisites
 Todo: Should be cross-platform.
+
+Third-parties are managed by git-submodule, so you need to get it :
+```bash
+$ git submodule update --init --recursive
+```
 ## Configure and build cross-compiling firmware
 ### Configure workspace
 ```bash
@@ -93,4 +98,9 @@ $ arm-none-eabi-gdb --tui
 (gdb) monitor start # With renode only
 (gdb) monitor halt # With renode only
 (gdb) continue
+```
+
+## Shell on serial port com
+```bash
+$ picocom --echo -b 115200 /dev/ttyACM0
 ```

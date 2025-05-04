@@ -4,16 +4,21 @@ on: [push]
 jobs:
   build_firmware:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./device
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi ninja-build openocd
+          sudo apt-get install -yq build-essential cmake gcc-arm-none-eabi git ninja-build openocd
+      - name: Get third-party dependencies
+        run: |
+          git submodule update --init --recursive
       - name: Build firmware
         run: |
-          cd device
           cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild
           cmake --build build
       - name: Archive linker map file
@@ -23,16 +28,21 @@ jobs:
           path: build/output.map
   build_and_run_unit_test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./device
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc lcov ninja-build
+          sudo apt-get install -yq build-essential cmake gcc git lcov ninja-build
+      - name: Get third-party dependencies
+        run: |
+          git submodule update --init --recursive
       - name: Build and run test suite
         run: |
-          cd device
           cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild
           cmake --build build
           ctest -V --test-dir build

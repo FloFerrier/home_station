@@ -5,13 +5,6 @@ build
 .cproject
 .project
 
-# lib specific folder
-lib/hal/cmsis/Device
-lib/hal/stm32
-lib/rtos/freertos_kernel
-lib/driver/bme68x/src
-test/cmocka
-
 # Python folders
 test/acceptance/virtualenv
 test/acceptance/__pycache__
