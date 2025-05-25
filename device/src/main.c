@@ -36,8 +36,11 @@ void HAL_MspInit(void) {
     HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
 }
 
+volatile uint32_t RTOS_runTimeCounter;
+
 void SysTick_Handler(void) {
     HAL_IncTick();
+    RTOS_runTimeCounter++;
 #if (INCLUDE_xTaskGetSchedulerState == 1)
     if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
 #endif /* INCLUDE_xTaskGetSchedulerState */
@@ -46,3 +49,11 @@ void SysTick_Handler(void) {
     }
 #endif /* INCLUDE_xTaskGetSchedulerState */
 }
+
+void RTOS_configureTimerForRuntimeStats(void) {
+    RTOS_runTimeCounter = 0;
+}
+
+uint32_t RTOS_getRuntimeCounterValue(void) {
+    return RTOS_runTimeCounter;
+  }

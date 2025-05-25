@@ -8,8 +8,11 @@
 #include <stdio.h>
 
 #ifndef TEST
+#include "FreeRTOS.h"
+#include "task.h"
 #define STATIC static
 #else
+#include "mock_freertos.h"
 #define STATIC
 #endif // TEST
 
@@ -26,6 +29,7 @@ STATIC void command_help(char *response, const uint32_t response_len_max);
 STATIC void command_reboot(char *response, const uint32_t response_len_max);
 STATIC void command_sensorSelfTest(char *response, const uint32_t response_len_max);
 STATIC void command_sensorGetData(char *response, const uint32_t response_len_max);
+STATIC void command_systemGetInfos(char *response, const uint32_t response_len_max);
 
 STATIC const command_s command_list[] = {
     [COMMAND_UNKNOWN] = {"", command_unknown, ""},
@@ -33,6 +37,7 @@ STATIC const command_s command_list[] = {
     [COMMAND_REBOOT] = {"reboot", command_reboot, "Performing a system reboot"},
     [COMMAND_SENSOR_SELF_TEST] = {"sensor_selfTest", command_sensorSelfTest, "Performing a sensor self-test"},
     [COMMAND_SENSOR_GET_DATA] = {"sensor_getData", command_sensorGetData, "Request a sensor to get data"},
+    [COMMAND_SYSTEM_GET_INFOS] = {"system_getInfos", command_systemGetInfos, "Get system informations"},
 };
 
 STATIC void command_unknown(char *response, const uint32_t response_len_max) {
@@ -101,6 +106,11 @@ STATIC void command_sensorGetData(char *response, const uint32_t response_len_ma
     (void)snprintf(protocol.request.message, response_len_max, "%s", sensor_returnCodeAsString(result));
 
     protocol_serialize(protocol, response_len_max, response);
+}
+
+STATIC void command_systemGetInfos(char *response, const uint32_t response_len_max) {
+    (void) response_len_max;
+    vTaskGetRunTimeStats(response);
 }
 
 command_index_e command_getIndex(const char *cmd) {

@@ -2,12 +2,17 @@
 #define TEST_MOCK_FREERTOS_H
 
 #include <stdint.h>
+#include <stddef.h>
 
-typedef long BaseType_t;
-typedef unsigned long UBaseType_t;
+#define portCHAR char
+#define portFLOAT float
+#define portDOUBLE double
+#define portLONG long
+#define portSHORT short
+#define portSTACK_TYPE uint32_t
+#define portBASE_TYPE long
 
-struct tskTaskControlBlock;
-typedef struct tskTaskControlBlock *TaskHandle_t;
+typedef portSTACK_TYPE StackType_t;
 
 /* Used for configUSE_16_BIT_TICKS == 0 */
 typedef uint32_t TickType_t;
@@ -22,6 +27,34 @@ typedef uint32_t TickType_t;
 #define tskIDLE_PRIORITY ((UBaseType_t) 0U)
 
 #define configSTACK_DEPTH_TYPE uint16_t
+#define configRUN_TIME_COUNTER_TYPE uint32_t
+
+typedef long BaseType_t;
+typedef unsigned long UBaseType_t;
+
+struct tskTaskControlBlock;
+typedef struct tskTaskControlBlock *TaskHandle_t;
+
+typedef enum {
+    eRunning = 0,
+    eReady,
+    eBlocked,
+    eSuspended,
+    eDeleted,
+    eInvalid
+} eTaskState;
+
+typedef struct xTASK_STATUS {
+    TaskHandle_t xHandle;
+    const char * pcTaskName;
+    UBaseType_t xTaskNumber;
+    eTaskState eCurrentState;
+    UBaseType_t uxCurrentPriority;
+    UBaseType_t uxBasePriority;
+    configRUN_TIME_COUNTER_TYPE ulRunTimeCounter;
+    StackType_t * pxStackBase;
+    configSTACK_DEPTH_TYPE usStackHighWaterMark;
+} TaskStatus_t;
 
 typedef void (* TaskFunction_t)(void *);
 
@@ -33,5 +66,8 @@ BaseType_t xTaskNotifyGive(TaskHandle_t xTaskToNotify);
 
 void mock_assert_call_xTaskCreate(BaseType_t ret);
 BaseType_t xTaskCreate(TaskFunction_t pxTaskCode, const char * const pcName, const configSTACK_DEPTH_TYPE usStackDepth, void * const pvParameters, UBaseType_t uxPriority, TaskHandle_t * const pxCreatedTask);
+
+void mock_assert_call_vTaskGetRunTimeStats(char* mockWriteBuffer);
+void vTaskGetRunTimeStats(char* pcWriteBuffer);
 
 #endif  // TEST_MOCK_FREERTOS_H

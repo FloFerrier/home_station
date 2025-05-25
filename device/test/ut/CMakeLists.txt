@@ -41,6 +41,7 @@ add_unit_test(test_commands
     ${CMAKE_SOURCE_DIR}/src/commands/commands.c
     ${CMAKE_SOURCE_DIR}/test/mock/mock_sensor.c
     ${CMAKE_SOURCE_DIR}/test/mock/mock_protocol.c
+    ${CMAKE_SOURCE_DIR}/test/mock/mock_freertos.c
     ${CMAKE_SOURCE_DIR}/test/ut/test_commands.c
 )
 

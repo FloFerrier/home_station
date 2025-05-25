@@ -47,3 +47,14 @@ BaseType_t xTaskCreate(TaskFunction_t pxTaskCode, const char * const pcName, con
     (void) pxCreatedTask;
     return mock();
 }
+
+void mock_assert_call_vTaskGetRunTimeStats(char* mockWriteBuffer) {
+    expect_function_call(vTaskGetRunTimeStats);
+    will_return(vTaskGetRunTimeStats, mockWriteBuffer);
+}
+void vTaskGetRunTimeStats(char* pcWriteBuffer) {
+    function_called();
+    assert_non_null(pcWriteBuffer);
+    char* mockWriteBuffer = mock_ptr_type(char*);
+    (void)strncpy(pcWriteBuffer, mockWriteBuffer, strlen(mockWriteBuffer));
+}

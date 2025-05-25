@@ -35,6 +35,9 @@
 #define configQUEUE_REGISTRY_SIZE                8
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 #define configCHECK_FOR_STACK_OVERFLOW           0
+#define configUSE_TRACE_FACILITY                 1
+#define configGENERATE_RUN_TIME_STATS            1
+#define configUSE_STATS_FORMATTING_FUNCTIONS     1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
@@ -91,5 +94,11 @@ standard names. */
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 
 //#define xPortSysTickHandler SysTick_Handler
+
+/* Definitions needed when configGENERATE_RUN_TIME_STATS is on */
+extern void RTOS_configureTimerForRuntimeStats(void);
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() RTOS_configureTimerForRuntimeStats()
+extern uint32_t RTOS_getRuntimeCounterValue(void);
+#define portGET_RUN_TIME_COUNTER_VALUE() RTOS_getRuntimeCounterValue()
 
 #endif /* FREERTOS_CONFIG_H */
