@@ -6,5 +6,7 @@ set(UNIT_TESTING OFF CACHE BOOL "CMocka: Build with unit testing" FORCE)
 set(PICKY_DEVELOPER OFF CACHE BOOL "CMocka: Build with picky developer flags" FORCE)
 add_subdirectory(cmocka)
 
+add_subdirectory(mock)
+
 # Unit test folder
 add_subdirectory(ut)
