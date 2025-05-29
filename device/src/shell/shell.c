@@ -16,6 +16,8 @@ int loopCnt;
 #define COMMAND_STRING_LEN_MAX (255u)
 #define RING_BUFFER_LEN_MAX (255u)
 
+#define SHELL_RESPONSE_SIZE_MAX (2048u)
+
 typedef struct {
     char buffer[RING_BUFFER_LEN_MAX+1];
     uint32_t index;
@@ -56,8 +58,8 @@ void shell_task(void *params) {
         }
         if(command_is_available == true) {
             command_index_e command_index = command_getIndex(command_string);
-            char response[COMMAND_STRING_LEN_MAX+1] = "";
-            command_execute(command_index, COMMAND_STRING_LEN_MAX, response);
+            static char response[SHELL_RESPONSE_SIZE_MAX] = "";
+            command_execute(command_index, SHELL_RESPONSE_SIZE_MAX-1, response);
             console_send(response);
             command_is_available = false;
         }

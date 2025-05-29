@@ -3,60 +3,35 @@
 
 #include <stdint.h>
 
-#define PROTOCOL_REQUEST_MESSAGE_LEN_MAX (256u)
-
 typedef enum {
-    PROTOCOL_REQUEST_CODE_FAILURE = 0,
-    PROTOCOL_REQUEST_CODE_SUCCESS = 1,
+    PROTOCOL_REQUEST_CODE_UNKNOWN = 0, // Keep per default
+    PROTOCOL_REQUEST_CODE_FAILURE = 1,
+    PROTOCOL_REQUEST_CODE_SUCCESS = 2,
 } protocol_request_code_e;
 
+#define PROTOCOL_REQUEST_MESSAGE_SIZE_MAX (32u)
 typedef struct {
     protocol_request_code_e code;
-    char message[PROTOCOL_REQUEST_MESSAGE_LEN_MAX];
+    char message[PROTOCOL_REQUEST_MESSAGE_SIZE_MAX];
 } protocol_request_s;
 
-typedef enum {
-    PROTOCOL_DATA_FIELD_TEMPERATURE = 0,
-    PROTOCOL_DATA_FIELD_HUMIDITY = 1,
-    PROTOCOL_DATA_FIELD_PRESSURE = 2,
-} protocol_data_field_e;
-
-typedef enum {
-    PROTOCOL_DATA_UNIT_DEGREE_CELSIUS = 0,
-    PROTOCOL_DATA_UNIT_PERCENTAGE = 1,
-    PROTOCOL_DATA_UNIT_PASCAL = 2,
-} protocol_data_unit_e;
-
+#define PROTOCOL_DATA_NAME_SIZE_MAX (16u)
+#define PROTOCOL_DATA_UNIT_SIZE_MAX (16u)
 typedef struct {
-    protocol_data_field_e field;
+    char name[PROTOCOL_DATA_NAME_SIZE_MAX];
     float value;
-    protocol_data_unit_e unit;
+    char unit[PROTOCOL_DATA_UNIT_SIZE_MAX];
 } protocol_data_s;
 
-typedef enum {
-    PROTOCOL_METADATA_FIELD_0 = 0,
-    PROTOCOL_METADATA_FIELD_1 = 1,
-} protocol_metadata_field_e;
-
-typedef enum {
-    PROTOCOL_METADATA_VALUE_0 = 0,
-    PROTOCOL_METADATA_VALUE_1 = 1,
-} protocol_metadata_value_e;
-
+#define PROTOCOL_METADATA_NAME_SIZE_MAX (32u)
+#define PROTOCOL_METADATA_VALUE_SIZE_MAX (32u)
 typedef struct {
-    protocol_metadata_field_e field;
-    protocol_metadata_value_e value;
+    char name[PROTOCOL_METADATA_NAME_SIZE_MAX];
+    char value[PROTOCOL_METADATA_VALUE_SIZE_MAX];
 } protocol_metadata_s;
-
-typedef enum {
-    PROTOCOL_DATA_TEMPERATURE = 0,
-    PROTOCOL_DATA_HUMIDITY = 1,
-    PROTOCOL_DATA_PRESSURE = 2,
-} protocol_data_e;
 
 #define PROTOCOL_DATA_NB_MAX (3u)
 #define PROTOCOL_METADATA_NB_MAX (2u)
-
 typedef struct {
     protocol_request_s request;
     uint8_t data_nb;

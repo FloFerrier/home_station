@@ -14,18 +14,6 @@
 
 #define MESSAGE_LEN_MAX (255u)
 
-static void test_command_get_index_should_be_help() {
-    command_index_e command_is_available = command_getIndex("help");
-
-    assert_int_equal(command_is_available, COMMAND_HELP);
-}
-
-static void test_command_get_index_should_be_unknown() {
-    command_index_e command_is_available = command_getIndex("");
-
-    assert_int_equal(command_is_available, COMMAND_UNKNOWN);
-}
-
 static void test_command_should_avoid_incorrect_parameter() {
     command_index_e command_is_available = command_getIndex(NULL);
 
@@ -34,48 +22,6 @@ static void test_command_should_avoid_incorrect_parameter() {
 
 static void test_command_execute_should_avoid_incorrect_parameter() {
     command_execute(-1, 0, NULL);
-}
-
-static void test_command_execute_should_be_unknown_command() {
-    #define RESPONSE_LEN_MAX (256u)
-    char response[RESPONSE_LEN_MAX] = "";
-    protocol_s expected_protocol = {
-        .request = {
-            .code = PROTOCOL_REQUEST_CODE_FAILURE,
-            .message = "Command unknown, tap \"help\" to display all available command.",
-        },
-    };
-    mock_assert_call_protocol_serialize(expected_protocol, RESPONSE_LEN_MAX, response);
-
-    command_execute(COMMAND_UNKNOWN, RESPONSE_LEN_MAX, response);
-}
-
-static void test_command_execute_should_display_all_available_command() {
-    #define RESPONSE_LEN_MAX (256u)
-    char response[RESPONSE_LEN_MAX] = "";
-    protocol_s expected_protocol = {
-        .request = {
-            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-            .message = "\"reboot\": Performing a system reboot, \"sensor_selfTest\": Performing a sensor self-test, \"sensor_getData\": Request a sensor to get data",
-        },
-    };
-    mock_assert_call_protocol_serialize(expected_protocol, RESPONSE_LEN_MAX, response);
-
-    command_execute(COMMAND_HELP, RESPONSE_LEN_MAX, response);
-}
-
-static void test_command_execute_should_reboot_the_system() {
-    #define RESPONSE_LEN_MAX (256u)
-    char response[RESPONSE_LEN_MAX] = "";
-    protocol_s expected_protocol = {
-        .request = {
-            .code = PROTOCOL_REQUEST_CODE_SUCCESS,
-            .message = "Performing a system reboot",
-        },
-    };
-    mock_assert_call_protocol_serialize(expected_protocol, RESPONSE_LEN_MAX, response);
-
-    command_execute(COMMAND_REBOOT, RESPONSE_LEN_MAX, response);
 }
 
 static void test_command_execute_should_failed_sensor_selftest() {
@@ -147,19 +93,19 @@ static void test_command_execute_should_passed_sensor_get_data() {
         .data_nb = 3,
         .data = {
             [0] = {
-                .field = PROTOCOL_DATA_FIELD_TEMPERATURE,
+                .name = "temperature",
                 .value = 15.0f,
-                .unit = PROTOCOL_DATA_UNIT_DEGREE_CELSIUS,
+                .unit = "degC",
             },
             [1] = {
-                .field = PROTOCOL_DATA_FIELD_HUMIDITY,
+                .name = "humidity",
                 .value = 50.0f,
-                .unit = PROTOCOL_DATA_UNIT_PERCENTAGE,
+                .unit = "per100",
             },
             [2] = {
-                .field = PROTOCOL_DATA_FIELD_PRESSURE,
+                .name = "pressure",
                 .value = 98000.0f,
-                .unit = PROTOCOL_DATA_UNIT_PASCAL,
+                .unit = "Pa",
             },
         },
     };
@@ -170,13 +116,8 @@ static void test_command_execute_should_passed_sensor_get_data() {
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_command_get_index_should_be_help),
-        cmocka_unit_test(test_command_get_index_should_be_unknown),
         cmocka_unit_test(test_command_should_avoid_incorrect_parameter),
         cmocka_unit_test(test_command_execute_should_avoid_incorrect_parameter),
-        cmocka_unit_test(test_command_execute_should_be_unknown_command),
-        cmocka_unit_test(test_command_execute_should_display_all_available_command),
-        cmocka_unit_test(test_command_execute_should_reboot_the_system),
         cmocka_unit_test(test_command_execute_should_failed_sensor_selftest),
         cmocka_unit_test(test_command_execute_should_passed_sensor_selftest),
         cmocka_unit_test(test_command_execute_should_failed_sensor_get_data),

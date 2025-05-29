@@ -10,10 +10,10 @@
 #define STATIC
 #endif // TEST
 
-#define UART_BUFFER_LEN_MAX (255u)
+#define UART_BUFFER_LEN_MAX (1024u)
 #define UART_TIMEOUT_DURATION (1000u)
 
-STATIC char uartBufferTx[UART_BUFFER_LEN_MAX+1] = "";
+STATIC char uartBufferTx[UART_BUFFER_LEN_MAX] = "";
 STATIC UART_HandleTypeDef uartHandle = {0};
 
 /* UART2
@@ -48,7 +48,7 @@ bool console_init(void) {
 bool console_send(const char* format, ...) {
     va_list va;
     va_start(va, format);
-    uint16_t uartBufferTxLen = (uint16_t)vsnprintf(uartBufferTx, UART_BUFFER_LEN_MAX, format, va);
+    uint16_t uartBufferTxLen = (uint16_t)vsnprintf(uartBufferTx, UART_BUFFER_LEN_MAX-1, format, va);
     va_end(va);
     HAL_StatusTypeDef halStatus = HAL_UART_Transmit(&uartHandle, (uint8_t*)uartBufferTx, uartBufferTxLen, UART_TIMEOUT_DURATION);
     return ((halStatus == HAL_OK) ? true : false);

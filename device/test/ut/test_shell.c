@@ -58,7 +58,7 @@ static void test_shell_should_failed_to_receive_a_character(void **state) {
 static void test_shell_should_received_a_command(void **state) {
     const char TEST_DATA[] = "a fake command\n";
     const char EXPECTED_RESPONSE[] = "Unknown command\r\n";
-    const uint32_t EXPECTED_RESPONSE_LEN_MAX = 255u;
+    const uint32_t EXPECTED_RESPONSE_LEN_MAX = 2048u - 1;
     test_fixture_s *fixture = (test_fixture_s *)*state;
     *fixture->loopCnt = strlen(TEST_DATA) - 1;
 
