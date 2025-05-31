@@ -1,64 +1,65 @@
-set(BUILD_TARGET ${CMAKE_PROJECT_NAME}_firmware)
+add_subdirectory(commands)
+add_subdirectory(console)
+add_subdirectory(fsm)
+add_subdirectory(led)
+add_subdirectory(protocol)
+add_subdirectory(sensor)
+add_subdirectory(shell)
 
-set(FIRMWARE_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf)
+if(NOT CMAKE_BUILD_TYPE STREQUAL test)
+    set(BUILD_TARGET ${CMAKE_PROJECT_NAME}_firmware)
 
-message("Firmware is available on the following folder : ${FIRMWARE_FILENAME}")
+    set(FIRMWARE_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf)
 
-add_executable(${BUILD_TARGET})
+    message("Firmware is available on the following folder : ${FIRMWARE_FILENAME}")
 
-target_include_directories(${BUILD_TARGET} PRIVATE
-    console
-    commands
-    sensor
-    shell
-    led
-    fsm
-    protocol
-)
+    add_executable(${BUILD_TARGET})
 
-target_sources(${BUILD_TARGET} PRIVATE
-    main.c
-    syscalls.c
-    console/console.c
-    commands/commands.c
-    sensor/sensor.c
-    shell/shell.c
-    led/led.c
-    fsm/fsm.c
-    protocol/protocol.c
-)
+    target_sources(${BUILD_TARGET} PRIVATE
+        main.c
+        syscalls.c
+    )
 
-target_link_libraries(${BUILD_TARGET} PRIVATE
-    stm32_hal_driver
-    freertos_kernel
-    bme68x
-)
+    target_link_libraries(${BUILD_TARGET} PRIVATE
+        stm32_hal_driver
+        freertos_kernel
+        bme68x
+        commands
+        console
+        fsm
+        led
+        protocol
+        sensor
+        shell
+    )
 
-target_compile_options(${BUILD_TARGET} PUBLIC
-    -Wall
-    -Wextra
-)
+    target_compile_options(${BUILD_TARGET} PUBLIC
+        -Wall
+        -Wextra
+        -Werror
+    )
 
-set(LINKER_FILE ${CMAKE_SOURCE_DIR}/config/stm32f446retx.ld)
-message("Linker file is : ${LINKER_FILE}")
+    set(LINKER_FILE ${CMAKE_SOURCE_DIR}/config/stm32f446retx.ld)
+    message("Linker file is : ${LINKER_FILE}")
 
-target_link_options(${BUILD_TARGET} PUBLIC
-    -T${LINKER_FILE}
-    -specs=nano.specs
-    -specs=nosys.specs
-    -Wl,-Map=output.map,--cref
-    -Wl,--print-memory-usage
-    -Wl,--gc-sections
-    -u _printf_float
-)
+    target_link_options(${BUILD_TARGET} PUBLIC
+        -T${LINKER_FILE}
+        -specs=nano.specs
+        -specs=nosys.specs
+        -Wl,-Map=output.map,--cref
+        -Wl,--print-memory-usage
+        -Wl,--gc-sections
+        -u _printf_float
+    )
 
-openocd_add_custom_target(flash
-    NAME flash
-    BOARD st_nucleo_f4
-    FW "${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf"
-)
+    openocd_add_custom_target(flash
+        NAME flash
+        BOARD st_nucleo_f4
+        FW "${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf"
+    )
 
-openocd_add_custom_target(debug
-    NAME debug
-    BOARD st_nucleo_f4
-)
+    openocd_add_custom_target(debug
+        NAME debug
+        BOARD st_nucleo_f4
+    )
+endif()
