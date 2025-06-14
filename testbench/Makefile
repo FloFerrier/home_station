@@ -14,10 +14,6 @@ $(VENV)/bin/activate: requirements.txt
 run: $(VENV)/bin/activate ## Run the application
 	$(PYTHON) script.py
 
-.PHONY: test
-test: $(VENV)/bin/activate ## Run the test suite
-	$(PYTHON) -m pytest -s -v tests
-
 .PHONY: clean
 clean: ## Clean the workspace
 	rm -rf $(VENV) */__pycache__ */*/__pycache__ .pytest_cache */.pytest_cache

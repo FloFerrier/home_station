@@ -36,13 +36,13 @@ class Console:
             self.__serial.write(character.encode("utf-8"))
             time.sleep(0.1)  # in seconds
 
-        #print("[Console:send] \"{}\"".format(message.rstrip()))
+        print("[Console:send] \"{}\"".format(message.rstrip()))
 
     def receive(self) -> str:
         raw_message = self.__serial.read_until()
         message = raw_message.decode("utf-8")
 
-        #print("[Console:receive] \"{}\"".format(message.rstrip()))
+        print("[Console:receive] \"{}\"".format(message.rstrip()))
         return message
 
 if __name__ == "__main__":
