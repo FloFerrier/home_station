@@ -14,6 +14,7 @@ foreach(MOCK_ITEM IN LISTS MOCK_LIST)
     message("${MOCK_ITEM}")
     add_library(${MOCK_ITEM} STATIC)
     target_sources(${MOCK_ITEM} PRIVATE ${MOCK_ITEM}.c)
+    target_link_libraries(${MOCK_ITEM} PRIVATE cmocka)
     target_include_directories(${MOCK_ITEM} PUBLIC
         ${CMAKE_SOURCE_DIR}/test/mock
         ${CMAKE_SOURCE_DIR}/src/console
