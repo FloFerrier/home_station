@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "sensor.h"
 
 #include <bme68x.h>

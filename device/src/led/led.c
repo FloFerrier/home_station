@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "led.h"
 
 #include <stdbool.h>

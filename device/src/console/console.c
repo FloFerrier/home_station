@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "console.h"
 
 #include <stdarg.h>

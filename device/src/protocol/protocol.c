@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "protocol.h"
 
 #include <stddef.h>

@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "commands.h"
 
 #include <stddef.h>

@@ -25,6 +25,10 @@ test_suite: ## Run and run the test suite
 format: ## Format source code only (no third-party or test)
 	find src -type f \( -name "*.c" -o -name "*.h" \) -exec sh -c 'echo "Formatting file: $$1"; clang-format -i "$$1"' sh {} \;
 
+.PHONY: documentation
+documentation: ## Build the documentation for code base
+	doxygen Doxyfile
+
 .PHONY: mrproper
 mrproper: ## Remove all workspace
 	rm -rf build

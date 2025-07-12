@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include <errno.h>
 #include <stdint.h>
 #include <sys/stat.h>

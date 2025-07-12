@@ -1,6 +1,9 @@
 # Generated file
 build
 
+# Doxygen output
+documentation
+
 # IDE file
 .cproject
 .project
