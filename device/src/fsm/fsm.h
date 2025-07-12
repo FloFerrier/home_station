@@ -14,4 +14,4 @@ void fsm_task(void *params);
 
 void fsm_requestNewState(fsm_state_e new_state);
 
-#endif  /* FSM_H */
+#endif /* FSM_H */

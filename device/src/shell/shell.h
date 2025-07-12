@@ -5,4 +5,4 @@
 
 void shell_task(void *params);
 
-#endif  /* SHELL_H */
+#endif /* SHELL_H */

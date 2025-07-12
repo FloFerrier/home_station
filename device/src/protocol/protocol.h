@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef enum {
-    PROTOCOL_REQUEST_CODE_UNKNOWN = 0, // Keep per default
+    PROTOCOL_REQUEST_CODE_UNKNOWN = 0,  // Keep per default
     PROTOCOL_REQUEST_CODE_FAILURE = 1,
     PROTOCOL_REQUEST_CODE_SUCCESS = 2,
 } protocol_request_code_e;
@@ -40,6 +40,7 @@ typedef struct {
     protocol_metadata_s metadata[PROTOCOL_METADATA_NB_MAX];
 } protocol_s;
 
-void protocol_serialize(protocol_s data, const uint32_t string_len_max, char *string);
+void protocol_serialize(protocol_s data, const uint32_t string_len_max,
+                        char *string);
 
-#endif  /* PROTOCOL_H */
+#endif /* PROTOCOL_H */

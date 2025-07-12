@@ -1,8 +1,8 @@
 #ifndef LED_H
 #define LED_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef enum {
     LED_ID_BLUE = 0,
@@ -18,4 +18,4 @@ typedef enum {
 void led_init(void);
 bool led_setState(led_id_e id, led_state_e state);
 
-#endif  /* LED_H */
+#endif /* LED_H */

@@ -1,20 +1,19 @@
+#include <FreeRTOS.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdarg.h>
-
-#include <FreeRTOS.h>
-#include <task.h>
 #include <stm32f4xx_hal.h>
+#include <task.h>
 
-#include "shell.h"
-#include "sensor.h"
 #include "console.h"
-#include "led.h"
 #include "fsm.h"
+#include "led.h"
+#include "sensor.h"
+#include "shell.h"
 
 extern TaskHandle_t fsm_task_handle;
 
-void HAL_MspInit(void); // Use on HAL_Init() function
+void HAL_MspInit(void);  // Use on HAL_Init() function
 void SysTick_Handler(void);
 
 int main(void) {
@@ -22,7 +21,8 @@ int main(void) {
     (void)HAL_Init();
 
     /* Must keep the most priority */
-    (void)xTaskCreate(fsm_task, "fsm", 1024u, NULL, (configMAX_PRIORITIES - 1), &fsm_task_handle);
+    (void)xTaskCreate(fsm_task, "fsm", 1024u, NULL, (configMAX_PRIORITIES - 1),
+                      &fsm_task_handle);
 
     vTaskStartScheduler();
 
@@ -50,10 +50,6 @@ void SysTick_Handler(void) {
 #endif /* INCLUDE_xTaskGetSchedulerState */
 }
 
-void RTOS_configureTimerForRuntimeStats(void) {
-    RTOS_runTimeCounter = 0;
-}
+void RTOS_configureTimerForRuntimeStats(void) { RTOS_runTimeCounter = 0; }
 
-uint32_t RTOS_getRuntimeCounterValue(void) {
-    return RTOS_runTimeCounter;
-  }
+uint32_t RTOS_getRuntimeCounterValue(void) { return RTOS_runTimeCounter; }

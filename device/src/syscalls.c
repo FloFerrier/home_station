@@ -56,18 +56,16 @@ void _kill(int pid, int sig) {
     (void)sig;
 }
 
-int _getpid(void) {
-  return -1;
-}
+int _getpid(void) { return -1; }
 
-int _write (int file, char *ptr, int len) {
+int _write(int file, char *ptr, int len) {
     (void)file;
     (void)ptr;
     (void)len;
     return -1;
 }
 
-int _read (int file, char *ptr, int len) {
+int _read(int file, char *ptr, int len) {
     (void)file;
     (void)ptr;
     (void)len;

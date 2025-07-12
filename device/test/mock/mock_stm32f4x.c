@@ -164,7 +164,7 @@ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pD
     uint8_t *expected_data = mock_ptr_type(uint8_t *);
     int expected_len = strlen((char*)expected_data);
     assert_int_equal(Size, expected_len);
-    assert_string_equal(pData, expected_data);
+    assert_string_equal((char*)pData, (char*)expected_data);
     return mock();
 }
 

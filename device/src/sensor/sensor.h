@@ -24,7 +24,8 @@ typedef struct {
 
 sensor_returnCode_e sensor_init(void);
 sensor_returnCode_e sensor_selfTest(void);
-sensor_returnCode_e sensor_getData(sensor_data_s *data, uint32_t *number_of_data);
-char* sensor_returnCodeAsString(sensor_returnCode_e code);
+sensor_returnCode_e sensor_getData(sensor_data_s *data,
+                                   uint32_t *number_of_data);
+char *sensor_returnCodeAsString(sensor_returnCode_e code);
 
-#endif  /* SENSOR_H */
+#endif /* SENSOR_H */

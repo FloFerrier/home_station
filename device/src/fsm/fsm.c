@@ -9,16 +9,16 @@
 
 #ifndef TEST
 #include <FreeRTOS.h>
-#include <task.h>
 #include <stm32f4xx_hal.h>
+#include <task.h>
 #define LOOP (1u)
 #define STATIC static
 #else
-#include "mock_stm32f4x.h"
 #include "mock_freertos.h"
+#include "mock_stm32f4x.h"
 #define LOOP (0u)
 #define STATIC
-#endif // TEST
+#endif  // TEST
 
 STATIC fsm_state_e fsm_state = FSM_STATE_INIT;
 TaskHandle_t fsm_task_handle = NULL;
@@ -30,14 +30,15 @@ STATIC fsm_state_e fsm_state_init(void) {
     led_init();
     (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 
-    if(console_init() != true) {
+    if (console_init() != true) {
         return FSM_STATE_ERROR;
     }
 
     (void)sensor_init();
 
     /* Middleware Initialization*/
-    if(xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+    if (xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) !=
+        pdPASS) {
         return FSM_STATE_ERROR;
     }
 
@@ -48,8 +49,7 @@ void fsm_task(void *params) {
     (void)params;
 
     do {
-        switch (fsm_state)
-        {
+        switch (fsm_state) {
             case FSM_STATE_INIT: {
                 fsm_state_e next_state = fsm_state_init();
                 fsm_requestNewState(next_state);
@@ -70,19 +70,20 @@ void fsm_task(void *params) {
             } break;
         }
         (void)ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-    } while(LOOP);
+    } while (LOOP);
 }
 
 STATIC bool checkTransitionIsAllowed(fsm_state_e next_state) {
     fsm_state_e current_state = fsm_state;
     bool result = false;
-    if(current_state == FSM_STATE_INIT) {
-        if((next_state == FSM_STATE_RUNNING) || (next_state == FSM_STATE_ERROR)) {
+    if (current_state == FSM_STATE_INIT) {
+        if ((next_state == FSM_STATE_RUNNING) ||
+            (next_state == FSM_STATE_ERROR)) {
             result = true;
         }
-    }
-    else if(current_state == FSM_STATE_RUNNING) {
-        if((next_state == FSM_STATE_REBOOTING) || (next_state == FSM_STATE_ERROR)) {
+    } else if (current_state == FSM_STATE_RUNNING) {
+        if ((next_state == FSM_STATE_REBOOTING) ||
+            (next_state == FSM_STATE_ERROR)) {
             result = true;
         }
     }
@@ -92,7 +93,7 @@ STATIC bool checkTransitionIsAllowed(fsm_state_e next_state) {
 
 void fsm_requestNewState(fsm_state_e new_state) {
     /* Check if transition is allowed */
-    if(checkTransitionIsAllowed(new_state) == true) {
+    if (checkTransitionIsAllowed(new_state) == true) {
         fsm_state = new_state;
         (void)xTaskNotifyGive(fsm_task_handle);
     }

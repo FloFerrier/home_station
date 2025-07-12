@@ -5,6 +5,6 @@
 
 bool console_init(void);
 bool console_send(const char* format, ...);
-bool console_receive(char *character);
+bool console_receive(char* character);
 
-#endif  /* CONSOLE_H */
+#endif /* CONSOLE_H */
