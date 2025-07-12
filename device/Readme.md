@@ -1,57 +1,25 @@
 # README
 ## Prerequisites
 Todo: Should be cross-platform.
+- gcc-arm-none-eabi
+- cmake
+- openocd
+- renode
+- picocom
+- doxygen
+- lcov/gcov
+- make
 
 Third-parties are managed by git-submodule, so you need to get it :
 ```bash
 $ git submodule update --init --recursive
 ```
-## Configure and build cross-compiling firmware
-### Configure workspace
+## Build system
+A Makefile is available to manage build system, tap the following command to have all command with description :
 ```bash
-$ cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild/debug
+$ make help
 ```
-Note:
-- **CMAKE_BUILD_TYPE** can be debug or release.
-- **CMAKE_TOOLCHAIN_FILE** can be replace by **--toolchain**
-- Add **--fresh** to configure with new tree folder
-### Build source
-```bash
-$ cmake --build build/debug
-```
-### Flash firmware
-```bash
-$ cmake --build build/debug --target flash
-```
-## Configure and build native test suite
-### Configure workspace
-```bash
-$ cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild/test
-```
-Note:
-- Use **-G"Visual Studio 17 2022"** as generator on Windows
-- Add **--fresh** to configure with new tree folder
-- **CMAKE_TOOLCHAIN_FILE** is not used here because CMake find native toolchain automatically.
-### Build source
-```bash
-$ cmake --build build/test
-```
-### Run test suite
-For running all test binaries, launch this command :
-```bash
-$ ctest --test-dir build/test
-```
-For displaying all test binaries, launch this command :
-```bash
-$ ctest --test-dir build/test -N
-```
-For running only a specific test binary, launch this command :
-```bash
-$ ctest --test-dir build/test -R <test_name>
-```
-Note:
-- Add **-C Debug** on Windows
-- Add **-V** to have a verbose mode or **-VV** to have an extra verbose mode
+
 ## Open a debug session on target board
 After steps configure workspace and build source as debug mode, it is possible to launch a session debug with this command :
 ```bash
@@ -98,9 +66,4 @@ $ arm-none-eabi-gdb --tui
 (gdb) monitor start # With renode only
 (gdb) monitor halt # With renode only
 (gdb) continue
-```
-
-## Shell on serial port com
-```bash
-$ picocom --echo -b 115200 /dev/ttyACM0
 ```

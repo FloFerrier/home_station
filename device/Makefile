@@ -16,7 +16,7 @@ console: ## Launch console for firmware
 	picocom --echo -b 115200 /dev/ttyACM0
 
 .PHONY: test_suite
-test_suite: ## Run and run the test suite
+test_suite: ## Build and run the test suite
 	cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild/test --fresh
 	cmake --build build/test
 	ctest --test-dir build/test
