@@ -25,6 +25,10 @@ test_suite: ## Build and run the test suite
 format: ## Format source code only (no third-party or test)
 	find src -type f \( -name "*.c" -o -name "*.h" \) -exec sh -c 'echo "Formatting file: $$1"; clang-format -i "$$1"' sh {} \;
 
+.PHONY: static_analysis
+static_analysis: ## Run static analysis on source code only
+	cppcheck --project=build/debug/compile_commands.json --enable=all --addon=misra --inconclusive --suppress=missingIncludeSystem -i test -i third_party
+
 .PHONY: documentation
 documentation: ## Build the documentation for code base
 	doxygen Doxyfile
