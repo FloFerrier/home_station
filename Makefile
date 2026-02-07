@@ -21,6 +21,10 @@ test_suite: ## Build and run the test suite
 	cmake --build build/test
 	ctest --test-dir build/test
 
+.PHONY: coverage
+coverage: ## Launch code coverage on test suite
+	gcovr -r . --filter "src" --html-details -o build/test/code_coverage.html
+
 .PHONY: format
 format: ## Format source code only (no third-party or test)
 	find src -type f \( -name "*.c" -o -name "*.h" \) -exec sh -c 'echo "Formatting file: $$1"; clang-format -i "$$1"' sh {} \;

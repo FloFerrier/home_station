@@ -16,12 +16,28 @@ jobs:
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc git lcov ninja-build
+          sudo apt-get install -yq build-essential cmake gcc git ninja-build python3-venv
+      - name: Install gcovr in venv
+        run: |
+          python3 -m venv venv
+          ./venv/bin/pip install gcovr
       - name: Get third-party dependencies
         run: |
           git submodule update --init --recursive
-      - name: Build and run test suite
+      - name: Configure test suite
         run: |
           cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-native.cmake" -DCMAKE_BUILD_TYPE=test -Bbuild
+      - name: Build test suite
+        run: |
           cmake --build build
+      - name: Run test suite
+        run: |
           ctest -V --test-dir build
+      - name: Launch code coverage
+        run: |
+          ./venv/bin/gcovr -r . --filter "src" --html-details -o build/code_coverage.html
+      - name: Archive code coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: ${{ github.workspace }}/build/code_coverage.html

@@ -21,5 +21,5 @@ else()
 
 endif()
 
-set(CMAKE_C_FLAGS "-g -O0 -Wall -Wextra" CACHE STRING "C flags")
-set(CMAKE_CXX_FLAGS "-g -O0 -Wall -Wextra" CACHE STRING "C++ flags")
+set(CMAKE_C_FLAGS "-g -O0 -Wall -Wextra --coverage" CACHE STRING "C flags")
+set(CMAKE_CXX_FLAGS "-g -O0 -Wall -Wextra --coverage" CACHE STRING "C++ flags")
