@@ -17,7 +17,7 @@ console: ## Launch console for firmware
 
 .PHONY: test_suite
 test_suite: ## Build and run the test suite
-	cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild/test --fresh
+	cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-native.cmake" -DCMAKE_BUILD_TYPE=test -Bbuild/test --fresh
 	cmake --build build/test
 	ctest --test-dir build/test
 
