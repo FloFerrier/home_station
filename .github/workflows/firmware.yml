@@ -1,5 +1,5 @@
-name: Device
-run-name: Home Station pipelines for device
+name: Firmware
+run-name: Home Station pipelines for building firmware
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./device
+        working-directory: .
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -28,24 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linker-map-file
-          path: ${{ github.workspace }}/**/build/output.map
-  build_and_run_unit_test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./device
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc git lcov ninja-build
-      - name: Get third-party dependencies
-        run: |
-          git submodule update --init --recursive
-      - name: Build and run test suite
-        run: |
-          cmake -GNinja -DCMAKE_BUILD_TYPE=test -Bbuild
-          cmake --build build
-          ctest -V --test-dir build
+          path: ${{ github.workspace }}/build/output.map

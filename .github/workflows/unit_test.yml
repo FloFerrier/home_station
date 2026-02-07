@@ -1,0 +1,27 @@
+name: Unit Test
+run-name: Home Station pipelines for building and running unit tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_and_run_unit_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -yq build-essential cmake gcc git lcov ninja-build
+      - name: Get third-party dependencies
+        run: |
+          git submodule update --init --recursive
+      - name: Build and run test suite
+        run: |
+          cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-native.cmake" -DCMAKE_BUILD_TYPE=test -Bbuild
+          cmake --build build
+          ctest -V --test-dir build

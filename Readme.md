@@ -1,6 +1,7 @@
 # HOME STATION
 
-[![Device](https://github.com/FloFerrier/home_station/actions/workflows/device.yml/badge.svg?branch=main)](https://github.com/FloFerrier/home_station/actions/workflows/device.yml)
+[![Firmware](https://github.com/FloFerrier/home_station/actions/workflows/firmware.yml/badge.svg?branch=main)](https://github.com/FloFerrier/home_station/actions/workflows/firmware.yml)
+[![Unit Test](https://github.com/FloFerrier/home_station/actions/workflows/unit_test.yml/badge.svg?branch=main)](https://github.com/FloFerrier/home_station/actions/workflows/unit_test.yml)
 
 The home station is a hobbist project and in no way an industrial project. The goal of this project is to have fun with state of art on embedded system.
 
