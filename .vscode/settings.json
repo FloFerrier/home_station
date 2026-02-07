@@ -34,5 +34,8 @@
     "cortex-debug.armToolchainPath.linux": "/opt/arm-gnu-toolchain/bin/arm-none-eabi-gcc",
     "cortex-debug.armToolchainPath.windows": "",
     "cortex-debug.gdbPath.linux": "/usr/bin/gdb-multiarch",
-    "cortex-debug.gdbPath.windows": ""
+    "cortex-debug.gdbPath.windows": "",
+    "files.exclude": {
+        "**/.git": false
+    }
 }

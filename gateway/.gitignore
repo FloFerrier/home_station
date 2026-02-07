@@ -1,8 +1,0 @@
-# Virtual environment folder
-virtualenv
-
-# Temporary files and folders
-.pytest_cache
-*/.pytest_cache
-*/__pycache__
-*/*/__pycache__

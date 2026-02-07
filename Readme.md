@@ -1,56 +1,77 @@
 # HOME STATION
 
-[![Gateway](https://github.com/FloFerrier/home_station/actions/workflows/gateway.yml/badge.svg?branch=main)](https://github.com/FloFerrier/home_station/actions/workflows/gateway.yml)
 [![Device](https://github.com/FloFerrier/home_station/actions/workflows/device.yml/badge.svg?branch=main)](https://github.com/FloFerrier/home_station/actions/workflows/device.yml)
 
 The home station is a hobbist project and in no way an industrial project. The goal of this project is to have fun with state of art on embedded system.
 
-## Project overview
-The project aims to develop a system that allows users to access real-time or historical data collected directly from their homes. This data is sourced from various inputs, such as local weather conditions or sensors installed in the home, such as temperature and humidity. The system is designed to centralize this information and make it easily accessible through an intuitive user interface, enabling better management of the home environment.
+## Prerequisites
+Todo: Should be cross-platform.
+- gcc-arm-none-eabi
+- cmake
+- openocd
+- renode
+- picocom
+- doxygen
+- lcov/gcov
+- make
 
-## System view
-The user can visualize data through a UI directly on a computer or a smartphone.
-Data are gathering from sensor to UI through a gateway and a device as following :
+Third-parties are managed by git-submodule, so you need to get it :
+```bash
+$ git submodule update --init --recursive
+```
+## Build system
+A Makefile is available to manage build system, tap the following command to have all command with description :
+```bash
+$ make help
+```
 
-![Home Station System View](documentation/Home_Station_System_View.png)
-
-The Home Station system is composed of two main components: a gateway and a device.
-The gateway serves as a bridge between the device and the internet for collecting data and storing it in a database.
-It ensures secure and reliable communication for remote access to the data.
-The device gathers physical data from various sensors, such as temperature, pressure, and humidity.
-This allows for intelligent data acquisition, transforming raw sensor inputs into meaningful information for the user.
-
-## Functional view
-In technical terms, consider software development on the two components : gateway and device.
-To have a better view of the component follow the below description.
-
-### Gateway
-This system is based on a Raspberry Pi model 3B (not critical, need only internet connection).
-The OS is a Linux distribution and running SystemD service as program.
-Three services are running :
-- Grafana service for UI
-- InfluxDB service for database
-- Home station service for custom program to gather data and store it on database
-
-![Gateway Overview](documentation/Gateway_Overview.png)
-
-Go to the folder **gateway** to see the integration of tool on the system.
-
-### Device
-This system is based on a Nucleo-F446RE from ST-Microelectronics connecting to the sensor BME680.
-Some libraries are used as FreeRTOS kernel and STM32F4x HAL (Hardware Abstraction Layer).
-
-![Device Overview](documentation/Device_Overview.png)
-
-Go to the folder **device** to see the integration of firmware on the system.
-
-## Repository arborescence
-On the root of repository, the organization is the following :
-- **.github** : contains CI/CD configuration files for Github Actions.
-- **documentation** : contains some files for the project.
-- **device** : contains firmware development for device system.
-- **gateway** : contains program development for gateway system.
-- **testbench** : contains an automated test bench for gateway and device
+## Open a debug session on target board
+After steps configure workspace and build source as debug mode, it is possible to launch a session debug with this command :
+```bash
+$ cmake --build build/debug --target debug
+```
+On another terminal, launch gdb :
+```bash
+$ arm-none-eabi-gdb --tui
+(gdb) target extended-remote localhost:3333
+(gdb) file <FIRMWARE_FILE>
+(gdb) load
+(gdb) monitor reset halt
+(gdb) continue
+...
+(gdb) monitor shutdown
+(gdb) exit
+```
+Note:
+- Use **gdb-multiarch** instead of **arm-none-eabi-gdb** if you have trouble with the latter.
+- On Linux, if you do not shutdown openocd from gdb, you have some errors like : "Error: couldn't bind tcl to socket on port 6666: Address already in use"
+So, you can stop it with this command :
+```bash
+$ kill -9 `lsof -i -a -c openocd`
+```
+## Use the Renode emulator
+You can use the emulator on standalone mode :
+```bash
+$ renode config/nucleo-f446re.resc
+(machine-0) logFile @/tmp/function-trace.log
+(machine-0) start
+(machine-0) pause
+(machine-0) sysbus.cpu PC
+(machine-0) sysbus.cpu LogFunctionNames true
+(machine-0) machine GetTimeSourceInfo
+(machine-0) machine EnableProfiler
+(machine-0) quit
+```
+Or with gdb :
+```bash
+$ arm-none-eabi-gdb --tui
+(gdb) target extended-remote localhost:3333
+(gdb) file <FIRMWARE_FILE>
+(gdb) load
+(gdb) monitor start # With renode only
+(gdb) monitor halt # With renode only
+(gdb) continue
+```
 
 ## License
 Check the License file to have terms.
