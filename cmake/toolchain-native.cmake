@@ -1,19 +1,10 @@
-if(CMAKE_HOST_SYSTEM_NAME STREQUAL Linux)
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL Linux OR CMAKE_HOST_SYSTEM_NAME STREQUAL Windows)
 
     find_program(GCC_Executable Name gcc REQUIRED)
     set(CMAKE_C_COMPILER ${GCC_Executable})
 
     find_program(GXX_Executable Name g++ REQUIRED)
     set(CMAKE_CXX_COMPILER ${GXX_Executable})
-
-elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL Windows)
-
-    find_program(CLANG_Executable Name clang REQUIRED)
-    set(CMAKE_ASM_COMPILER ${CLANG_Executable})
-    set(CMAKE_C_COMPILER ${CLANG_Executable})
-
-    find_program(CLANGXX_Executable Name clang++ REQUIRED)
-    set(CMAKE_CXX_COMPILER ${CLANGXX_Executable})
 
 else()
 

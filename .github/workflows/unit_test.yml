@@ -26,18 +26,18 @@ jobs:
           git submodule update --init --recursive
       - name: Configure test suite
         run: |
-          cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-native.cmake" -DCMAKE_BUILD_TYPE=test -Bbuild
+          cmake --preset test
       - name: Build test suite
         run: |
-          cmake --build build
+          cmake --build --preset test
       - name: Run test suite
         run: |
-          ctest -V --test-dir build
+          ctest -V --test-dir build/test
       - name: Launch code coverage
         run: |
-          ./venv/bin/gcovr -r . --filter "src" --html-details -o build/code_coverage.html
+          ./venv/bin/gcovr -r . --filter "src" --html-details -o build/test/code_coverage.html
       - name: Archive code coverage report
         uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
-          path: ${{ github.workspace }}/build/code_coverage.html
+          path: ${{ github.workspace }}/build/test/code_coverage.html

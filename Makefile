@@ -4,8 +4,8 @@ help:
 
 .PHONY: build
 build: ## Build firmware on Debug mode
-	cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild/debug --fresh
-	cmake --build build/debug
+	cmake --preset debug
+	cmake --build --preset debug
 
 .PHONY: flash
 flash: ## Flash firmware on Debug mode
@@ -17,8 +17,8 @@ console: ## Launch console for firmware
 
 .PHONY: test_suite
 test_suite: ## Build and run the test suite
-	cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-native.cmake" -DCMAKE_BUILD_TYPE=test -Bbuild/test --fresh
-	cmake --build build/test
+	cmake --preset test
+	cmake --build --preset test
 	ctest --test-dir build/test
 
 .PHONY: coverage

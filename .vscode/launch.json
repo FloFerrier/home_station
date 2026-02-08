@@ -3,7 +3,7 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "build/debug/src/device_firmware.elf",
+            "executable": "${command:cmake.getLaunchTargetPath}",
             "name": "Debug with OpenOCD",
             "request": "launch",
             "type": "cortex-debug",
@@ -13,7 +13,7 @@
             ],
             "searchDir": [],
             "runToEntryPoint": "main",
-            "showDevDebugOutput": "none",
+            "showDevDebugOutput": "raw",
             "preLaunchCommands": [
                 "monitor reset init",
             ],

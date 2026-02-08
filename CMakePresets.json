@@ -1,0 +1,46 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "debug",
+      "displayName": "Firmware Debug",
+      "description": "Configure for Firmware in debug mode",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchain-arm-none-eabi.cmake"
+      }
+    },
+    {
+      "name": "test",
+      "displayName": "Test Suite",
+      "description": "Configure for test suite on native",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/test",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "test",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchain-native.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "test",
+      "configurePreset": "test"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-suite",
+      "configurePreset": "test",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

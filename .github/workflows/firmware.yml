@@ -22,8 +22,8 @@ jobs:
           git submodule update --init --recursive
       - name: Build firmware
         run: |
-          cmake -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/toolchain-arm-none-eabi.cmake" -DCMAKE_BUILD_TYPE=debug -Bbuild
-          cmake --build build
+          cmake --preset debug
+          cmake --build --preset debug
       - name: Archive linker map file
         uses: actions/upload-artifact@v4
         with:
