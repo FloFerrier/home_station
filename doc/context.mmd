@@ -1,0 +1,20 @@
+graph TB
+
+    User((User))
+    Dev((Developer))
+
+    subgraph SystemBoundary [Système]
+        Thermometer[<b>Connected Thermometer<b>]
+    end
+
+    Env[Physical Environment]
+    Gateway[Gateway/Proxy]
+    HomeAssistant[Home Assistant]
+
+    Env -- "Temperature, Humidity" --> Thermometer
+    Thermometer -- "Send data on wireless (GATT BLE)" --> Gateway
+    Gateway -- "Send informations to dashboard (MQTT/API)" --> HomeAssistant
+    HomeAssistant -- "Display data and energy consumption" --> User
+
+    Dev -- "Firmware Update (OTA)" --> Thermometer
+    Dev -- "Troubleshooting & Debugging" --> Thermometer

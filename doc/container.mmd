@@ -1,0 +1,20 @@
+graph TB
+
+    subgraph Thermometre [<b>System : Connected Thermometer</b>]
+        direction TB
+
+        FW[<b>Firmware</b><br/><i>STM32F446RE</i><br/>Logical control, energy and data formatting.]
+        Power[<b>Power Supply</b><br/><i>INA219</i><br/>Energy measurement module.]
+        BLE[<b>BLE Module</b><br/><i>RN4871</i><br/>Monitoring BLE stack.]
+        Sensor[<b>Sensor Module</b><br/><i>BME680</i><br/>Environment measurement module.]
+    end
+
+    Env[<b>Physical Environment</b>]
+    HA[<b>Home Assistant</b>]
+
+    FW -- "AT Commands (UART)" --> BLE
+    FW -- "Measurements Request (I2C)" --> Sensor
+    FW -- "Energy Monitoring" --> Power
+
+    Env -- "Temperature & Humidity" --> Sensor
+    BLE -- "Advertising BLE" --> HA

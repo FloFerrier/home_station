@@ -1,0 +1,27 @@
+graph TD
+
+    subgraph Custom_Plugin [Custom Plugin]
+        subgraph Nucleo_Board [Nucleo Board]
+            STM32[<b>STM32F446RE</b><br/>Cortex-M4]
+            USB_STLink[<b>ST-Link V2.1</b><br/>USB Debug]
+        end
+        RN4871[<b>RN4871</b><br/>Module BLE]
+        I2C[<b>I2C</b>]
+    end
+
+    BME680[<b>BME680</b><br/>Temperature & Hunidity]
+    INA219[<b>INA219</b><br/>Energy Monitoring]
+    Console[<b>Console Debug</b><br/>USB-UART Adaptater]
+
+    STM32 -- "UART1" --> USB_STLink
+    STM32 -- "UART3" --> RN4871
+    STM32 -- "I2C1" --> I2C
+
+    USB_STLink -- "TX" --> Console
+    USB_STLink -- "RX" --> Console
+
+    I2C -- "SDA" --> BME680
+    I2C -- "SDA" --> INA219
+
+    I2C -- "SCL" --> BME680
+    I2C -- "SCL" --> INA219
