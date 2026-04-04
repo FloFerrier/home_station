@@ -13,7 +13,7 @@ flash: ## Flash firmware on Debug mode
 
 .PHONY: console
 console: ## Launch console for firmware
-	picocom --echo -b 115200 /dev/ttyACM0
+	picocom -b 115200 /dev/ttyACM0
 
 .PHONY: test_suite
 test_suite: ## Build and run the test suite
