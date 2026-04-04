@@ -13,3 +13,6 @@
 [submodule "third_party/hal/cmsis/Device"]
 	path = third_party/hal/cmsis/Device
 	url = https://github.com/STMicroelectronics/cmsis_device_f4.git
+[submodule "third_party/middleware/embedded-cli"]
+	path = third_party/middleware/embedded-cli
+	url = https://github.com/funbiscuit/embedded-cli.git
