@@ -24,7 +24,6 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL test)
         stm32_hal_driver
         freertos_kernel
         bme68x
-        commands
         console
         fsm
         led

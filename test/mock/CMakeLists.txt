@@ -1,6 +1,5 @@
 set(MOCK_LIST
     mock_bme68x
-    mock_commands
     mock_console
     mock_freertos
     mock_led
@@ -18,7 +17,6 @@ foreach(MOCK_ITEM IN LISTS MOCK_LIST)
     target_include_directories(${MOCK_ITEM} PUBLIC
         ${CMAKE_SOURCE_DIR}/test/mock
         ${CMAKE_SOURCE_DIR}/src/console
-        ${CMAKE_SOURCE_DIR}/src/commands
         ${CMAKE_SOURCE_DIR}/src/sensor
         ${CMAKE_SOURCE_DIR}/src/shell
         ${CMAKE_SOURCE_DIR}/src/led

@@ -3,11 +3,6 @@ add_cmocka_test(test_bme680
     LINK_LIBRARIES cmocka-static bme68x
 )
 
-add_cmocka_test(test_commands
-    SOURCES test_commands.c
-    LINK_LIBRARIES cmocka-static commands mock_freertos mock_sensor mock_protocol
-)
-
 add_cmocka_test(test_console
     SOURCES test_console.c
     LINK_LIBRARIES cmocka-static console mock_stm32f4x
