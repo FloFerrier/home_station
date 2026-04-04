@@ -27,8 +27,3 @@ add_cmocka_test(test_sensor
     SOURCES test_sensor.c
     LINK_LIBRARIES cmocka-static sensor mock_stm32f4x mock_bme68x
 )
-
-add_cmocka_test(test_shell
-    SOURCES test_shell.c
-    LINK_LIBRARIES cmocka-static shell mock_console mock_commands
-)

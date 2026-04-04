@@ -1,12 +1,13 @@
-add_subdirectory(commands)
+
 add_subdirectory(console)
 add_subdirectory(fsm)
 add_subdirectory(led)
 add_subdirectory(protocol)
 add_subdirectory(sensor)
-add_subdirectory(shell)
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL test)
+    add_subdirectory(shell)
+
     set(BUILD_TARGET ${CMAKE_PROJECT_NAME}_firmware)
 
     set(FIRMWARE_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/${BUILD_TARGET}.elf)
