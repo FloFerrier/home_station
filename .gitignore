@@ -13,3 +13,6 @@ test/acceptance/virtualenv
 test/acceptance/__pycache__
 test/acceptance/.pytest_cache
 test/acceptance/output
+
+# Temporary file
+todo.md
