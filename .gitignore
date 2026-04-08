@@ -7,7 +7,6 @@ documentation
 # IDE file
 .cproject
 .project
-.vscode/settings.json
 
 # Python folders
 test/acceptance/virtualenv

@@ -1,0 +1,9 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.checkService": true,
+    "clangd.arguments": [
+        "--compile-commands-dir=build/debug",
+        "--clang-tidy",
+        "--background-index"
+    ]
+}
