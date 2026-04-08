@@ -6,6 +6,7 @@
 
 #include <stdbool.h>
 
+#include "ble.h"
 #include "console.h"
 #include "led.h"
 #include "sensor.h"
@@ -26,6 +27,7 @@
 
 STATIC fsm_state_e fsm_state = FSM_STATE_INIT;
 TaskHandle_t fsm_task_handle = NULL;
+TaskHandle_t rn4871_task_handle = NULL;
 
 STATIC fsm_state_e fsm_state_init(void);
 
@@ -41,6 +43,11 @@ STATIC fsm_state_e fsm_state_init(void) {
     (void)sensor_init();
 
     /* Middleware Initialization*/
+    if (xTaskCreate(ble_task, "ble", 1024u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle) !=
+        pdPASS) {
+        return FSM_STATE_ERROR;
+    }
+
     if (xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) !=
         pdPASS) {
         return FSM_STATE_ERROR;

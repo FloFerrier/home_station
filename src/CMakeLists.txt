@@ -1,4 +1,4 @@
-
+add_subdirectory(ble)
 add_subdirectory(console)
 add_subdirectory(fsm)
 add_subdirectory(led)

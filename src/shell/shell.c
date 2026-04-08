@@ -12,6 +12,7 @@
 
 #include "led.h"
 #include "console.h"
+#include "ble.h"
 
 #ifndef TEST
 #define FOREVER() (1u)
@@ -43,6 +44,37 @@ static void setLed(EmbeddedCli *cli, char *args, void *context) {
     }
 }
 
+static void rn4871(EmbeddedCli *cli, char *args, void *context) {
+    (void) cli;
+    (void) context;
+
+    const char *arg1 = embeddedCliGetToken(args, 1);
+    if (strcmp(arg1, "$$$") == 0) {
+        ble_sendCmdMode();
+    }
+    else if (strcmp(arg1, "factory_reset") == 0) {
+        ble_sendFactoryReset();
+    }
+    else if (strcmp(arg1, "reboot") == 0) {
+        ble_sendReboot();
+    }
+    else if (strcmp(arg1, "version") == 0) {
+        ble_sendVersion();
+    }
+    else if (strcmp(arg1, "fake_packet") == 0) {
+        ble_sendFakePacket();
+    }
+    else if (strcmp(arg1, "advertising") == 0) {
+        ble_sendAdvertising();
+    }
+    else if (strcmp(arg1, "reset_services") == 0) {
+        ble_sendResetServices();
+    }
+    else {
+        console_send("Incorrect arg ...\r\n");
+    }
+}
+
 void shell_task(void *params) {
     (void)params;
 
@@ -58,6 +90,14 @@ void shell_task(void *params) {
             .binding = setLed
     };
     embeddedCliAddBinding(cli, setLed_binding);
+    CliCommandBinding rn4871_binding = {
+            .name = "rn4871",
+            .help = "RN4871 CLI",
+            .tokenizeArgs = true,
+            .context = NULL,
+            .binding = rn4871
+    };
+    embeddedCliAddBinding(cli, rn4871_binding);
 
     do {
         char character = 0;
