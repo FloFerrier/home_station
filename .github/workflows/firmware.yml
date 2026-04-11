@@ -22,8 +22,7 @@ jobs:
           git submodule update --init --recursive
       - name: Build firmware
         run: |
-          cmake --preset debug
-          cmake --build --preset debug
+          make build
       - name: Archive linker map file
         uses: actions/upload-artifact@v4
         with:

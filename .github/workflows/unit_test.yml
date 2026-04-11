@@ -16,7 +16,10 @@ jobs:
       - name: Install toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -yq build-essential cmake gcc git ninja-build python3-venv
+          sudo apt-get install -yq build-essential gcc git lcov make python3-venv ruby
+      - name: Install Ceedling
+        run: |
+          gem install ceedling
       - name: Install gcovr in venv
         run: |
           python3 -m venv venv
@@ -24,18 +27,12 @@ jobs:
       - name: Get third-party dependencies
         run: |
           git submodule update --init --recursive
-      - name: Configure test suite
+      - name: Build and run test suite
         run: |
-          cmake --preset test
-      - name: Build test suite
-        run: |
-          cmake --build --preset test
-      - name: Run test suite
-        run: |
-          ctest -V --test-dir build/test
+          make test_suite
       - name: Launch code coverage
         run: |
-          ./venv/bin/gcovr -r . --filter "src" --html-details -o build/test/code_coverage.html
+          make coverage
       - name: Archive code coverage report
         uses: actions/upload-artifact@v4
         with:
