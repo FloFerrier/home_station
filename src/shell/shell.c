@@ -8,11 +8,12 @@
 #include <string.h>
 
 #define EMBEDDED_CLI_IMPL
-#include "embedded_cli.h"
-
-#include "led.h"
-#include "console.h"
+#include "FreeRTOS.h"
 #include "ble.h"
+#include "console.h"
+#include "embedded_cli.h"
+#include "led.h"
+#include "task.h"
 
 #ifndef TEST
 #define FOREVER() (1u)

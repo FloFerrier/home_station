@@ -5,8 +5,6 @@
 #ifndef BLE_H
 #define BLE_H
 
-#include <stdbool.h>
-
 void ble_task(void *params);
 
 void ble_sendCmdMode(void);

@@ -6,21 +6,21 @@
 
 #include <stdbool.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "stm32f4xx_hal.h"
+
 #include "ble.h"
 #include "console.h"
 #include "led.h"
-#include "sensor.h"
+#include "sampling.h"
 #include "shell.h"
 
 #ifndef TEST
-#include <FreeRTOS.h>
-#include <stm32f4xx_hal.h>
-#include <task.h>
 #define LOOP (1u)
 #define STATIC static
 #else
-#include "mock_freertos.h"
-#include "mock_stm32f4x.h"
 #define LOOP (0u)
 #define STATIC
 #endif  // TEST

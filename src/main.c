@@ -2,18 +2,14 @@
  * @file
  */
 
-#include <FreeRTOS.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stm32f4xx_hal.h>
-#include <task.h>
 
-#include "console.h"
+#include "FreeRTOS.h"
 #include "fsm.h"
-#include "led.h"
-#include "sensor.h"
-#include "shell.h"
+#include "stm32f4xx_hal.h"
+#include "task.h"
 
 extern TaskHandle_t fsm_task_handle;
 

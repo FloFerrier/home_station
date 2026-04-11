@@ -5,8 +5,6 @@
 #ifndef FSM_H
 #define FSM_H
 
-#include <stddef.h>
-
 typedef enum {
     FSM_STATE_INIT = 0,
     FSM_STATE_RUNNING = 1,
