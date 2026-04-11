@@ -2,7 +2,6 @@ add_subdirectory(ble)
 add_subdirectory(console)
 add_subdirectory(fsm)
 add_subdirectory(led)
-add_subdirectory(protocol)
 add_subdirectory(sensor)
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL test)
@@ -28,7 +27,6 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL test)
         console
         fsm
         led
-        protocol
         sensor
         shell
     )

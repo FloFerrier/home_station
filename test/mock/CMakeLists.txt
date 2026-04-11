@@ -3,7 +3,6 @@ set(MOCK_LIST
     mock_console
     mock_freertos
     mock_led
-    mock_protocol
     mock_sensor
     mock_shell
     mock_stm32f4x
@@ -21,7 +20,6 @@ foreach(MOCK_ITEM IN LISTS MOCK_LIST)
         ${CMAKE_SOURCE_DIR}/src/shell
         ${CMAKE_SOURCE_DIR}/src/led
         ${CMAKE_SOURCE_DIR}/src/fsm
-        ${CMAKE_SOURCE_DIR}/src/protocol
         ${CMAKE_SOURCE_DIR}/third_party/driver/bme68x/src
     )
 endforeach()

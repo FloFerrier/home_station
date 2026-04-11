@@ -18,11 +18,6 @@ add_cmocka_test(test_led
     LINK_LIBRARIES cmocka-static led mock_stm32f4x
 )
 
-add_cmocka_test(test_protocol
-    SOURCES test_protocol.c
-    LINK_LIBRARIES cmocka-static protocol
-)
-
 add_cmocka_test(test_sensor
     SOURCES test_sensor.c
     LINK_LIBRARIES cmocka-static sensor mock_stm32f4x mock_bme68x
