@@ -7,11 +7,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "stm32f4xx_hal.h"
+
 #ifndef TEST
-#include <stm32f4xx_hal.h>
 #define STATIC static
 #else
-#include "mock_stm32f4x.h"
 #define STATIC
 #endif  // TEST
 

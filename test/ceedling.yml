@@ -1,0 +1,50 @@
+# =========================================================================
+#   HomeStation - Configuration Spécifique
+#   Ce fichier documente les parties spécifiques au projet
+#   vs le fichier générique project.yml à la racine
+# =========================================================================
+
+# -----------------------------------------------------------------------------
+# PATHS SPÉCIFIQUES AU PROJET
+# -----------------------------------------------------------------------------
+:paths:
+  :test:
+    - +:test/**
+    - -:test/support
+  :source:
+    - src/**
+  :include:
+    - test/support/**      # Stubs HAL
+    - src/**
+  :support:
+    - test/support
+  :libraries: []
+
+# -----------------------------------------------------------------------------
+# DEFINES SPÉCIFIQUES STM32
+# -----------------------------------------------------------------------------
+:defines:
+  :test:
+    - TEST
+    - STM32F446xx
+    - USE_HAL_DRIVER
+  :release: []
+
+# -----------------------------------------------------------------------------
+# CONFIGURATION CMock - Types STM32
+# -----------------------------------------------------------------------------
+:cmock:
+  :treat_as:
+    uint8: HEX8
+    uint16: HEX16
+    uint32: UINT32
+    int8: INT8
+    bool: UINT8
+
+# -----------------------------------------------------------------------------
+# CONFIGURATION RELEASE
+# -----------------------------------------------------------------------------
+:release_build:
+  :output: HomeStation.elf
+  :use_assembly: FALSE
+  :artifacts: []

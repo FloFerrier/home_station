@@ -17,13 +17,11 @@ console: ## Launch console for firmware
 
 .PHONY: test_suite
 test_suite: ## Build and run the test suite
-	cmake --preset test
-	cmake --build --preset test
-	ctest --test-dir build/test
+	ceedling test:all
 
 .PHONY: coverage
 coverage: ## Launch code coverage on test suite
-	gcovr -r . --filter "src" --html-details -o build/test/code_coverage.html
+	ceedling gcov:all
 
 .PHONY: format
 format: ## Format source code only (no third-party or test)
