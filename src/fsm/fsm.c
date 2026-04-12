@@ -37,13 +37,17 @@ STATIC fsm_state_e fsm_state_init(void) {
     (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 
     /* Middleware Initialization*/
-    if (xTaskCreate(ble_task, "ble", 1024u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle) !=
-        pdPASS) {
+    BaseType_t status = pdPASS;
+
+    status = xTaskCreate(ble_task, "ble", 1024u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle);
+    if (status != pdPASS) {
+        console_send("[FSM] Fail to create ble task... %d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
-    if (xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL) !=
-        pdPASS) {
+    status = xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL);
+    if (status != pdPASS) {
+        console_send("[FSM] Fail to create shell task...%d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
