@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "FreeRTOS.h"
+#include "console.h"
 #include "fsm.h"
 #include "stm32f4xx_hal.h"
 #include "task.h"
@@ -19,6 +20,9 @@ void SysTick_Handler(void);
 int main(void) {
     /* Minimal to setup FSM */
     (void)HAL_Init();
+    (void)console_init();
+    console_send("[LOG] Start bootloader ...\r\n");
+    console_send("[LOG] Console debug is available.\r\n");
 
     /* Must keep the most priority */
     (void)xTaskCreate(fsm_task, "fsm", 1024u, NULL, (configMAX_PRIORITIES - 1),
