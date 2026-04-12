@@ -4,17 +4,15 @@
 
 #include "shell.h"
 
-
 #include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
 
 #define EMBEDDED_CLI_IMPL
-#include "embedded_cli.h"
-
 #include "ble.h"
 #include "console.h"
+#include "embedded_cli.h"
 #include "led.h"
 
 #ifndef TEST
@@ -32,48 +30,40 @@ static void writeChar(EmbeddedCli *embeddedCli, char c) {
 }
 
 static void setLed(EmbeddedCli *cli, char *args, void *context) {
-    (void) cli;
-    (void) context;
+    (void)cli;
+    (void)context;
 
     const char *arg1 = embeddedCliGetToken(args, 1);
     if (strcmp(arg1, "on") == 0) {
         led_setState(LED_ID_RED, LED_STATE_ON);
-    }
-    else if (strcmp(arg1, "off") == 0) {
+    } else if (strcmp(arg1, "off") == 0) {
         led_setState(LED_ID_RED, LED_STATE_OFF);
-    }
-    else {
-        console_send("Incorrect arg ... \"on\" or \"off\" available !\r\n", arg1);
+    } else {
+        console_send("Incorrect arg ... \"on\" or \"off\" available !\r\n",
+                     arg1);
     }
 }
 
 static void rn4871(EmbeddedCli *cli, char *args, void *context) {
-    (void) cli;
-    (void) context;
+    (void)cli;
+    (void)context;
 
     const char *arg1 = embeddedCliGetToken(args, 1);
     if (strcmp(arg1, "$$$") == 0) {
         ble_sendCmdMode();
-    }
-    else if (strcmp(arg1, "factory_reset") == 0) {
+    } else if (strcmp(arg1, "factory_reset") == 0) {
         ble_sendFactoryReset();
-    }
-    else if (strcmp(arg1, "reboot") == 0) {
+    } else if (strcmp(arg1, "reboot") == 0) {
         ble_sendReboot();
-    }
-    else if (strcmp(arg1, "version") == 0) {
+    } else if (strcmp(arg1, "version") == 0) {
         ble_sendVersion();
-    }
-    else if (strcmp(arg1, "fake_packet") == 0) {
+    } else if (strcmp(arg1, "fake_packet") == 0) {
         ble_sendFakePacket();
-    }
-    else if (strcmp(arg1, "advertising") == 0) {
+    } else if (strcmp(arg1, "advertising") == 0) {
         ble_sendAdvertising();
-    }
-    else if (strcmp(arg1, "reset_services") == 0) {
+    } else if (strcmp(arg1, "reset_services") == 0) {
         ble_sendResetServices();
-    }
-    else {
+    } else {
         console_send("Incorrect arg ...\r\n");
     }
 }
@@ -106,29 +96,23 @@ void shell_task(void *params) {
     config->maxBindingCount = 16;
     EmbeddedCli *cli = embeddedCliNew(config);
     cli->writeChar = writeChar;
-    CliCommandBinding setLed_binding = {
-            .name = "set-led",
-            .help = "Set led on/off",
-            .tokenizeArgs = true,
-            .context = NULL,
-            .binding = setLed
-    };
+    CliCommandBinding setLed_binding = {.name = "set-led",
+                                        .help = "Set led on/off",
+                                        .tokenizeArgs = true,
+                                        .context = NULL,
+                                        .binding = setLed};
     embeddedCliAddBinding(cli, setLed_binding);
-    CliCommandBinding rn4871_binding = {
-            .name = "rn4871",
-            .help = "RN4871 CLI",
-            .tokenizeArgs = true,
-            .context = NULL,
-            .binding = rn4871
-    };
+    CliCommandBinding rn4871_binding = {.name = "rn4871",
+                                        .help = "RN4871 CLI",
+                                        .tokenizeArgs = true,
+                                        .context = NULL,
+                                        .binding = rn4871};
     embeddedCliAddBinding(cli, rn4871_binding);
-    CliCommandBinding stack_binding = {
-        .name = "stack",
-        .help = "Show stack usage",
-        .tokenizeArgs = false,
-        .context = NULL,
-        .binding = stack
-    };
+    CliCommandBinding stack_binding = {.name = "stack",
+                                       .help = "Show stack usage",
+                                       .tokenizeArgs = false,
+                                       .context = NULL,
+                                       .binding = stack};
     embeddedCliAddBinding(cli, stack_binding);
 
     do {

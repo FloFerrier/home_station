@@ -7,15 +7,13 @@
 #include <stdbool.h>
 
 #include "FreeRTOS.h"
-#include "task.h"
-
-#include "stm32f4xx_hal.h"
-
 #include "ble.h"
 #include "console.h"
 #include "led.h"
 #include "sampling.h"
 #include "shell.h"
+#include "stm32f4xx_hal.h"
+#include "task.h"
 
 #ifndef TEST
 #define LOOP (1u)
@@ -39,19 +37,22 @@ STATIC fsm_state_e fsm_state_init(void) {
     /* Middleware Initialization*/
     BaseType_t status = pdPASS;
 
-    status = xTaskCreate(ble_task, "ble", 256u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle);
+    status = xTaskCreate(ble_task, "ble", 256u, NULL, tskIDLE_PRIORITY + 1,
+                         &rn4871_task_handle);
     if (status != pdPASS) {
         console_send("[FSM] Fail to create ble task... %d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
-    status = xTaskCreate(sampling_task, "sampling", 256u, NULL, tskIDLE_PRIORITY+2, NULL);
+    status = xTaskCreate(sampling_task, "sampling", 256u, NULL,
+                         tskIDLE_PRIORITY + 2, NULL);
     if (status != pdPASS) {
         console_send("[FSM] Fail to create sampling task... %d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
-    status = xTaskCreate(shell_task, "shell", 256u, NULL, tskIDLE_PRIORITY, NULL);
+    status =
+        xTaskCreate(shell_task, "shell", 256u, NULL, tskIDLE_PRIORITY, NULL);
     if (status != pdPASS) {
         console_send("[FSM] Fail to create shell task... %d\r\n", status);
         return FSM_STATE_ERROR;
@@ -81,7 +82,7 @@ void fsm_task(void *params) {
             default: {
                 (void)led_setState(LED_ID_RED, LED_STATE_ON);
                 (void)led_setState(LED_ID_GREEN, LED_STATE_OFF);
-                configASSERT(0); // Blocking here, useful for debugging
+                configASSERT(0);  // Blocking here, useful for debugging
             } break;
         }
         (void)ulTaskNotifyTake(pdTRUE, portMAX_DELAY);

@@ -63,5 +63,5 @@ uint32_t RTOS_getRuntimeCounterValue(void) { return RTOS_runTimeCounter; }
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
     (void)xTask;
     console_send("[LOG] Stack overflow detected on %s\r\n", pcTaskName);
-    configASSERT(0); // Blocking here, useful for debugging
+    configASSERT(0);  // Blocking here, useful for debugging
 }

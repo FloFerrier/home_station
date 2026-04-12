@@ -2,15 +2,16 @@
  * @file
  */
 
-#include <string.h>
-#include <stdio.h>
-
 #include "ble.h"
-#include "console.h" // TMP: only for logging
+
+#include <stdio.h>
+#include <string.h>
+
+#include "console.h"  // TMP: only for logging
 
 #ifndef TEST
-#include <stm32f4xx_hal.h>
 #include <FreeRTOS.h>
+#include <stm32f4xx_hal.h>
 #include <task.h>
 #define STATIC static
 #else
@@ -32,7 +33,6 @@ static uint8_t rn4871_rx_buffer[RN4871_RX_BUFFER_SIZE] = "";
 static char log_msg[RN4871_RX_BUFFER_SIZE] = "";
 
 static bool ble_init(void) {
-
     /* GPIO Init */
     __HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef gpioInit = {
@@ -56,7 +56,7 @@ static bool ble_init(void) {
     hdma_usart3_rx.Init.Mode = DMA_NORMAL;
     hdma_usart3_rx.Init.Priority = DMA_PRIORITY_LOW;
     hdma_usart3_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    (void) HAL_DMA_Init(&hdma_usart3_rx);
+    (void)HAL_DMA_Init(&hdma_usart3_rx);
     __HAL_LINKDMA(&huart3, hdmarx, hdma_usart3_rx);
     hdma_usart3_tx.Instance = DMA1_Stream3;
     hdma_usart3_tx.Init.Channel = DMA_CHANNEL_4;
@@ -68,7 +68,7 @@ static bool ble_init(void) {
     hdma_usart3_tx.Init.Mode = DMA_NORMAL;
     hdma_usart3_tx.Init.Priority = DMA_PRIORITY_LOW;
     hdma_usart3_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    (void) HAL_DMA_Init(&hdma_usart3_tx);
+    (void)HAL_DMA_Init(&hdma_usart3_tx);
     __HAL_LINKDMA(&huart3, hdmatx, hdma_usart3_tx);
     HAL_NVIC_SetPriority(USART3_IRQn, 5, 5);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
@@ -96,89 +96,87 @@ void ble_task(void *params) {
 
     (void)ble_init();
 
-    HAL_UARTEx_ReceiveToIdle_DMA(&huart3, rn4871_rx_buffer, RN4871_RX_BUFFER_SIZE);
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart3, rn4871_rx_buffer,
+                                 RN4871_RX_BUFFER_SIZE);
     __HAL_DMA_DISABLE_IT(huart3.hdmarx, DMA_IT_HT);
 
     uint16_t head = 0;
     uint16_t length = 0;
     uint16_t old_pos = 0;
 
-    while(1) {
+    while (1) {
         if (ulTaskNotifyTake(pdTRUE, portMAX_DELAY) > 0) {
-            int length = strnlen((char*) rn4871_rx_buffer, RN4871_RX_BUFFER_SIZE);
-            if( length > 0 && length < RN4871_RX_BUFFER_SIZE) {
+            int length =
+                strnlen((char *)rn4871_rx_buffer, RN4871_RX_BUFFER_SIZE);
+            if (length > 0 && length < RN4871_RX_BUFFER_SIZE) {
                 console_send("%s", rn4871_rx_buffer);
             }
             rn4871_rx_buffer[0] = 0;
-            (void) HAL_UARTEx_ReceiveToIdle_DMA(&huart3, rn4871_rx_buffer, RN4871_RX_BUFFER_SIZE);
+            (void)HAL_UARTEx_ReceiveToIdle_DMA(&huart3, rn4871_rx_buffer,
+                                               RN4871_RX_BUFFER_SIZE);
         }
     }
 }
 
 void ble_sendCmdMode(void) {
     const uint8_t command[] = "$";
-    size_t length = strlen((char*)command);
-    HAL_Delay(100); // Wait 100 ms
-    for(int i=0; i<3; i++) {
-        (void) HAL_UART_Transmit_DMA(&huart3, command, length);
-        HAL_Delay(100); // Wait 100 ms
+    size_t length = strlen((char *)command);
+    HAL_Delay(100);  // Wait 100 ms
+    for (int i = 0; i < 3; i++) {
+        (void)HAL_UART_Transmit_DMA(&huart3, command, length);
+        HAL_Delay(100);  // Wait 100 ms
     }
 }
 
 void ble_sendVersion(void) {
     const uint8_t command[] = "V\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
 void ble_sendFactoryReset(void) {
     const uint8_t command[] = "SF,1\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
 void ble_sendReboot(void) {
     const uint8_t command[] = "R,1\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
 void ble_sendResetServices(void) {
     const uint8_t command[] = "SS,00\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
 void ble_sendAdvertising(void) {
     const uint8_t command[] = "A\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
 void ble_sendFakePacket(void) {
     const uint8_t command[] = "IA,01,0201060816D2FC40026A09\r\n";
-    size_t length = strlen((char*)command);
-    (void) HAL_UART_Transmit_DMA(&huart3, command, length);
+    size_t length = strlen((char *)command);
+    (void)HAL_UART_Transmit_DMA(&huart3, command, length);
 }
 
-void DMA1_Stream1_IRQHandler(void) {
-    HAL_DMA_IRQHandler(&hdma_usart3_rx);
-}
+void DMA1_Stream1_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_usart3_rx); }
 
-void DMA1_Stream3_IRQHandler(void) {
-  HAL_DMA_IRQHandler(&hdma_usart3_tx);
-}
+void DMA1_Stream3_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma_usart3_tx); }
 
-void USART3_IRQHandler(void) {
-    HAL_UART_IRQHandler(&huart3);
-}
+void USART3_IRQHandler(void) { HAL_UART_IRQHandler(&huart3); }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
     if (huart->Instance == USART3) {
         rn4871_rx_buffer[Size] = 0;
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         if (rn4871_task_handle != NULL) {
-            vTaskNotifyGiveFromISR(rn4871_task_handle, &xHigherPriorityTaskWoken);
+            vTaskNotifyGiveFromISR(rn4871_task_handle,
+                                   &xHigherPriorityTaskWoken);
         }
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
