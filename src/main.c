@@ -14,6 +14,8 @@
 
 extern TaskHandle_t fsm_task_handle;
 
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName);
+
 void HAL_MspInit(void);  // Use on HAL_Init() function
 void SysTick_Handler(void);
 
@@ -57,3 +59,9 @@ void SysTick_Handler(void) {
 void RTOS_configureTimerForRuntimeStats(void) { RTOS_runTimeCounter = 0; }
 
 uint32_t RTOS_getRuntimeCounterValue(void) { return RTOS_runTimeCounter; }
+
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
+    (void)xTask;
+    console_send("[LOG] Stack overflow detected on %s\r\n", pcTaskName);
+    configASSERT(0); // Blocking here, useful for debugging
+}

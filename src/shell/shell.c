@@ -76,6 +76,27 @@ static void rn4871(EmbeddedCli *cli, char *args, void *context) {
     }
 }
 
+static void printStackUsage(TaskHandle_t task, const char *name,
+                            UBaseType_t stackSize) {
+    UBaseType_t highWater = uxTaskGetStackHighWaterMark(task);
+    UBaseType_t used = stackSize - highWater;
+    UBaseType_t percent = (used * 100) / stackSize;
+    console_send("%-12s Stack: %4u Used: %3u%% Free: %u\r\n", name, stackSize,
+                 percent, highWater);
+}
+
+static void stack(EmbeddedCli *cli, char *args, void *context) {
+    (void)cli;
+    (void)args;
+    (void)context;
+
+    console_send("=== Stack Usage ===\r\n");
+    printStackUsage(NULL, "ble", 256);
+    printStackUsage(NULL, "fsm", 256);
+    printStackUsage(NULL, "sampling", 256);
+    printStackUsage(NULL, "shell", 256);
+}
+
 void shell_task(void *params) {
     (void)params;
 
@@ -99,6 +120,14 @@ void shell_task(void *params) {
             .binding = rn4871
     };
     embeddedCliAddBinding(cli, rn4871_binding);
+    CliCommandBinding stack_binding = {
+        .name = "stack",
+        .help = "Show stack usage",
+        .tokenizeArgs = false,
+        .context = NULL,
+        .binding = stack
+    };
+    embeddedCliAddBinding(cli, stack_binding);
 
     do {
         char character = 0;

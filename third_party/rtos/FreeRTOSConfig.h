@@ -34,7 +34,7 @@
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
-#define configCHECK_FOR_STACK_OVERFLOW           0
+#define configCHECK_FOR_STACK_OVERFLOW           2
 #define configUSE_TRACE_FACILITY                 1
 #define configGENERATE_RUN_TIME_STATS            1
 #define configUSE_STATS_FORMATTING_FUNCTIONS     1
@@ -53,6 +53,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil             0
 #define INCLUDE_vTaskDelay                  1
 #define INCLUDE_xTaskGetSchedulerState      1
+#define INCLUDE_uxTaskGetStackHighWaterMark 1
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
