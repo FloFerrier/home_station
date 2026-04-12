@@ -81,8 +81,7 @@ void fsm_task(void *params) {
             default: {
                 (void)led_setState(LED_ID_RED, LED_STATE_ON);
                 (void)led_setState(LED_ID_GREEN, LED_STATE_OFF);
-                while(1);
-                /* The system must be blocking here */
+                configASSERT(0); // Blocking here, useful for debugging
             } break;
         }
         (void)ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
