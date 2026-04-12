@@ -27,7 +27,7 @@ int main(void) {
     console_send("[LOG] Console debug is available.\r\n");
 
     /* Must keep the most priority */
-    (void)xTaskCreate(fsm_task, "fsm", 1024u, NULL, (configMAX_PRIORITIES - 1),
+    (void)xTaskCreate(fsm_task, "fsm", 256u, NULL, (configMAX_PRIORITIES - 1),
                       &fsm_task_handle);
 
     vTaskStartScheduler();

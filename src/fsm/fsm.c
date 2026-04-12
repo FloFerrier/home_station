@@ -39,15 +39,15 @@ STATIC fsm_state_e fsm_state_init(void) {
     /* Middleware Initialization*/
     BaseType_t status = pdPASS;
 
-    status = xTaskCreate(ble_task, "ble", 1024u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle);
+    status = xTaskCreate(ble_task, "ble", 256u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle);
     if (status != pdPASS) {
         console_send("[FSM] Fail to create ble task... %d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
-    status = xTaskCreate(shell_task, "shell", 1024u, NULL, tskIDLE_PRIORITY, NULL);
+    status = xTaskCreate(shell_task, "shell", 256u, NULL, tskIDLE_PRIORITY, NULL);
     if (status != pdPASS) {
-        console_send("[FSM] Fail to create shell task...%d\r\n", status);
+        console_send("[FSM] Fail to create shell task... %d\r\n", status);
         return FSM_STATE_ERROR;
     }
 
