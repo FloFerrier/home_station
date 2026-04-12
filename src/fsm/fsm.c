@@ -45,6 +45,12 @@ STATIC fsm_state_e fsm_state_init(void) {
         return FSM_STATE_ERROR;
     }
 
+    status = xTaskCreate(sampling_task, "sampling", 256u, NULL, tskIDLE_PRIORITY+2, NULL);
+    if (status != pdPASS) {
+        console_send("[FSM] Fail to create sampling task... %d\r\n", status);
+        return FSM_STATE_ERROR;
+    }
+
     status = xTaskCreate(shell_task, "shell", 256u, NULL, tskIDLE_PRIORITY, NULL);
     if (status != pdPASS) {
         console_send("[FSM] Fail to create shell task... %d\r\n", status);
