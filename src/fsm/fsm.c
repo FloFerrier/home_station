@@ -36,12 +36,6 @@ STATIC fsm_state_e fsm_state_init(void) {
     led_init();
     (void)led_setState(LED_ID_GREEN, LED_STATE_ON);
 
-    if (console_init() != true) {
-        return FSM_STATE_ERROR;
-    }
-
-    (void)sensor_init();
-
     /* Middleware Initialization*/
     if (xTaskCreate(ble_task, "ble", 1024u, NULL, tskIDLE_PRIORITY+1, &rn4871_task_handle) !=
         pdPASS) {
