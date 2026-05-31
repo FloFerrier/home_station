@@ -7,10 +7,8 @@
 #include <bme68x.h>
 
 #ifndef TEST
-#include <stm32f4xx_hal.h>
 #define STATIC static
 #else
-#include "mock_stm32f4x.h"
 #define STATIC
 #endif  // TEST
 
@@ -21,7 +19,7 @@
 
 #define BME680_RETURN_CODE_LEN_MAX (255)
 
-STATIC I2C_HandleTypeDef i2c_handle = {0};
+STATIC I2C_HandleTypeDef *i2c_handle = NULL;
 STATIC struct bme68x_dev bme680 = {0};
 
 STATIC const uint8_t BME68X_DEV_ADDR = BME68X_I2C_ADDR_LOW;
@@ -72,7 +70,7 @@ STATIC int8_t bme68x_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len,
     }
     uint16_t *DevAddress = (uint16_t *)intf_ptr;
     HAL_StatusTypeDef result = HAL_I2C_Mem_Read(
-        &i2c_handle, *DevAddress << 1, (uint16_t)reg_addr,
+        i2c_handle, *DevAddress << 1, (uint16_t)reg_addr,
         BME68X_I2C_MEM_ADDR_SIZE, (uint8_t *)reg_data, len, BME68X_I2C_TIMEOUT);
     if (result != HAL_OK) {
         return BME68X_E_COM_FAIL;
@@ -87,7 +85,7 @@ STATIC int8_t bme68x_i2c_write(uint8_t reg_addr, const uint8_t *reg_data,
     }
     uint16_t *DevAddress = (uint16_t *)intf_ptr;
     HAL_StatusTypeDef result = HAL_I2C_Mem_Write(
-        &i2c_handle, *DevAddress << 1, (uint16_t)reg_addr,
+        i2c_handle, *DevAddress << 1, (uint16_t)reg_addr,
         BME68X_I2C_MEM_ADDR_SIZE, (uint8_t *)reg_data, len, BME68X_I2C_TIMEOUT);
     if (result != HAL_OK) {
         return BME68X_E_COM_FAIL;
@@ -101,34 +99,8 @@ STATIC void bme68x_delay_us(uint32_t period, void *intf_ptr) {
     HAL_Delay(delay_in_ms);
 }
 
-bme680_returnCode_e bme680_init(void) {
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    /* I2C1 Configuration
-        PB8 ------> I2C1_SCL
-        PB9 ------> I2C1_SDA
-    */
-    GPIO_InitTypeDef gpio_init = {
-        .Pin = GPIO_PIN_8 | GPIO_PIN_9,
-        .Mode = GPIO_MODE_AF_OD,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
-        .Alternate = GPIO_AF4_I2C1,
-    };
-    HAL_GPIO_Init(GPIOB, &gpio_init);
-
-    __HAL_RCC_I2C1_CLK_ENABLE();
-    i2c_handle.Instance = I2C1;
-    i2c_handle.Init.ClockSpeed = 100000;
-    i2c_handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
-    i2c_handle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-    i2c_handle.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-    i2c_handle.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-    i2c_handle.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-    HAL_StatusTypeDef hal_rslt = HAL_I2C_Init(&i2c_handle);
-    if (hal_rslt != HAL_OK) {
-        return BME680_I2C_FAILURE;
-    }
-
+bme680_returnCode_e bme680_init(I2C_HandleTypeDef *i2c_handle) {
+    i2c_handle = i2c_handle;
     bme680.intf = BME68X_I2C_INTF;
     bme680.intf_ptr = (uint8_t *)&BME68X_DEV_ADDR;
     bme680.delay_us = bme68x_delay_us;

@@ -6,6 +6,7 @@
 #define BME680_H
 
 #include <stdint.h>
+#include <stm32f4xx_hal.h>
 
 #define BME680_MAX_DATA_AVAILABLE (4u)
 
@@ -26,7 +27,7 @@ typedef struct {
     float gas_resistance_in_ohms;
 } bme680_data_s;
 
-bme680_returnCode_e bme680_init(void);
+bme680_returnCode_e bme680_init(I2C_HandleTypeDef *i2c_handle);
 bme680_returnCode_e bme680_selfTest(void);
 bme680_returnCode_e bme680_getData(bme680_data_s *data,
                                    uint32_t *number_of_data);
