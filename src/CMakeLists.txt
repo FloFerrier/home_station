@@ -1,6 +1,7 @@
 add_subdirectory(ble)
 add_subdirectory(console)
 add_subdirectory(fsm)
+add_subdirectory(ina219)
 add_subdirectory(led)
 add_subdirectory(sampling)
 add_subdirectory(sensor)
@@ -31,6 +32,7 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL test)
         sampling
         sensor
         shell
+        ina219
     )
 
     target_compile_options(${BUILD_TARGET} PUBLIC
