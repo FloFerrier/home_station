@@ -4,7 +4,7 @@ add_subdirectory(fsm)
 add_subdirectory(ina219)
 add_subdirectory(led)
 add_subdirectory(sampling)
-add_subdirectory(sensor)
+add_subdirectory(bme680)
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL test)
     add_subdirectory(shell)
@@ -30,7 +30,7 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL test)
         fsm
         led
         sampling
-        sensor
+        bme680
         shell
         ina219
     )
