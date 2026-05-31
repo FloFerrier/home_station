@@ -71,6 +71,7 @@
     - TEST
     - STM32F446xx
     - USE_HAL_DRIVER
+    - UNITY_INCLUDE_PRINT_FORMATTED
   :release: []
 
 :cmock:
@@ -111,7 +112,7 @@
 
 :unity:
   :defines:
-    - UNITY_EXCLUDE_FLOAT
+    #- UNITY_EXCLUDE_FLOAT
 
 :gcov:
   :html_report_file: coverage/index.html
